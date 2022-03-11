@@ -21,6 +21,9 @@
 	<!-- <title><?php //bloginfo( 'name' ); ?></title> -->
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+  	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
 	<script>
 		function loadIndie() {
 

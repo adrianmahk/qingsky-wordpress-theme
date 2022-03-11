@@ -1,0 +1,28 @@
+{
+    "short_name": "青色的天空",
+    "name": "青色的天空",
+    "description": "我是青鳥，歡迎來到我的天空。這裡有《雲想曲》、小說長篇、短篇，也有隨筆散文、世界觀系列，隨便參觀。",
+    "icons": [{
+      "src": "/wp-content/themes/qingsky-hk/icons/qingsky-512.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "/wp-content/themes/qingsky-hk/icons/qingsky-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }],
+    "prefer_related_applications": true,
+    "related_applications": [{
+      "platform": "web",
+      "url": "/"
+    }
+    ],
+    "start_url": "/",
+    "display": "fullscreen",
+    "theme_color": "#0aa89e",
+    "background_color": "#fefdf3",
+    "orientation": "any",
+    "gcm_sender_id": ""
+  }
+  
+  
