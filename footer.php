@@ -26,7 +26,12 @@
 					?>
 				</a>
 </div>
-<div class="copyright">青鳥（Adrian Ma）2014 ~ 2021 All rights reserved</div>
+<!-- <div class="copyright">青鳥（Adrian Ma）2014 ~ 2022 All rights reserved</div> -->
+<?php if ( is_active_sidebar( 'footer-1' ) ):?>
+	<div class="copyright">
+	 <?php dynamic_sidebar( 'footer-1' ); ?>
+</div>
+<?php endif;?>
 </div>
 </div>
 </footer>

@@ -487,6 +487,10 @@ font-style: italic;
 .comment-respond {
     width: 100%;
 }
+.comment-link svg {
+    padding: 6px 12px;
+    transform: scale(0.8);
+}
 #commentsHolder {
     background-color: white;
     border-radius: 5px;
