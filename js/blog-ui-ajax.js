@@ -51,6 +51,7 @@ ready(function () {
   //makeExternalLinkOpenInBlank();
   init();
   fixDropboxImgSrc();
+  console.log('sat: ' + getComputedStyle(document.documentElement).getPropertyValue("--sat"));
 });
 
 function fixDropboxImgSrc() {

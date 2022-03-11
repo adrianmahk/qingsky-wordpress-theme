@@ -1,6 +1,10 @@
+
 /* For WordPress */
 .widget {
     border: none !important;
+}
+:root {
+    --sat: env(safe-area-inset-top);
 }
 
 /* For glassnote */
