@@ -131,7 +131,7 @@ function init() {
   if (!document.body.getAttribute("inited")) {
     document.body.setAttribute("orientation", getOrientation());
     if (detectmob()) {
-      fixBgHeight();
+      // fixBgHeight();
       makeCmUnfocusable();
     }
     if (!document.body.getAttribute("loaded-main") && !document.body.className.match("item-view")) {
