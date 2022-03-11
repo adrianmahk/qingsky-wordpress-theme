@@ -73,7 +73,8 @@ body {
 overflow-wrap: break-word;
 word-break: break-word;
 word-wrap: break-word;
-background-color: #1d9f97;
+/* background-color: #1d9f97; */
+background-color: white;
 color: #757575;
 font: 15px Roboto, sans-serif;
 margin: 0;
