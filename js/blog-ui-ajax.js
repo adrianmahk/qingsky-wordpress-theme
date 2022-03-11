@@ -294,6 +294,7 @@ function fixBgHeight() {
     var bg_div = document.getElementById("bg-div");
     if (window.matchMedia('(max-aspect-ratio: 1920/1200) and (min-height: 501px)').matches) {
       var bg_fixed_h = height + 100;
+      console("fixed_h: "+fixed_h);
       bg_div.style.backgroundSize = "auto " + bg_fixed_h + "px";
     }
     else {
