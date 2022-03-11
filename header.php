@@ -8,7 +8,7 @@
  * @subpackage Twenty_Sixteen
  * @since Twenty Sixteen 1.0
  */
-include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/override-functions.php";
+// include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/override-functions.php";
 // include get_template_directory_uri() . "/override-functions.php";
 ?>
 <?php
@@ -21,10 +21,6 @@ include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/overrid
 	<!-- <title><?php //bloginfo( 'name' ); ?></title> -->
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- <base href="http://localhost:81/" /> -->
-	<!-- <link rel="profile" href="http://gmpg.org/xfn/11"> -->
-	<!-- <link rel="stylesheet" href="/css/buttons.css"> -->
-	<!-- <script src="https://js.qingsky.hk/indie-compiled.js" type="text/javascript"> </script> -->
 	<script>
 		function loadIndie() {
 
@@ -85,13 +81,6 @@ include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/overrid
 										
 		<!-- <?php //dynamic_sidebar( 'header-1' ); ?> -->
 									<!-- .sidebar .widget-area -->
-								
-                                    <!-- <div class="widget HTML" data-version="2" id="HTML1">
-                                        <div class="subtitle">
-                                            <span class="subtitle">I wish</span>
-                                            <span class="subtitle_desc">（本月主題）</span>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <nav role="navigation">
                                 </nav>
@@ -100,7 +89,7 @@ include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/overrid
                     </header>
 
 					<!-- for PageList1 -->
-					<?php if (is_single() ){// && is_active_sidebar( 'header-1' ) ){
+					<?php if (is_single() || is_page() ){// && is_active_sidebar( 'header-1' ) ){
 						// dynamic_sidebar( 'header-1' );
 						echo get_page_list(page_list(), 'top_widget');
 					}?>
@@ -113,7 +102,7 @@ include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/overrid
                 <div class="centered-top-container top-bar" id="top-bar">
 					<?php if (!is_front_page()):?>
 						<a class="return_link ripple" href="/"
-            onclick="removeAttribute("href");history.back();" title="上一頁">
+            onclick="removeAttribute('href');history.back();" title="上一頁">
             <img class="png_icon light"
               src="<?php echo get_template_directory_uri() . '/icons/Return.png'?>">
 			  <img class="png_icon dark"
@@ -150,5 +139,46 @@ include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/overrid
                 </div>
             </div>
 		
+            <div class="middle section centered" id="page_middle">
+		<?php 
+		if (is_home() && is_front_page() && !is_paged()) {
+			if ( is_active_sidebar( 'frontpage-1' ) ) : ?>
+				<div class="widget-area widget HTML">
+					<div class="apps-icon">
+						<div class="icons-container">
+							<?php dynamic_sidebar( 'frontpage-1' ); ?>
+						</div>
+					</div>
+				</div><!-- .widget-area -->
+			<?php endif;
+			if ( is_active_sidebar( 'frontpage-2' ) ) : ?>
+				<div class="widget-area widget HTML">
+					<h3 class="post-title main">作者的話</h3>
+					<div class="post-outer">
+						<div class="post intro">
+							<?php dynamic_sidebar( 'frontpage-2' ); ?>
+							<div style="text-align: right">
+								<a class="jump-link flat-button ripple" href="/greetings#more">
+									繼續看 ≫
+								</a>
+							</div>
+						</div>
+					</div>
+				</div><!-- .widget-area -->
+				<?php endif;
+		}
 
+		if (is_archive() || is_search()){// && is_active_sidebar( 'header-1' ) ){
+			// dynamic_sidebar( 'header-1' );
+			echo get_page_list(page_list(), '');
+		}
+		// Popup Widgets
+		if ( is_active_sidebar( 'popup-1' ) ) : ?>
+			<div class="widget-area widget HTML">
+				<?php dynamic_sidebar( 'popup-1' ); ?>
+			</div><!-- .widget-area -->
+		<?php endif;
+		?>
+
+		</div>
 		<div id="content" class="page-lower-part">

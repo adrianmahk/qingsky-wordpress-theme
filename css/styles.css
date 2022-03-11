@@ -33,6 +33,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-color: transparent;
+    background-attachment: scroll !important;
 }
 
 body.user-bg .bg-div,
@@ -290,12 +291,13 @@ body.opacity-30.dark-mode .post-outer-container {
     box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.9);
     margin-bottom: 16px !important;
     transition: color .2s ease-in-out, background .2s ease-in-out;
+    position: relative;
 }
 
 @media screen and (max-width: 886px) {
-    .post-outer-container {
+    /* .post-outer-container {
         margin: 0 8px;
-    }
+    } */
 }
 
 .glassnote-about-msg {
@@ -432,4 +434,159 @@ body.opacity-30.dark-mode .post-outer-container {
     /* width: 110%;
     padding-right: 10px;
     margin-right: 10px; */
+}
+
+.label-all-container {
+    margin: 0px 8px 8px 8px;
+}
+
+
+.comment-body {
+    margin-left: 50px;
+}
+.comment-author.vcard img {
+    position: absolute;
+    left: 0;
+}
+.comment-meta div {
+    display: inline-block;
+}
+.comment-metadata a {
+bottom: 0;
+color: rgba(0,0,0,0.54);
+display: inline-block;
+font-size: 13px;
+font-style: italic;
+}
+.comment-content {
+    font-size: 14px;
+}
+
+
+.comments-reply-container { 
+    display: table;
+    background-color: white;
+    width: 100%;
+    border-top: 1px dashed #ccc;
+    border-bottom: 1px dashed #ccc;
+}
+.comments-reply-container div { 
+    display: table-cell;
+    padding: 8px 12px;
+}
+.comments-reply-container svg {
+    padding: 32px 12px;
+} 
+.comment-respond {
+    width: 100%;
+}
+#commentsHolder {
+    background-color: white;
+    border-radius: 5px;
+padding: 0 5px;
+position: relative;
+box-sizing: border-box;
+display: block;
+width: 100%;
+}
+#commentBodyField-container {
+    display: block;
+    width: 100%;
+}
+#commentBodyField-container svg {
+    display: table-cell;
+}
+#commentBodyField {
+    background-color: transparent;
+    border: 0;
+    box-sizing: border-box;
+    color: #757575;
+    font: 15px Roboto,sans-serif;
+    font-size: 16px;
+    outline: none;
+    padding-top: 0;
+    margin: 5px;
+    resize: vertical;
+    width: 100%;
+    height: 50px;
+    display: inline;
+    }
+#allHolder.compact #commentBodyField {
+border: 0;
+box-sizing: border-box;
+padding-top: 34px;
+
+outline: none;
+display: table-cell;
+}
+
+#allHolder.compact #commentsHolder {
+    height: 88px;
+}
+@media (max-width: 400px){
+    div#commentsHolder {
+    padding: 0;
+    }
+}
+
+.comment-form-author, .comment-form-email, .comment-form-url, .comment-form-cookies-consent, .form-submit {
+    display: none;
+    width: 48%;
+}
+
+#commentsHolder.focused .comment-form-author, #commentsHolder.focused .comment-form-email, #commentsHolder.focused .comment-form-url, #commentsHolder.focused .comment-form-cookies-consent, #commentsHolder.focused .form-submit {
+    display: inline-block;
+}
+.form-submit {
+    /* display: table-cell !important; */
+    width: 100% !important;
+    text-align: center;
+}
+.post-body p:empty {
+    display: block;
+    height: 1.2em;
+}
+.snippet-text.has-featured-image {
+    left: -5px;
+    position: relative;
+}
+.snippet-text img {
+    display: none;
+}
+.snippet-text img:first-of-type, .snippet-text .post-thumbnail img {
+    width: 20vw;
+    height: 20vw;
+    max-width: calc(12em - 15px);
+    max-height: calc(12em - 15px);
+    margin: 0 3vw 3vw 0;
+    box-shadow: 0 5px 10px rgba(0,0,0, 0.8);
+    float: left;
+    /* margin-left: 5px; */
+    object-fit: cover;
+    display: block;
+    margin-left: 5px;
+}
+
+.widget.Label h3{
+    display: none;
+    }
+    .widget.Label h1, .widget.BlogArchive h1{
+    text-align: center;
+    }
+    /*23.08.2017*/
+    /*#Label2.widget.Label .post-outer{
+    margin-top: -50px;
+    }*/
+.widget.Label .post-outer, .widget.BlogArchive .post-outer{
+    margin-bottom: 0;
+    /*margin-top: -50px;*/
+    background: rgba(254,254,253,0.95);
+    padding: 0 16px 5% 16px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 15px -5px rgba(0,0,0, 0.8);
+}
+@media screen and (max-width: 886px) {
+    .widget.Label .post-outer, .widget.BlogArchive .post-outer{
+        margin: 0 8px;
+    }
 }

@@ -10,29 +10,28 @@
 get_header(); ?>
 
 	<div id="page_body" class="content-area centered">
-		<main id="main" class="site-main centered-bottom" role="main">
+		<main id="main" class="site-main centered-bottom widget Blog" role="main">
+		<h3 class="page-title post-title main">搜尋文章</h3>
+		<div class="blog-posts hfeed container">
+		<?php 
+			if (is_search()) :
+				blog_search();
+		endif;?>
 		<?php if ( have_posts() ) : ?>
-
-			<header class="page-header">
-				<h1 class="page-title">
-				<?php
-				/* translators: %s: The search query. */
-				printf( __( 'Search Results for: %s', 'twentysixteen' ), '<span>' . esc_html( get_search_query() ) . '</span>' );
-				?>
-				</h1>
-			</header><!-- .page-header -->
-
 			<?php
 			// Start the loop.
 			while ( have_posts() ) :
+				
 				the_post();
-
+				if (is_search() && $post->post_type =='page') {
+					continue;
+				}
 				/**
 				 * Run the loop for the search to output the results.
 				 * If you want to overload this in a child theme then include a file
 				 * called content-search.php and that will be used instead.
 				 */
-				get_template_part( 'template-parts/content', 'search' );
+				get_template_part( 'template-parts/content', get_post_format() );
 
 				// End the loop.
 			endwhile;
@@ -52,7 +51,11 @@ get_header(); ?>
 
 		endif;
 		?>
-
+		</div>
+		<?php
+		blog_pager();
+		echo get_page_list(page_list());
+		?>
 		</main><!-- .site-main -->
 	</div><!-- .content-area -->
 

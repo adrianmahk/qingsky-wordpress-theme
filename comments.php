@@ -19,38 +19,14 @@ if ( post_password_required() ) {
 	return;
 }
 ?>
-
 <div id="comments" class="comments-area">
 
 	<?php if ( have_comments() ) : ?>
-		<h2 class="comments-title">
-			<?php
-				$comments_number = get_comments_number();
-			if ( '1' === $comments_number ) {
-				/* translators: %s: Post title. */
-				printf( _x( 'One thought on &ldquo;%s&rdquo;', 'comments title', 'twentysixteen' ), get_the_title() );
-			} else {
-				printf(
-					/* translators: 1: Number of comments, 2: Post title. */
-					_nx(
-						'%1$s thought on &ldquo;%2$s&rdquo;',
-						'%1$s thoughts on &ldquo;%2$s&rdquo;',
-						$comments_number,
-						'comments title',
-						'twentysixteen'
-					),
-					number_format_i18n( $comments_number ),
-					get_the_title()
-				);
-			}
-			?>
-		</h2>
-
 		<?php the_comments_navigation(); ?>
-
+		<div class="comment-thread">
 		<ol class="comment-list">
 			<?php
-				wp_list_comments(
+				wp_list_comments2(
 					array(
 						'style'       => 'ol',
 						'short_ping'  => true,
@@ -59,7 +35,7 @@ if ( post_password_required() ) {
 				);
 			?>
 		</ol><!-- .comment-list -->
-
+			</div>
 		<?php the_comments_navigation(); ?>
 
 	<?php endif; // Check for have_comments(). ?>
@@ -70,14 +46,45 @@ if ( post_password_required() ) {
 		?>
 	<p class="no-comments"><?php _e( 'Comments are closed.', 'twentysixteen' ); ?></p>
 	<?php endif; ?>
-
+	<div class="comments-container" onclick="">
+												
+											</div>
+											<script>
+												function hideShowComments(el) {
+													// console.log(el);
+													if (el.matches(":focus")) {
+														console.log("focusin");
+														el.parentNode.classList.add("focused");
+													}
+													else if (el.value == "") {
+														console.log("focusout");
+														el.parentNode.classList.remove("focused");
+													}
+												}
+											</script>
+	<div class="comments-reply-container" style="">
+	<div><svg style="display: table-cell;" class="svg-icon-24 touch-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64z"/></svg></div>
 	<?php
-		comment_form(
+		comment_form2(
 			array(
 				'title_reply_before' => '<h2 id="reply-title" class="comment-reply-title">',
 				'title_reply_after'  => '</h2>',
+				'title_reply' => '',
+				'comment_notes_before' => '',
+				'comment_field'        => '<textarea id="commentBodyField" name="comment" onfocus="hideShowComments(this)" onblur="hideShowComments(this)" cols="45" rows="8" maxlength="65525" required="required" placeholder="輸入您的留言"></textarea>',
+				'class_form' => 'commentBodyContainer',
+				'id_form' => 'commentsHolder',
+				'submit_button' => '<input name="%1$s" type="submit" id="%2$s" class="%3$s search-action flat-button" value="%4$s">'
+				// sprintf(
+				// 	'<p class="comment-form-comment">%s %s</p>',
+				// 	sprintf(
+				// 		'<label for="comment">%s</label>',
+				// 		_x( 'Comment', 'noun' )
+				// 	),
+				// 	'<textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required" placeholder="abcd"></textarea>'
+				// ),
 			)
 		);
 		?>
-
+	</div>
 </div><!-- .comments-area -->

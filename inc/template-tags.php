@@ -18,7 +18,7 @@ if ( ! function_exists( 'twentysixteen_entry_meta' ) ) :
 	 * @since Twenty Sixteen 1.0
 	 */
 	function twentysixteen_entry_meta() {
-		if ( 'post' === get_post_type() ) {
+		if ( 'post' === get_post_type()) {
 			$author_avatar_size = apply_filters( 'twentysixteen_author_avatar_size', 49 );
 			printf(
 				'<span class="byline post-timestamp"><span class="screen-reader-text">%1$s： </span> <a class="url fn n" href="%2$s">%3$s</a></span></span>',
@@ -65,6 +65,7 @@ if ( ! function_exists( 'twentysixteen_entry_date' ) ) :
 	 * @since Twenty Sixteen 1.0
 	 */
 	function twentysixteen_entry_date() {
+
 		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
 
 		// if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
@@ -82,12 +83,37 @@ if ( ! function_exists( 'twentysixteen_entry_date' ) ) :
 		);
 		
 		$string = '';
-		if (strcasecmp((string) get_the_date(), (string) get_the_modified_date()) != 0) {
-			$string = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a><span class="last-updated" title="%4$s">（已更新）</span></span>';
+		$publish = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a>';
+		$updated = '<span class="last-updated" title="%4$s">（已更新）</span></span>';
+		$update_inpost = '</span><br /><span class="byline post-timestamp last-updated">於 <time class="published"  title="%4$s">%4$s</time> 更新</span>';
+		if (!is_single()) {
+			if (!is_sticky()) {
+				$string .= $publish;
+			}
+			if (!is_sticky() && strcasecmp((string) get_the_date(), (string) get_the_modified_date()) != 0) {
+				$string .= $updated;
+			}
+		}
+		else if (is_sticky() || is_page()) {
+				$string .= $update_inpost;
 		}
 		else {
-			$string = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a></span>';
+			$string .= $publish;
+			if (strcasecmp((string) get_the_date(), (string) get_the_modified_date()) != 0){
+				$string .= $update_inpost;
+			}
 		}
+
+		// if (!is_single() && strcasecmp((string) get_the_date(), (string) get_the_modified_date()) != 0) {
+		// 	$string = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a><span class="last-updated" title="%4$s">（已更新）</span></span>';
+		// }
+		// else {
+		// 	$string = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a></span>';
+		// }
+
+		// if (is_single() &&  strcasecmp((string) get_the_date(), (string) get_the_modified_date()) != 0) {
+		// 	$string .= '<br /><span class="byline post-timestamp last-updated">於 <time class="published"  title="%4$s">%4$s</time> 更新</span>';
+		// }
 		printf(
 			$string,
 			_x( 'Posted on', 'Used before publish date.', 'twentysixteen' ),

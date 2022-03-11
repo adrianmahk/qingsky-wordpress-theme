@@ -762,7 +762,9 @@ function loadScrollPos(bottomPadding = 580) {
         else {
           var scrollPosFromPercent = scrollPos * (document.body.clientHeight - document.documentElement.clientHeight - bottomPadding);
             console.log(scrollPosFromPercent);
-            window.scrollTo(0, scrollPosFromPercent);  
+            setTimeout(function (){
+              window.scrollTo(0, scrollPosFromPercent);  
+            }, 1000);
         }
       }
       else {
@@ -822,7 +824,15 @@ function handleScrollEvent(e) {
   }
   
   // console.log(main);
-  var main = document.getElementById("main");
+  // if (document.body.scrollHeight > 110) {
+  //   if(main.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
+  //     document.body.classList.add("collapsed-header");
+  //   }
+  //   else if (main.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
+  //     document.body.classList.remove("collapsed-header");
+  //   }
+  // }
+  // var main = document.getElementById("main");
   if (main !== undefined) {
     if(main.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
       document.body.classList.add("collapsed-header");

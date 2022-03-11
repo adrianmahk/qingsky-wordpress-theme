@@ -10,6 +10,7 @@
 get_header(); ?>
 
 	<div id="primary" class="content-area centered">
+	<?php echo get_page_list(page_list()); ?>
 		<main id="main" class="site-main centered-bottom" role="main">
 		<?php 
 				// global $wp_query;

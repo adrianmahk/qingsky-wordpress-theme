@@ -13,16 +13,16 @@
 
 get_header(); ?>
 
-<div id="primary" class="content-area">
-	<main id="main" class="site-main" role="main">
-		this is page
+<div id="page_body" class="content-area centered">
+	<main id="main" class="site-main centered-bottom" role="main">
 		<?php
+		
 		// Start the loop.
 		while ( have_posts() ) :
 			the_post();
 
 			// Include the page content template.
-			get_template_part( 'template-parts/content', 'page' );
+			get_template_part( 'template-parts/content', 'single' );
 
 			// If comments are open or we have at least one comment, load up the comment template.
 			if ( comments_open() || get_comments_number() ) {
@@ -31,6 +31,8 @@ get_header(); ?>
 
 			// End the loop.
 		endwhile;
+		// blog_pager();
+		echo get_page_list(page_list());
 		?>
 
 	</main><!-- .site-main -->

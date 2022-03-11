@@ -18,11 +18,7 @@
 
 get_header(); ?>
 
-	<div id="page_body" class="content-area centered">
-	<?php if (true){// && is_active_sidebar( 'header-1' ) ){
-						// dynamic_sidebar( 'header-1' );
-						echo get_page_list(page_list(), '');
-					}?>
+	<div id="page_body" class="content-area centered">	
 		<main id="main" class="site-main centered-bottom" role="main">
 		<header class="page-header">
 			<?php post_filter_message();?>
@@ -31,7 +27,11 @@ get_header(); ?>
 		<?php
 			if (!is_paged() && (is_tag() || is_category())) {
 				$sticky = get_option( 'sticky_posts' );
-				$query = new WP_Query( array( 'p' => $sticky[0] ) );
+				$query = new WP_Query( 
+					array(
+						 'category_name' => is_category() ? get_query_var('category_name') : get_query_var('tag'),
+						 'post__in' => $sticky
+				) );
 				
 				if ( $query->have_posts() ) : ?>
 					<?php
@@ -81,8 +81,8 @@ get_header(); ?>
 			// 		'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentysixteen' ) . ' </span>',
 			// 	)
 			// );
-			blog_pager();
-			echo get_page_list(page_list());
+			// blog_pager();
+			// echo get_page_list(page_list());
 			
 			// If no content, include the "No posts found" template.
 		else :
@@ -90,11 +90,16 @@ get_header(); ?>
 
 		endif;
 		?>
+
+		</div>
 		<?php
 			// echo $wp_query->paged;
 			// echo get_page_list(page_list());
+			
+		blog_pager();
+		echo get_page_list(page_list());
+		
 		?>
-		</div>
 		</main><!-- .site-main -->
 	</div><!-- .content-area -->
 

@@ -10,6 +10,10 @@
 get_header(); ?>
 
 <div id="page_body" class="content-area centered">
+	<div class="blog-posts hfeed container">
+	<div class="centered top-bar-container" style="top: 4px">
+	<div class="progress-bar-container"><div class="progress-bar" id="progress-bar-top-bar" style=""></div></div>
+	</div>
 	<main id="main" class="site-main centered-bottom" role="main">
 		<?php
 		// Start the loop.
@@ -33,8 +37,25 @@ get_header(); ?>
 						?>
                         </div>
                         <div style="display: table-cell">
+						  <?php
+						  		$tags = wp_get_post_tags(get_the_ID());
+								//   echo $tags;
+								$name = '';
+								$moreTag = array_filter($tags, function ($tag){
+									if (!in_array( $tag->name, ['散文', '隨筆']) ) {
+										return true;
+									}
+								});
+								// echo $moreTag;
+								// echo json_encode($moreTag);
+
+								if (!empty($moreTag)):
+									$name = $moreTag[0]->name;
+									$link = '/tag/' . $name;
+									
+						  ?>
                           <a class="pill-button ripple"
-                            href="https://www.qwinna.hk/search/label/我看世界?max-results=10#main" title="更多「我看世界」文章">
+                            href="<?php echo $link;?>" title="更多「<?php echo $name;?>」文章">
                             <svg class="svg-icon-pagination" height="14px" version="1.1" viewBox="0 0 18 14"
                               width="18px" xmlns="http://www.w3.org/2000/svg"
                               xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -47,6 +68,7 @@ get_header(); ?>
                             </svg>
                             更多相似文章
                           </a>
+						  <?php endif; ?>
                         </div>
                         <div style="display: table-cell">
 
@@ -64,7 +86,7 @@ get_header(); ?>
 	</main><!-- .site-main -->
 
 	<?php get_sidebar( 'content-bottom' ); ?>
-
+	</div>
 </div><!-- .content-area -->
 
 <?php get_sidebar(); ?>

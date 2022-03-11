@@ -1,5 +1,5 @@
 /*
-Theme Name: Twenty Sixteen
+Theme Name: Qingsky.hk
 Theme URI: https://wordpress.org/themes/twentysixteen/
 Author: the WordPress team
 Author URI: https://wordpress.org/
@@ -514,6 +514,7 @@ img {
 	max-width: 100%;
 	/* Adhere to container width. */
 	vertical-align: middle;
+	object-fit: cover;
 }
 
 del {
