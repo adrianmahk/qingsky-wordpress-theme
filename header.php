@@ -34,11 +34,11 @@
 			font-family: 'Roboto';
 			font-style: italic;
 			font-weight: 300;
-			src: url(<?php echo get_template_directory_uri().'/assets/roboto.woff2'?>) format('woff2');
+			src: url(<?php echo get_template_directory_uri().'/assests/roboto.woff2'?>) format('woff2');
 			unicode-range: U + 0000-00FF, U + 0131, U + 0152-0153, U + 02BB-02BC, U + 02C6, U + 02DA, U + 02DC, U + 2000-206F, U + 2074, U + 20AC, U + 2122, U + 2191, U + 2193, U + 2212, U + 2215, U + FEFF, U + FFFD;
 		}
 	</style>
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-ajax.js' ?>" type="text/javascript"> </script>
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script>
 	
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
 	<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>">
