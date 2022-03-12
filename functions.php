@@ -1257,7 +1257,7 @@ function postTags() {
 	if (!empty($tags)) {
 		echo '<ul class="tabs inpost">';
 		foreach ($tags as $tag) {
-			printf('<li class="pill-button ripple"><a href="%1$s" title="更多「%2$s」的文章">%2$s</a></li>', '/tag/' . $tag->name, $tag->name);
+			printf('<li class="pill-button ripple"><a href="%1$s" title="更多「%2$s」的文章">%2$s</a></li>', '/category/' . $tag->name, $tag->name);
 		}
 		echo '</ul>';
 	}
