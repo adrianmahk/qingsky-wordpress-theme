@@ -1162,6 +1162,11 @@ function post_filter_message() {
 	else if (get_query_var('tag') || get_query_var('category_name')) {
 		echo $h3;
 		$name = get_query_var('tag') ? get_query_var('tag') : get_query_var('category_name');
+		$tag = get_term_by('slug', $name, get_query_var('tag') ? 'tag' : 'category');
+		if ($tag) {
+			$name = $tag->name;
+		}
+		// echo $name;
 		echo urldecode($name);
 		echo '</h3>';
 		// echo '<div class="post-filter-message"><div>目前顯示的是有「<span class="search-label">散文</span>」標籤的文章</div><div><a class="flat-button ripple" href="/p/allposts.html#tags" target="_blank" title="查找所有文章">標籤列表</a></div></div>';
@@ -1257,7 +1262,8 @@ function postTags() {
 	if (!empty($tags)) {
 		echo '<ul class="tabs inpost">';
 		foreach ($tags as $tag) {
-			printf('<li class="pill-button ripple"><a href="%1$s" title="更多「%2$s」的文章">%2$s</a></li>', '/category/' . $tag->name, $tag->name);
+			// echo $tag->slug;
+			printf('<li class="pill-button ripple"><a href="%1$s" title="更多「%2$s」的文章">%2$s</a></li>', '/category/' . $tag->slug, $tag->name);
 		}
 		echo '</ul>';
 	}
