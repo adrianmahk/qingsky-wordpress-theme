@@ -38,20 +38,23 @@ get_header(); ?>
                         </div>
                         <div style="display: table-cell">
 						  <?php
-						  		$tags = wp_get_post_tags(get_the_ID());
-								//   echo $tags;
+						  		$tags = get_the_category(get_the_ID());
+								// echo json_encode($tags);
 								$name = '';
 								$moreTag = array_filter($tags, function ($tag){
-									if (!in_array( $tag->name, ['散文', '隨筆']) ) {
+									if (!in_array( urldecode($tag->name), ['散文', '隨筆', '精選', '小說', '世界觀', '每月主題', '置頂']) ) {
 										return true;
 									}
 								});
 								// echo $moreTag;
 								// echo json_encode($moreTag);
+								if (empty($moreTag)) {
+									$moreTag = $tags;
+								}
 
 								if (!empty($moreTag)):
-									$name = $moreTag[0]->name;
-									$link = '/tag/' . $name;
+									$name = urldecode(array_values($moreTag)[0]->name);
+									$link = urldecode('/category/' . $slug);
 									
 						  ?>
                           <a class="pill-button ripple"
