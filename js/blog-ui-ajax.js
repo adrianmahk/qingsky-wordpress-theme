@@ -520,7 +520,7 @@ function changeFontSizeInit() {
 }
 function changeFontSize() {
   var body = document.body;
-  var next_font_size = "f16px";
+  var next_font_size = "f15px";
   
   if (body.classList.contains("f12px") || body.classList.contains("f13px")) {
     next_font_size = "f14px";
