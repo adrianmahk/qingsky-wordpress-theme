@@ -46,10 +46,15 @@
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class2(); ?>>
+<body
+<?php body_class2(); ?>>
 <?php
 	// echo includes_url();
 ?>
+<script type="text/javascript">
+	changeFontSizeInit();
+	darkModeInit();
+</script>
 <?php wp_body_open(); ?>
 <div class="loading-bar" id="loading-bar"></div>
     <div class="bg-div" id="bg-div"></div>
@@ -137,7 +142,7 @@
 							src="<?php echo get_template_directory_uri() . '/icons/moon9_dark.png'?>">
                         </a>
                     </div>
-					<?php if (is_single()):?>
+					<?php if (is_single()|| is_page()):?>
 					<div class="right-button-container flat-icon-button ripple">
             <a class="return_link font_size" onclick="changeFontSize();" style="" title="字體大小">
               <img class="png_icon light"
