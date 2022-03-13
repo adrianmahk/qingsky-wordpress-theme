@@ -1118,13 +1118,19 @@ function get_page_list($array = [], $id = '') {
 		else if ($item['href'] == wp_make_link_relative(get_permalink()) || $item['href'] . '/' == wp_make_link_relative(get_permalink()) || $item['href']  == wp_make_link_relative(get_permalink()). '/') {
 			$selected = true;
 		}
-
-		$tabs .= '<li class="pill-button ripple label-item' . ($selected ? ' selected' : '') . '">';
+		$tabs .= '<a href='. $item['href'] . '>';
+		$tabs .= '<li class="pill-button ripple label-item' . ($selected ? ' selected' : '') . '">' . $item['name'] .'</li>';
 		// else if () {
 
 		// }
-		$tabs .= '<a href='. $item['href'] . '>' . $item['name'] .' </a>';
-		$tabs .= '</li>';
+		$tabs .= '</a> ';
+
+		// $tabs .= '<li class="pill-button ripple label-item' . ($selected ? ' selected' : '') . '">';
+		// // else if () {
+
+		// // }
+		// $tabs .= '<a href='. $item['href'] . '>' . $item['name'] .' </a>';
+		// $tabs .= '</li>';
 	}
 
 	$tabs .=

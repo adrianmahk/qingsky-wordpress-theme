@@ -51,10 +51,6 @@ ready(function () {
   //makeExternalLinkOpenInBlank();
   init();
   fixDropboxImgSrc();
-  console.log('sat: ' + getComputedStyle(document.documentElement).getPropertyValue("--sat"));
-  console.log('sal: ' + getComputedStyle(document.documentElement).getPropertyValue("--sal"));
-  console.log('sar: ' + getComputedStyle(document.documentElement).getPropertyValue("--sar"));
-  console.log('sab: ' + getComputedStyle(document.documentElement).getPropertyValue("--sab"));
 });
 
 function fixDropboxImgSrc() {
