@@ -132,8 +132,8 @@ a {
 text-decoration: none;
 color: #3aacc3;
 }
-a:visited {
-color: #3aacc3;
+.post-body a:visited {
+  color: #06859e;
 }
 a:hover {
 color: #3aacc3;
