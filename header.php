@@ -52,8 +52,7 @@
 	// echo includes_url();
 ?>
 <script type="text/javascript">
-	changeFontSizeInit();
-	darkModeInit();
+	bodyInit();
 </script>
 <?php wp_body_open(); ?>
 <div class="loading-bar" id="loading-bar"></div>

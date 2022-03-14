@@ -344,14 +344,14 @@ body.opacity-30.dark-mode .post-outer-container {
 .editor-buttons svg {
     fill: #212121;
 }
-.post-body p br {
+/* .post-body p br {
     line-height: unset;
     display: block;
     content: unset;
 }
 .post-body p br::before {
     content: unset;
-}
+} */
 .glassnote-about-msg {
     text-align: center;
     color: #fefdfd;

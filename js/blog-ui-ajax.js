@@ -164,9 +164,11 @@ function init() {
       if (!document.body.className.match("item-view")) {
         saveMain();
         //saveScrollPosOld();
-      } else {
+      } 
+      else {
         setFlag();
-      }  
+      }
+      saveLastUrl();
       hidePageLoading(0);
       saveScrollPos();
     });
@@ -174,9 +176,9 @@ function init() {
       if (event.persisted) {
         darkModeInit();
         changeFontSizeInit();
-        hidePageLoading(0);
-        loadScrollPos();
+        hidePageLoading(0);  
       }
+      loadScrollPos();
       loadReadingProgress();
     });
     window.addEventListener("resize", function () {
@@ -195,7 +197,7 @@ function init() {
       }
     });
     loadIndie();
-    loadScrollPos();
+    // loadScrollPos();
   
     document.body.setAttribute("inited", true);
 
@@ -425,12 +427,17 @@ function loadLinkPreventDefault(event, href, removeFirst = false, button = null)
 }
 
 function checkNeedRefresh() {
+  if (typeof (Storage) == undefined) {
+    return;
+  }
   var last_update = sessionStorage.getItem("last-update");
   if (last_update != null) {
     var d1 = new Date(document.lastModified);
     var d2 = new Date(last_update);
-    var url1 = sessionStorage.getItem("last-url");
+    var url1 = sessionStorage.getItem("last-list-url");
     var url2 = window.location.href;
+    // console.log("d1: " + d1 +"d2: " + d2);
+    // console.log("last-list-url: " + sessionStorage.getItem("last-list-url"));
 
     if ((d1.getTime() == d2.getTime()) && (url1 == url2)) {
       return false;
@@ -447,12 +454,24 @@ function saveMain(str) {
     sessionStorage.clear();
     sessionStorage.setItem("main", str);
     sessionStorage.setItem("last-update", document.lastModified);
-    sessionStorage.setItem("last-url", window.location);
+    // sessionStorage.setItem("last-list-url", window.location);
+    // saveLastUrl();
 
     if (!document.body.className.match("item-view"))
       sessionStorage.setItem("scrollPos", document.body.scrollTop || document.scrollingElement.scrollTop);
   }
   return "unload!";
+}
+function saveLastUrl() {
+  if (typeof (Storage) !== "undefined") {
+    sessionStorage.setItem("last-url", window.location);
+    // console.log("item-view: " + document.body.classList.contains("item-view"));
+    if (!document.body.classList.contains("item-view")) {
+      // console.log("no item-view");
+      sessionStorage.setItem("last-list-url", window.location);
+      // console.log("last list url: " + sessionStorage.getItem("last-list-url"));
+    }
+  }
 }
 // function saveScrollPosOld() {
 //   if (typeof (Storage) !== "undefined") {
@@ -749,6 +768,14 @@ function saveScrollPos() {
 function loadScrollPos(bottomPadding = 580) {
 // get scrollPos
   if (document.body.classList.contains("is-post")) {
+    if (typeof (Storage) == "undefined") {
+      return;
+    }
+
+    var url1 = sessionStorage.getItem("last-url");
+    var url2 = window.location.href;
+    // console.log("last-url: " + url1);
+    
       var scrollPosObj = getLocalStorageScrollPos();
       var scrollPos = scrollPosObj ? scrollPosObj[window.location.pathname] : 0;
       console.log(scrollPos);
@@ -763,14 +790,17 @@ function loadScrollPos(bottomPadding = 580) {
         else {
           var scrollPosFromPercent = scrollPos * (document.body.clientHeight - document.documentElement.clientHeight - bottomPadding);
             console.log(scrollPosFromPercent);
-            setTimeout(function (){
-              window.scrollTo(0, scrollPosFromPercent);  
-            }, 1000);
+            if (url1 != url2) {
+              setTimeout(function (){
+                window.scrollTo(0, scrollPosFromPercent);  
+              }, 1000);
+            }
         }
       }
       else {
         updateItemViewProgressBar(0);
       }
+    
   }
 }
 function loadReadingProgress() {
