@@ -54,7 +54,7 @@ get_header(); ?>
 
 								if (!empty($moreTag)):
 									$name = urldecode(array_values($moreTag)[0]->name);
-									$link = urldecode('/category/' . $slug);
+									$link = urldecode('/category/' . array_values($moreTag)[0]->slug);
 									
 						  ?>
                           <a class="pill-button ripple"
