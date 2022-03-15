@@ -809,10 +809,20 @@ function custom_background_cb()
 }
 
 function clear_br($content) { 
-return str_replace("<br/>","<br clear='none'/>", $content);
+	// $content = str_replace("<br/>","<br clear='none'/>", $content);
+	
+	// $content = str_replace('<br clear="none"/>','</p><p>', $content);
+	// if (!str_starts_with($content,'<p>')) {
+	// 	$content = '<p>' . $content;
+	// }
+
+	// $content = str_replace('<br clear=\'none\'/>','</p><p>', $content);
+	// $content = str_replace('<br clear="none" />','</p><p>', $content);
+	return str_replace("<br/>","<br clear='none'/>", $content);
+// return '';
 } 
 add_filter('the_content','clear_br');
-remove_filter ('the_content', 'wpautop');	
+remove_filter ('the_content', 'wpautop');
 
 function search_distinct() {
 	return "DISTINCT";
@@ -1340,7 +1350,7 @@ function blogArchive() {
 								AND YEAR(post_date) = '".$year."'
 								ORDER BY post_date DESC");
 		foreach($months as $month) {
-			$echo .= '<li><a href="#">' .$year . ' 年 ' . $month . '月</a>
+			$echo .= '<li><a href="#">' .$year . ' 年 ' . $month . ' 月</a>
 				<ul>';
 				$days = $wpdb->get_col("SELECT ID
 								FROM $wpdb->posts

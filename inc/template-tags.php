@@ -18,20 +18,20 @@ if ( ! function_exists( 'twentysixteen_entry_meta' ) ) :
 	 * @since Twenty Sixteen 1.0
 	 */
 	function twentysixteen_entry_meta() {
-		if ( 'post' === get_post_type()) {
+		// if ( 'post' === get_post_type()) {
 			$author_avatar_size = apply_filters( 'twentysixteen_author_avatar_size', 49 );
 			printf(
-				'<span class="byline post-timestamp"><span class="screen-reader-text">%1$s： </span> <a class="url fn n" href="%2$s">%3$s</a></span></span>',
+				'<span class="byline post-timestamp"><span class="">作者： </span> <a class="url fn n" href="%2$s">%3$s</a></span></span>',
 				// get_avatar( get_the_author_meta( 'user_email' ), $author_avatar_size ).'',
 				_x( 'Author', 'Used before post author name.', 'twentysixteen' ),
 				esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
 				get_the_author()
 			);
-		}
+		// }
 
-		if ( in_array( get_post_type(), array( 'post', 'attachment' ) ) ) {
+		// if ( in_array( get_post_type(), array( 'post', 'attachment' ) ) ) {
 			twentysixteen_entry_date();
-		}
+		// }
 
 		$format = get_post_format();
 		if ( current_theme_supports( 'post-formats', $format ) ) {
@@ -79,14 +79,14 @@ if ( ! function_exists( 'twentysixteen_entry_date' ) ) :
 			esc_attr( get_the_modified_date( 'c' ) ),
 			// get_the_modified_date()
 			// get_post_datetime()
-			get_the_published_date()
+			get_the_date()
 		);
 		
 		$string = '';
 		$publish = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a>';
 		$updated = '<span class="last-updated" title="%4$s">（已更新）</span></span>';
 		$update_inpost = '</span><br /><span class="byline post-timestamp last-updated">於 <time class="published"  title="%4$s">%4$s</time> 更新</span>';
-		if (!is_single()) {
+		if (!is_singular()) {
 			if (!is_sticky()) {
 				$string .= $publish;
 			}
