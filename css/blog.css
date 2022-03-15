@@ -37,6 +37,7 @@ height: 50px;
 outline: none;
 margin-top: 1em;
 position: relative;
+padding-top: env(safe-area-inset-top);
 padding-right: env(safe-area-inset-right);
 padding-bottom: env(safe-area-inset-bottom);
 padding-left: env(safe-area-inset-left);
@@ -3149,7 +3150,7 @@ text-align: center;
   animation: page-load 5 ease-in-out 1s forwards;
   /*box-shadow: 0 2px 5px $(body.shadow.color);*/
   display: none;
-}
+} 
 
 body.page-loading .loading-bar,
 body.page-loading-end .loading-bar {

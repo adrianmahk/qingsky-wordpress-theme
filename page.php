@@ -14,6 +14,7 @@
 get_header(); ?>
 
 <div id="page_body" class="content-area centered">
+<div class="blog-posts hfeed container">
 	<main id="main" class="site-main centered-bottom" role="main">
 		<?php
 		
@@ -38,7 +39,7 @@ get_header(); ?>
 	</main><!-- .site-main -->
 
 	<?php get_sidebar( 'content-bottom' ); ?>
-
+	</div>
 </div><!-- .content-area -->
 
 <?php get_sidebar(); ?>

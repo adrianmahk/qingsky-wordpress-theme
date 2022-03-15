@@ -147,7 +147,7 @@ function init() {
       }
 
       const link = findLink(e.target);
-      console.log(link);
+      // console.log(link);
       if (link == null) {
         return;
       }
@@ -178,7 +178,9 @@ function init() {
         changeFontSizeInit();
         hidePageLoading(0);  
       }
-      loadScrollPos();
+      else {
+        loadScrollPos();
+      }
       loadReadingProgress();
     });
     window.addEventListener("resize", function () {
@@ -436,8 +438,8 @@ function checkNeedRefresh() {
     var d2 = new Date(last_update);
     var url1 = sessionStorage.getItem("last-list-url");
     var url2 = window.location.href;
-    // console.log("d1: " + d1 +"d2: " + d2);
-    // console.log("last-list-url: " + sessionStorage.getItem("last-list-url"));
+    console.log("d1: " + d1 +"d2: " + d2);
+    console.log("last-list-url: " + sessionStorage.getItem("last-list-url"));
 
     if ((d1.getTime() == d2.getTime()) && (url1 == url2)) {
       return false;
@@ -776,30 +778,33 @@ function loadScrollPos(bottomPadding = 580) {
     var url2 = window.location.href;
     // console.log("last-url: " + url1);
     
-      var scrollPosObj = getLocalStorageScrollPos();
-      var scrollPos = scrollPosObj ? scrollPosObj[window.location.pathname] : 0;
-      console.log(scrollPos);
-      if (scrollPos != undefined) {
-        scrollPos = scrollPos / 100;
-        if (scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
-          updateItemViewProgressBar(100);
-        }
-        else if (scrollPos < 0.05) {
-          updateItemViewProgressBar(0);
-        }
-        else {
-          var scrollPosFromPercent = scrollPos * (document.body.clientHeight - document.documentElement.clientHeight - bottomPadding);
-            console.log(scrollPosFromPercent);
-            if (url1 != url2) {
-              setTimeout(function (){
-                window.scrollTo(0, scrollPosFromPercent);  
-              }, 1000);
-            }
-        }
+    var scrollPosObj = getLocalStorageScrollPos();
+    var scrollPos = scrollPosObj ? scrollPosObj[window.location.pathname] : 0;
+    console.log(scrollPos);
+    if (scrollPos != undefined) {
+      scrollPos = scrollPos / 100;
+      if (scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
+        updateItemViewProgressBar(100);
       }
-      else {
+      else if (scrollPos < 0.05) {
         updateItemViewProgressBar(0);
       }
+      else {
+        var scrollPosFromPercent = scrollPos * (document.body.clientHeight - document.documentElement.clientHeight - bottomPadding);
+          console.log(scrollPosFromPercent);
+          if (url1 != url2) {
+            setTimeout(function (){
+              window.scrollTo(0, scrollPosFromPercent);  
+            }, 1000);
+          }
+          else {
+            updateItemViewProgressBar(scrollPos * 100);
+          }
+      }
+    }
+    else {
+      updateItemViewProgressBar(0);
+    }
     
   }
 }
