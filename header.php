@@ -8,6 +8,7 @@
  * @subpackage Twenty_Sixteen
  * @since Twenty Sixteen 1.0
  */
+include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html_dom.php';
 // include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/override-functions.php";
 // include get_template_directory_uri() . "/override-functions.php";
 ?>
