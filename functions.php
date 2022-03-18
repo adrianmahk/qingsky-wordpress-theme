@@ -809,19 +809,26 @@ function custom_background_cb()
 }
 
 function clear_br($content) { 
-	// $content = str_replace("<br/>","<br clear='none'/>", $content);
-	
-	// $content = str_replace('<br clear="none"/>','</p><p>', $content);
-	// if (!str_starts_with($content,'<p>')) {
-	// 	$content = '<p>' . $content;
-	// }
+	//this requires simplehtmldom
+	$html = str_get_html($content);
+	if (!$html) {
+		return str_replace("<br/>","<br clear='none'/>", $content);
+	}
+	$domain = $_SERVER['HTTP_HOST'];
+	// for links to work the same on localhost and prod
+	foreach($html->find('a') as $element) {
+		$element->href = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->href));
+	 }
 
-	// $content = str_replace('<br clear=\'none\'/>','</p><p>', $content);
-	// $content = str_replace('<br clear="none" />','</p><p>', $content);
-	return str_replace("<br/>","<br clear='none'/>", $content);
-// return '';
+	// for me to have imgs shown in both localhost and prod
+	foreach($html->find('img') as $element) {
+       $element->src = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->src));
+	   $element->srcset = '';
+	}
+	return str_replace("<br/>","<br clear='none'/>", $html);
 } 
 add_filter('the_content','clear_br');
+add_filter('post_thumbnail_html','clear_br');
 remove_filter ('the_content', 'wpautop');
 
 function search_distinct() {

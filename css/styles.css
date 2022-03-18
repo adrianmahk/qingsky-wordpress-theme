@@ -447,6 +447,10 @@ body.opacity-30.dark-mode .post-outer-container {
     margin: 0px 8px 8px 8px;
 }
 
+/* Wordpress cond. */
+.post-body img {
+    object-fit: cover;
+}
 
 .comment-body {
     margin-left: 50px;
@@ -567,7 +571,9 @@ display: table-cell;
 .snippet-text img {
     display: none;
 }
-.snippet-text img:first-of-type, .snippet-text .post-thumbnail img {
+/*.snippet-text img:first-of-type, */
+.snippet-text .post-thumbnail img,
+.snippet-thumbnail img {
     width: 20vw;
     height: 20vw;
     max-width: calc(12em - 15px);
@@ -579,6 +585,10 @@ display: table-cell;
     object-fit: cover;
     display: block;
     margin-left: 5px;
+}
+.snippet-text ol,.snippet-text ul {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .widget.Label h3{

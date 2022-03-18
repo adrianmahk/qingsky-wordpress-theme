@@ -168,23 +168,47 @@ if ( ! function_exists( 'twentysixteen_post_thumbnail' ) ) :
 	 * @since Twenty Sixteen 1.0
 	 */
 	function twentysixteen_post_thumbnail() {
-		if ( post_password_required() || is_attachment() || ! has_post_thumbnail() ) {
+		
+		$first_img = null;
+		if ( post_password_required() || is_attachment() ) {
 			return;
 		}
+		else if (!has_post_thumbnail()) {
+			global $post, $posts;
+			$first_img = '';
+			ob_start();
+			ob_end_clean();
+			$output = preg_match_all('/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i', $post->post_content, $matches);
+			$first_img = $matches[1][0];
+			// echo $first_img;
+			if ($first_img == null) {
+				return;
+			}
+		}
+
 
 		if ( is_singular() ) :
 			?>
 
 		<div class="post-thumbnail">
-			<?php the_post_thumbnail(); ?>
+			<?php if ($first_img) {
+				echo '<img src="'. $first_img . '</img>';
+			} else {
+				the_post_thumbnail();
+			} ?>
 	</div><!-- .post-thumbnail -->
 
 	<?php else : ?>
 
-	<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true">
-		<?php the_post_thumbnail( 'post-thumbnail', array( 'alt' => the_title_attribute( 'echo=0' ) ) ); ?>
-	</a>
-
+	<div class="post-thumbnail snippet-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true">
+		<?php 
+		if ($first_img) {
+			echo '<img src="'. $first_img . '"></img>';
+		} else {
+			the_post_thumbnail( 'post-thumbnail', array( 'alt' => the_title_attribute( 'echo=0' ) ) );
+		} 
+		 ?>
+	</div>
 		<?php
 	endif; // End is_singular().
 	}
