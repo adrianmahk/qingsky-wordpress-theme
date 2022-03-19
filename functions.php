@@ -822,8 +822,11 @@ function clear_br($content) {
 
 	// for me to have imgs shown in both localhost and prod
 	foreach($html->find('img') as $element) {
-       $element->src = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->src));
-	   $element->srcset = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->srcset));
+    	$element->src = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->src));
+	//    echo attachment_url_to_postid('https://' . $domain . $element->parent->href);
+		$id = attachment_url_to_postid('https://' . $domain . $element->parent->href);
+		
+	    $element->srcset = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', wp_get_attachment_image_srcset($id)));
 	}
 	return str_replace("<br/>","<br clear='none'/>", $html);
 } 
