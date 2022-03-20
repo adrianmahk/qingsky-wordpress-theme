@@ -6,6 +6,7 @@
  * @subpackage Twenty_Sixteen
  * @since Twenty Sixteen 1.0
  */
+
 ?>
 <article id="post-<?php the_ID(); ?>" class="post-outer-container">
 											<div class="post-outer">
@@ -101,13 +102,6 @@
 												
 												</div>
 											</div>
-											<script type="text/javascript">
-												function popupComment() {
-													var iframe = document.getElementById("comment-editor");
-													var url = iframe.src;
-													var win = window.open(url, "_blank");
-												}
-											</script>
 											<?php 
 											if ( comments_open() || get_comments_number() ) {
 												comments_template();

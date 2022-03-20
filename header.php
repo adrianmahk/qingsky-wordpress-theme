@@ -48,7 +48,7 @@ include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html
 </head>
 
 <body
-<?php body_class2(); ?>>
+<?php body_class(); ?>>
 <?php
 	// echo includes_url();
 ?>
@@ -117,7 +117,7 @@ include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html
             </div>
 			<div class="centered top-bar-container">
                 <div class="centered-top-container top-bar" id="top-bar">
-					<?php if (!is_front_page()):?>
+					<?php if (!is_front_page() || is_paged()):?>
 						<a class="return_link ripple" href="/"
             onclick="removeAttribute('href');history.back();" title="上一頁">
             <img class="png_icon light"
