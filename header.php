@@ -9,12 +9,8 @@
  * @since Twenty Sixteen 1.0
  */
 include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html_dom.php';
-// include ($_SERVER['DOCUMENT_ROOT']) . "/wp-content/themes/twentysixteen2/override-functions.php";
-// include get_template_directory_uri() . "/override-functions.php";
-?>
-<?php
-// function wp_get_document_title() {
-// }
+
+update_view_count();
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
