@@ -1187,7 +1187,7 @@ function update_view_count() {
 		global $wp;
 		global $wpdb;
 		// $view_count_table_sql = "CREATE TABLE `wordpress`.`wp_posts_viewcount` (`post_id` BIGINT(20) NOT NULL , `post_title` TEXT NULL , `post_url` VARCHAR(255) NOT NULL , `view_count` INT(11) NOT NULL DEFAULT '0' , PRIMARY KEY (`post_id`)) ENGINE = InnoDB;";
-		$view_count_table_sql = "CREATE TABLE `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
+		$view_count_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
 		$view_count_sql = "INSERT INTO `wp_viewcounts` (`url`, `date`, `update_time`, `view_count`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request)) ."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '" . (is_singular() ?  get_the_ID() : '') . "', '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
 		// $view_count_sql = "INSERT INTO `wp_posts_viewcount` (`post_id`, `post_title`, `post_url`, `view_count`) VALUES(" . get_the_ID() . ", '" . get_the_title() . "', '" . get_permalink() . "', 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1";
 		// echo $view_count_sql;exit();

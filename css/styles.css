@@ -444,7 +444,7 @@ body.opacity-30.dark-mode .post-outer-container {
 }
 
 .label-all-container {
-    margin: 0px 8px 8px 8px;
+    margin: 0px 8px 8px 8px !important;
 }
 
 /* Wordpress cond. */
