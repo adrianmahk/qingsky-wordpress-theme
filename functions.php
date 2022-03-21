@@ -1233,7 +1233,7 @@ function getIpData($userIP) {
 	$ipData = json_decode($apiResponse, true); 
 	
 	if(!empty($ipData)){ 
-		return $ipData['region_name'];
+		return $ipData['country_name'];
 	}else{ 
 	} 
 	exit;
