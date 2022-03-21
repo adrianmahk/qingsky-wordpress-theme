@@ -428,18 +428,28 @@ function loadLinkPreventDefault(event, href, removeFirst = false, button = null)
   ajaxLoad(href, removeFirst, button);
 }
 
+function convertDateTime(dateTime) {
+  // const dateTime = '2017-02-04 11:23:54';
+
+  let dateTimeParts= dateTime.split(/[- :]/); // regular expression split that creates array with: year, month, day, hour, minutes, seconds values
+  dateTimeParts[1]--; // monthIndex begins with 0 for January and ends with 11 for December so we need to decrement by one
+  
+  return new Date(...dateTimeParts); // our Date object
+}
+
 function checkNeedRefresh() {
   if (typeof (Storage) == undefined) {
     return;
   }
   var last_update = sessionStorage.getItem("last-update");
   if (last_update != null) {
-    var d1 = new Date(document.lastModified);
-    var d2 = new Date(last_update);
+    // var d1 = new Date(document.lastModified);
+    var d1 = convertDateTime(document.body.getAttribute("last-update"));
+    var d2 = convertDateTime(last_update);
     var url1 = sessionStorage.getItem("last-list-url");
     var url2 = window.location.href;
-    console.log("d1: " + d1 +"d2: " + d2);
-    console.log("last-list-url: " + sessionStorage.getItem("last-list-url"));
+    // console.log("d1: " + d1 +"d2: " + d2);
+    // console.log("last-list-url: " + sessionStorage.getItem("last-list-url"));
 
     if ((d1.getTime() == d2.getTime()) && (url1 == url2)) {
       return false;
@@ -455,7 +465,8 @@ function saveMain(str) {
     }
     sessionStorage.clear();
     sessionStorage.setItem("main", str);
-    sessionStorage.setItem("last-update", document.lastModified);
+    // sessionStorage.setItem("last-update", document.lastModified);
+    sessionStorage.setItem("last-update", document.body.getAttribute("last-update"));
     // sessionStorage.setItem("last-list-url", window.location);
     // saveLastUrl();
 

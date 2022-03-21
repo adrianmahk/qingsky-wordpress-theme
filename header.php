@@ -44,7 +44,7 @@ update_view_count();
 </head>
 
 <body
-<?php body_class(); ?>>
+<?php body_class(); get_last_update(); ?>>
 <?php
 	// echo includes_url();
 ?>
