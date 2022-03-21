@@ -438,7 +438,7 @@ function convertDateTime(dateTime) {
 }
 
 function checkNeedRefresh() {
-  if (typeof (Storage) == undefined) {
+  if (typeof (Storage) == undefined || document.body.classList.contains("error404")) {
     return;
   }
   var last_update = sessionStorage.getItem("last-update");
