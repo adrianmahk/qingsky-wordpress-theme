@@ -1178,7 +1178,7 @@ function blogArchive() {
 }
 
 function update_view_count() {	
-	if (is_home() || is_archive() || is_singular() || is_search()) {
+	if (is_home() || is_archive() || is_singular() || is_search() || is_404()) {
 		if (is_user_logged_in()) {
 			if (current_user_can( 'edit_post', get_the_ID() )) {
 				return;
