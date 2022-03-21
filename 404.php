@@ -29,6 +29,19 @@ get_header(); ?>
 		echo '（此為本站的 Blogger 舊版本的鏈結）';
 	}
 ?>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- qingskys_page_body_Blog1_1x1_as -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6259217392436204"
+     data-ad-slot="4167252325"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<br />
+<cm>輕鬆一下</cm>
 </div>
 </div>
 </div>
