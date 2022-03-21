@@ -1184,19 +1184,60 @@ function update_view_count() {
 				return;
 			}
 		}
+
 		global $wp;
 		global $wpdb;
 		// $view_count_table_sql = "CREATE TABLE `wordpress`.`wp_posts_viewcount` (`post_id` BIGINT(20) NOT NULL , `post_title` TEXT NULL , `post_url` VARCHAR(255) NOT NULL , `view_count` INT(11) NOT NULL DEFAULT '0' , PRIMARY KEY (`post_id`)) ENGINE = InnoDB;";
 		$view_count_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
 		$view_count_sql = "INSERT INTO `wp_viewcounts` (`url`, `date`, `update_time`, `view_count`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request)) ."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '" . (is_singular() ?  get_the_ID() : '') . "', '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
 		// $view_count_sql = "INSERT INTO `wp_posts_viewcount` (`post_id`, `post_title`, `post_url`, `view_count`) VALUES(" . get_the_ID() . ", '" . get_the_title() . "', '" . get_permalink() . "', 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1";
-		// echo $view_count_sql;exit();
+		$user_region = getIpData($_SERVER['REMOTE_ADDR']);
+		$user_region_table_sql = "CREATE TABLE `wordpress`.`wp_viewcounts_region` ( `region` VARCHAR(20) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `view_count` INT(11) NOT NULL , PRIMARY KEY (`region`, `date`)) ENGINE = InnoDB;";
+		$user_region_sql = "INSERT INTO `wp_viewcounts_region` (`region`, `date`, `update_time`, `view_count`) VALUES('". $user_region . "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+		
+		// echo $user_region_sql;exit();
 		$wpdb->query( "START TRANSACTION" );
 		$wpdb->query($view_count_table_sql);
 		$wpdb->query($view_count_sql);
+		$wpdb->query($user_region_table_sql);
+		$wpdb->query($user_region_sql);
+		
 		$wpdb->query( "COMMIT" );
 	}
-	}
+}
+
+function getIpData($userIP) {
+	
+	// echo $userIP;
+	// IP address 
+	// $userIP = '162.222.198.75'; 
+	// $userIP = '61.244.105.254';
+	
+	// API end URL 
+	$apiURL = 'https://freegeoip.app/json/'.$userIP; 
+	
+	// Create a new cURL resource with URL 
+	$ch = curl_init($apiURL); 
+	
+	// Return response instead of outputting 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+	
+	// Execute API request 
+	$apiResponse = curl_exec($ch); 
+	// echo $apiResponse; exit;
+	
+	// Close cURL resource 
+	curl_close($ch); 
+	
+	// Retrieve IP data from API response 
+	$ipData = json_decode($apiResponse, true); 
+	
+	if(!empty($ipData)){ 
+		return $ipData['region_name'];
+	}else{ 
+	} 
+	exit;
+}
 
 function a() {
 	return '';
