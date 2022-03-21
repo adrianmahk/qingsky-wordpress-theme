@@ -1236,12 +1236,25 @@ function getIpData($userIP) {
 		return $ipData['country_name'];
 	}else{ 
 	} 
-	exit;
+}
+
+
+function get_last_update() {
+	if (!is_singular()) {
+		global $wpdb;
+		$sql = "SELECT MAX(GREATEST(`post_date`,`post_modified`)) as `last_update` FROM `wp_posts`";
+		$result = $wpdb->get_results($sql);
+		// echo json_encode($result[0]->last_update); exit;
+		if (!empty($result)) {
+			echo 'last-update="' . $result[0]->last_update .'"';
+		}
+	}
 }
 
 function a() {
 	return '';
 }
+// remove_all_filters('wp_get_document_title');
 
 function comment_form2( $args = array(), $post_id = null ) {
 	if ( null === $post_id ) {
