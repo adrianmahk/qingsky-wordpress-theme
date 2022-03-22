@@ -1256,7 +1256,6 @@ function get_stats($atts, $content = null) {
     extract(shortcode_atts(array(
 	'sql' => '',
 ), $atts)); 
-
 	$servername = "localhost";
 	$username = "readonly";
 	$password = "123456";
@@ -1268,7 +1267,7 @@ function get_stats($atts, $content = null) {
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
-	
+	$sql = html_entity_decode($sql);
 	$output = $conn->query($sql);
 	if ($output->num_rows > 0) {
 		// output data of each row
