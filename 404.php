@@ -47,12 +47,13 @@ get_header(); ?>
 		</script>
 <?php	endif; 
 	else :?>
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<!-- qingskys_page_body_Blog1_1x1_as -->
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6259217392436204"
+     crossorigin="anonymous"></script>
+	<!-- 404 -->
 	<ins class="adsbygoogle"
 		style="display:block"
 		data-ad-client="ca-pub-6259217392436204"
-		data-ad-slot="4167252325"
+		data-ad-slot="6196668685"
 		data-ad-format="auto"
 		data-full-width-responsive="true"></ins>
 	<script>
