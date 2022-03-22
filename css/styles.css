@@ -451,6 +451,9 @@ body.opacity-30.dark-mode .post-outer-container {
 .post-body img {
     object-fit: cover;
 }
+.post-body {
+    overflow-x: scroll;
+}
 
 .comment-body {
     margin-left: 50px;

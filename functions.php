@@ -1238,11 +1238,85 @@ function getIpData($userIP) {
 	} 
 }
 
+// function getStats() {
+// 	// echo the_content();exit;
+// 	global $wpdb;
+// 	$sql = "SELECT `site_date_sum`, `date` FROM `wp_stats` group by `date`";
+// 	$output = '';
+// 	$output = $wpdb->get_results($sql);
+// 	return $output;
+// }
+
+add_shortcode('get_stats', 'get_stats');
+function get_stats($atts, $content = null) {
+	if (!current_user_can( 'edit_post', get_the_ID() ) || wp_make_link_relative(get_permalink()) != '/stat/') {
+	// if (!current_user_can( 'edit_post', get_the_ID() ) ) {
+		return;
+	}
+    extract(shortcode_atts(array(
+	'sql' => '',
+), $atts)); 
+
+	$servername = "localhost";
+	$username = "readonly";
+	$password = "123456";
+	$dbname = "wordpress";
+
+	// Create connection
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	// Check connection
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	} 
+	
+	$output = $conn->query($sql);
+	if ($output->num_rows > 0) {
+		// output data of each row
+		$keys = null;
+		$string = '<style>
+		table.stats {
+
+		}
+		table.stats td, table.stats th {
+			box-shadow: 1px 1px 0px #888;
+		}
+		td.numbers {
+			text-align: right;
+		}
+		</style><table class="stats" style="white-space: nowrap;">';
+		
+		
+		while($row = $output->fetch_assoc()) {
+		
+			if (!$keys) {
+				$keys = array_keys($row);
+				$string .= '<tr>';
+				foreach ($keys as $key) {
+					$string .= '<th>' . $key. '</th>';
+				}
+				$string .= '</tr>';
+				
+			}
+			$string .= '<tr>';
+			$values = array_values($row);
+			foreach ($values as $value) {
+				$string .= '<td class="'. (is_numeric($value) ? 'numbers' : '') .  '">' . $value. '</td>';
+			}
+			$string .= '</tr>';
+		}
+		$string .= '</table>';
+		return $string;
+	  }
+	  else {
+		// echo "0 results";
+	  }
+}
 
 function get_last_update() {
 	if (!is_singular()) {
 		global $wpdb;
 		$sql = "SELECT MAX(GREATEST(`post_date`,`post_modified`)) as `last_update` FROM `wp_posts`";
+		$wpdb->query("");
 		$result = $wpdb->get_results($sql);
 		// echo json_encode($result[0]->last_update); exit;
 		if (!empty($result)) {
