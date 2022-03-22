@@ -1208,11 +1208,6 @@ function update_view_count() {
 
 function getIpData($userIP) {
 	
-	// echo $userIP;
-	// IP address 
-	// $userIP = '162.222.198.75'; 
-	// $userIP = '61.244.105.254';
-	
 	// API end URL 
 	$apiURL = 'https://freegeoip.app/json/'.$userIP; 
 	
@@ -1238,15 +1233,6 @@ function getIpData($userIP) {
 	} 
 }
 
-// function getStats() {
-// 	// echo the_content();exit;
-// 	global $wpdb;
-// 	$sql = "SELECT `site_date_sum`, `date` FROM `wp_stats` group by `date`";
-// 	$output = '';
-// 	$output = $wpdb->get_results($sql);
-// 	return $output;
-// }
-
 add_shortcode('get_stats', 'get_stats');
 function get_stats($atts, $content = null) {
 	if (!current_user_can( 'edit_post', get_the_ID() ) || wp_make_link_relative(get_permalink()) != '/stat/') {
@@ -1269,6 +1255,7 @@ function get_stats($atts, $content = null) {
 	} 
 	$sql = html_entity_decode($sql);
 	$output = $conn->query($sql);
+	$conn->close();
 	if ($output->num_rows > 0) {
 		// output data of each row
 		$keys = null;
@@ -1315,9 +1302,7 @@ function get_last_update() {
 	if (!is_singular()) {
 		global $wpdb;
 		$sql = "SELECT MAX(GREATEST(`post_date`,`post_modified`)) as `last_update` FROM `wp_posts`";
-		$wpdb->query("");
 		$result = $wpdb->get_results($sql);
-		// echo json_encode($result[0]->last_update); exit;
 		if (!empty($result)) {
 			echo 'last-update="' . $result[0]->last_update .'"';
 		}
