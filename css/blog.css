@@ -1463,11 +1463,11 @@ margin: 0 8vw;*/
 }
 .label-all-container{
 position: relative;
-margin: 0px 8px 0 8px;
+margin: 0px 8px 8px 8px;
 width : calc(100% - 16px);
 /*height: 50px;*/
 }
-body.home-view .label-all-container, body.search-view .label-all-container,
+/* body.home-view .label-all-container, body.search-view .label-all-container,
 body.archive-view .label-all-container, body.label-view .label-all-container{
 width: 100%;
 margin: 0;
@@ -1475,7 +1475,7 @@ margin: 0;
 body.item-view #top_widget .label-all-container{
 width: calc(100% - 16px);
 margin: 0px 8px;
-}
+} */
 .label-container {
 text-align : center;
 margin: 0px 4px 0px 4px;

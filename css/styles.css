@@ -442,10 +442,13 @@ body.opacity-30.dark-mode .post-outer-container {
     padding-right: 10px;
     margin-right: 10px; */
 }
-
+/* 
 .label-all-container {
     margin: 0px 8px 8px 8px !important;
 }
+body.home-view .label-all-container, body.search-view .label-all-container, body.archive-view .label-all-container, body.label-view .label-all-container {
+    width: calc(100% - 16px);
+} */
 
 /* Wordpress cond. */
 .post-body img {
