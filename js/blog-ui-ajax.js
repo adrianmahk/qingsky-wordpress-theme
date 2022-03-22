@@ -430,16 +430,19 @@ function loadLinkPreventDefault(event, href, removeFirst = false, button = null)
 
 function convertDateTime(dateTime) {
   // const dateTime = '2017-02-04 11:23:54';
+  if (dateTime) {
+    let dateTimeParts= dateTime.split(/[- :]/); // regular expression split that creates array with: year, month, day, hour, minutes, seconds values
+    dateTimeParts[1]--; // monthIndex begins with 0 for January and ends with 11 for December so we need to decrement by one
+    
+    return new Date(...dateTimeParts); // our Date object
+  }
 
-  let dateTimeParts= dateTime.split(/[- :]/); // regular expression split that creates array with: year, month, day, hour, minutes, seconds values
-  dateTimeParts[1]--; // monthIndex begins with 0 for January and ends with 11 for December so we need to decrement by one
-  
-  return new Date(...dateTimeParts); // our Date object
+  return new Date();
 }
 
 function checkNeedRefresh() {
   if (typeof (Storage) == undefined || document.body.classList.contains("error404")) {
-    return;
+    return true;
   }
   var last_update = sessionStorage.getItem("last-update");
   if (last_update != null) {
