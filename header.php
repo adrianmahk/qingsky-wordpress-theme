@@ -21,10 +21,29 @@ update_view_count();
 	<meta content="yes" name="apple-mobile-web-app-capable">
   	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
 		}
+		function setupServiceWorker() {
+			if (document.body.classList.contains('home-view')) {
+				if ('serviceWorker' in navigator) {
+					console.log('landing');
+					navigator.serviceWorker.register("<?php echo  '/sw.js'?>", {scope: "<?php echo '/' ?>"}).then(function(registration) {
+						console.log('Service worker registration succeeded:', registration);
+					}, /*catch*/ function(error) {
+						console.log('Service worker registration failed:', error);
+					});
+				}
+				navigator.serviceWorker.addEventListener('message', event => {
+					// event is a MessageEvent object
+					console.log(`The service worker sent me a message: ${event.data}`);
+				});
+				//loadTagsList();
+			}
+		}
+		ready(setupServiceWorker);
 	</script>
 	<style>
 		@font-face {
@@ -35,7 +54,7 @@ update_view_count();
 			unicode-range: U + 0000-00FF, U + 0131, U + 0152-0153, U + 02BB-02BC, U + 02C6, U + 02DA, U + 02DC, U + 2000-206F, U + 2074, U + 20AC, U + 2122, U + 2191, U + 2193, U + 2212, U + 2215, U + FEFF, U + FFFD;
 		}
 	</style>
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script>
+	
 	
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
 	<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>">
