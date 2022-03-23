@@ -177,9 +177,9 @@ update_view_count();
 			if ( is_active_sidebar( 'frontpage-1' ) ) : ?>
 				<div class="widget-area widget HTML">
 					<div class="apps-icon">
-						<div class="icons-container">
+						<!-- <div class="icons-container"> -->
 							<?php dynamic_sidebar( 'frontpage-1' ); ?>
-						</div>
+						<!-- </div> -->
 					</div>
 				</div><!-- .widget-area -->
 			<?php endif;
