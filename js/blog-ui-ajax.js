@@ -894,14 +894,34 @@ function handleScrollEvent(e) {
   //   }
   // }
   // var main = document.getElementById("main");
-  if (main !== undefined) {
-    if(main.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
+  var article = document.querySelector(".post-outer");
+  if (article !== undefined) {
+    if(article.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
       document.body.classList.add("collapsed-header");
     }
-    else if (main.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
+    else if (article.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
       document.body.classList.remove("collapsed-header");
     }
   }
+
+  // var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+  
+  // if (scrollTop > 100) {
+  //   if (!document.body.classList.contains("collapsed-header")){
+  //     document.body.classList.add("collapsed-header");
+  //   }
+  // }
+  // else if (document.body.classList.contains("collapsed-header")){
+  //   document.body.classList.remove("collapsed-header");
+  // }
+  // if (main !== undefined) {
+  //   if(main.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
+  //     document.body.classList.add("collapsed-header");
+  //   }
+  //   else if (main.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
+  //     document.body.classList.remove("collapsed-header");
+  //   }
+  // }
 
 }
 function updateItemViewProgressBar(progress = false) {

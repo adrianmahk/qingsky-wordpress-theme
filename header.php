@@ -93,6 +93,7 @@ update_view_count();
 <div class="loading-bar" id="loading-bar"></div>
     <div class="bg-div" id="bg-div"></div>
 	<div class="bg-div-cust" id="bg-div"></div>
+	<div class="bg-div-mask" id="bg-div-mask"></div>
 	<div class="dark_mode_overlay" id="dark_mode_overlay"></div>
     <!-- <div class="bg-div-mask" id="bg-div-mask"></div> -->
 <div id="page" class="page">
