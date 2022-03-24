@@ -58,10 +58,20 @@ function fixDropboxImgSrc() {
   for (var i = 0; i < imgEls.length; i++) {
       var src = imgEls[i].getAttribute("src");
       if (src && src.includes("www.dropbox.com")) {
-          var newSrc = src.replace("www.dropbox.com", "dl.dropboxusercontent.com");
-          imgEls[i].setAttribute("src", newSrc);
+          imgEl[i].setAttribute("onerror", "replaceDropboxLink(this)");
           // console.log(imgEls[i]);
       }
+  }
+}
+
+function replaceDropboxLink(img) {
+  console.log("onerror");
+  var newSrc = img.src.replace("www.dropbox.com", "dl.dropboxusercontent.com");
+  if (img.src != newSrc) {
+    img.setAttribute("src", newSrc);
+  }
+  else {
+    img.removeAttribute("onerror");
   }
 }
 
@@ -293,7 +303,7 @@ function fixBgHeight() {
   if (height > 500) {
     var bg_div = document.getElementById("bg-div");
     if (window.matchMedia('(max-aspect-ratio: 1920/1200) and (min-height: 501px)').matches) {
-      var sat = getComputedStyle(document.documentElement).getPropertyValue("--sat").replace("px", "");
+      var sat = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sat").replace("px", ""));
       var bg_fixed_h = height + sat + 100;
       console.log("fixed_h: "+bg_fixed_h);
       bg_div.style.backgroundSize = "auto " + bg_fixed_h + "px";
