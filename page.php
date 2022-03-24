@@ -11,9 +11,15 @@
  * @since Twenty Sixteen 1.0
  */
 
-get_header(); ?>
+get_header(); 
+?>
 
 <div id="page_body" class="content-area centered">
+	<?php 
+		if (wp_make_link_relative(get_permalink()) == '/allposts/'){
+			blog_search();
+		}
+	?>
 <div class="blog-posts hfeed container">
 	<main id="main" class="site-main centered-bottom" role="main">
 		<?php
