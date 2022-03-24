@@ -994,19 +994,23 @@ function post_filter_message() {
 	else if (get_query_var('year')) {
 		$year = get_query_var('year');
 		$month = get_query_var('monthnum');
+		if ($month) {
+			$month_name = array('一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二');
 			$month_str = $month_name[$month - 1] . '月, ';
+		}
+
 		echo $h3;
 		echo ($year ? ($year . ' 年 ') : '') . ($month ? ($month . ' 月 '): '') . (get_query_var('date') ? get_query_var('date') : '');
 		echo '<a class="pill-button ripple" href="/allposts" onclick="togglePopupArchive(' . $year  . ' ,' . $month . '); return false;" style="font-size: 12px; margin: -1px" title="選擇其他月份">選擇</a>';
 		echo '</h3>';
 	
-		echo '<div class="post-filter-message"><div>目前顯示的是 二月, 2022的文章</div><div><a class="flat-button ripple" href="/allposts#archive" target="_blank" title="查找所有文章">文章列表</a></div></div>';
+		echo '<div class="post-filter-message"><div>目前顯示的是 '. $month_str . $year.' 的文章</div><div><a class="flat-button ripple" href="/allposts#archive" target="_blank" title="查找所有文章">文章列表</a></div></div>';
 	}
 }
 
 function blog_pager($show_subscribe_msg = true) {
 	// echo '' . (get_query_var( 'paged' ) * get_query_var('posts_per_page') + 1);
-	echo '<div class="blog-pager container widget">';
+	echo '<div class="blog-pager container widget" id="blog-pager">';
 	if ($show_subscribe_msg) {
 		echo 
 		'<div class="subscribe-message-container blog-pager">
