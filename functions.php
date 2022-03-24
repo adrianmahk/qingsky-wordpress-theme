@@ -994,6 +994,7 @@ function post_filter_message() {
 	else if (get_query_var('year')) {
 		$year = get_query_var('year');
 		$month = get_query_var('monthnum');
+			$month_str = $month_name[$month - 1] . '月, ';
 		echo $h3;
 		echo ($year ? ($year . ' 年 ') : '') . ($month ? ($month . ' 月 '): '') . (get_query_var('date') ? get_query_var('date') : '');
 		echo '<a class="pill-button ripple" href="/allposts" onclick="togglePopupArchive(' . $year  . ' ,' . $month . '); return false;" style="font-size: 12px; margin: -1px" title="選擇其他月份">選擇</a>';
