@@ -127,7 +127,7 @@ function init() {
   if (!document.body.getAttribute("inited")) {
     document.body.setAttribute("orientation", getOrientation());
     if (detectmob()) {
-      // fixBgHeight();
+      fixBgHeight();
       makeCmUnfocusable();
     }
     if (!document.body.getAttribute("loaded-main") && !document.body.className.match("item-view")) {
@@ -293,7 +293,8 @@ function fixBgHeight() {
   if (height > 500) {
     var bg_div = document.getElementById("bg-div");
     if (window.matchMedia('(max-aspect-ratio: 1920/1200) and (min-height: 501px)').matches) {
-      var bg_fixed_h = height + 100;
+      var sat = getComputedStyle(document.documentElement).getPropertyValue("--sat");
+      var bg_fixed_h = height + sat + 100;
       console.log("fixed_h: "+bg_fixed_h);
       bg_div.style.backgroundSize = "auto " + bg_fixed_h + "px";
     }
