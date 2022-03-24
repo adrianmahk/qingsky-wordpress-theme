@@ -293,7 +293,7 @@ function fixBgHeight() {
   if (height > 500) {
     var bg_div = document.getElementById("bg-div");
     if (window.matchMedia('(max-aspect-ratio: 1920/1200) and (min-height: 501px)').matches) {
-      var sat = getComputedStyle(document.documentElement).getPropertyValue("--sat");
+      var sat = getComputedStyle(document.documentElement).getPropertyValue("--sat").replace("px", "");
       var bg_fixed_h = height + sat + 100;
       console.log("fixed_h: "+bg_fixed_h);
       bg_div.style.backgroundSize = "auto " + bg_fixed_h + "px";
