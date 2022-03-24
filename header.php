@@ -9,7 +9,6 @@
  * @since Twenty Sixteen 1.0
  */
 include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html_dom.php';
-
 update_view_count();
 ?>
 <!DOCTYPE html>
@@ -17,7 +16,7 @@ update_view_count();
 <head>
 	<!-- <title><?php //bloginfo( 'name' ); ?></title> -->
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 	<meta content="yes" name="apple-mobile-web-app-capable">
   	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
