@@ -14,8 +14,8 @@
  * @since Twenty Sixteen 1.0
  */
 get_header(); ?>
-	<div id="page_body" class="content-area centered">
-		<main id="main" class="site-main centered-bottom widget Blog" role="main">
+	<div id="page_body" class="content-area centered widget Blog">
+		<main id="main" class="site-main centered-bottom" role="main">
 
 		<header class="page-header">
 			<?php post_filter_message()?>

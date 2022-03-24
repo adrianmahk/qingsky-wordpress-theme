@@ -296,7 +296,7 @@ body.opacity-30.dark-mode .post-outer-container {
     border-radius: 12px;
     background: rgba(254, 254, 253, 0.95);
     box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.9);
-    margin-bottom: 16px !important;
+    margin-bottom: 16px;
     transition: color .2s ease-in-out, background .2s ease-in-out;
     position: relative;
 }
@@ -619,4 +619,12 @@ display: table-cell;
     .widget.Label .post-outer, .widget.BlogArchive .post-outer{
         margin: 0 8px;
     }
+}
+/* 
+.subscribe-message, .top-message {
+    font-weight: 300;
+} */
+
+hr.divider {
+  margin: 28px auto;
 }

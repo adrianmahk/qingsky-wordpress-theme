@@ -1005,15 +1005,16 @@ function post_filter_message() {
 
 function blog_pager($show_subscribe_msg = true) {
 	// echo '' . (get_query_var( 'paged' ) * get_query_var('posts_per_page') + 1);
-	echo '<div class="blog-pager-container widget">';
+	echo '<div class="blog-pager container widget">';
 	if ($show_subscribe_msg) {
-		echo '<div class="subscribe-message-container blog-pager">
+		echo 
+		'<div class="subscribe-message-container blog-pager">
 		<div class="subscribe-message">
 		<em>請支持自由創作者，如果喜歡可以分享給好友及留言，也可以<a href="/about/#subscribe" target="_blank">按這裡支持作者</a>，你的支持將會給我很大的鼓勵，謝謝～</em>
 		</div>
 		</div>';
 	}
-	echo '<div class="blog-pager">';
+	// echo '<div class="blog-pager">';
 	$button = '<a class="pill-button ripple %1$s" href="%2$s" id="blog-pager-older-link" title="較舊的文章">%3$s</a>';
 	$svg = '<svg class="svg-icon-pagination" height="14px" version="1.1" viewBox="0 0 18 14" width="18px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<path d="M1.027 5.332 C0.574 5.481 5.909 13.728 6.433 13.98 7.082 14.294 7.982 14.361 8.595 13.98 8.949 13.76 13.907 5.746 14 5.332 14.026 5.217 11.198 5.123 10.757 5.332 10.392 5.505 8.021 9.656 7.514 9.656 7.132 9.657 4.6 5.548 4.27 5.332 3.667 4.938 1.712 5.108 1.027 5.332 Z" fill="#646464" fill-opacity="1" id="Path-copy-1" stroke="none"></path>
@@ -1023,7 +1024,7 @@ function blog_pager($show_subscribe_msg = true) {
 	if (is_home() && !is_paged() && !is_date()) {
 		$date = strtotime(get_lastpostdate());
 		$path =  '/' . date('Y', $date) . '/' . date('m', $date) . '/';
-		printf($button, 'ajax-load-home', $path, $svg . '更多文章');
+		printf($button, 'ajax-load-home', $path, $svg . ' 更多文章');
 	}
 	else if (get_query_var('year')) {
 		// $path = paginate_links(['type' => 'array']);
@@ -1031,7 +1032,7 @@ function blog_pager($show_subscribe_msg = true) {
 		$month = get_query_var("monthnum");
 		if (!$month) {
 			$year = $year - 1;
-			printf($button, 'ajax-load', '/' . $year , $svg . '更多文章');
+			printf($button, 'ajax-load', '/' . $year , $svg . ' 更多文章');
 		}
 		else {
 			switch ($month) {
@@ -1056,7 +1057,7 @@ function blog_pager($show_subscribe_msg = true) {
 					$month = '' . $month - 1;
 					break;
 			}
-			printf($button, 'ajax-load', '/' . $year . '/' . (string) $month, $svg . '更多文章');
+			printf($button, 'ajax-load', '/' . $year . '/' . (string) $month, $svg . ' 更多文章');
 		}
 
 		
@@ -1068,9 +1069,9 @@ function blog_pager($show_subscribe_msg = true) {
 		
 	}
 	else {
-		printf($button, 'ajax-load', get_next_posts_page_link(), $svg . '更多文章');
+		printf($button, 'ajax-load', get_next_posts_page_link(), $svg . ' 更多文章');
 	}
-	echo '</div>';
+	// echo '</div>';
 	echo '</div>';
 }
 

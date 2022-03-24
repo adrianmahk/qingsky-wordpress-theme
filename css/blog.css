@@ -255,7 +255,7 @@ line-height: calc(2em + 4.35px);
 margin-bottom: 16px;
 }
 div.widget.Blog .blog-posts .post-outer-container:last-child {
-margin-bottom: 0;
+margin-bottom: 0 !important;
 }
 div.widget.Blog .blog-posts .post-outer-container .post-outer, .main .FeaturedPost .widget-content, .middle .FeaturedPost .widget-content {
 border: none;

@@ -18,7 +18,7 @@
 
 get_header(); ?>
 
-	<div id="page_body" class="content-area centered">	
+	<div id="page_body" class="content-area centered widget Blog">	
 		<main id="main" class="site-main centered-bottom" role="main">
 		<header class="page-header">
 			<?php post_filter_message();?>
