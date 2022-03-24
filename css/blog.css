@@ -2835,12 +2835,13 @@ padding-bottom: env(safe-area-inset-bottom);
 height: 100vh;
 }*/
 .bg-div-mask{
-height: 100%;
-width: 100%;
-position: fixed;
-background-color: rgba(0,0,0,.26);
-border: none;
-z-index: 1;
+  top: -5vh;
+  left: -5%;
+  height: 110vh;
+  width: 110%;
+  position: fixed;
+  background-color: rgba(0,0,0,.26);
+  z-index: -1;
 }
 /*body.home-view  .bg-div{
 position: fixed;
