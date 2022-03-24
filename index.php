@@ -14,8 +14,9 @@
  * @since Twenty Sixteen 1.0
  */
 get_header(); ?>
-	<div id="page_body" class="content-area centered widget Blog">
+	<div id="page_body" class="content-area centered">
 		<main id="main" class="site-main centered-bottom" role="main">
+			<div class="widget Blog">
 
 		<header class="page-header">
 			<?php post_filter_message()?>
@@ -57,6 +58,8 @@ get_header(); ?>
 		<?php
 			// echo get_page_list(page_list());
 		?>
+		</div>
+
 		</div>
 		<?php
 		blog_pager();

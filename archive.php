@@ -18,32 +18,34 @@
 
 get_header(); ?>
 
-	<div id="page_body" class="content-area centered widget Blog">	
-		<main id="main" class="site-main centered-bottom" role="main">
-		<header class="page-header">
-			<?php post_filter_message();?>
-		</header><!-- .page-header -->
-		
-		<?php
+<div id="page_body" class="content-area centered">
+	<main id="main" class="site-main centered-bottom" role="main">
+		<div class="widget Blog">
+			<header class="page-header">
+				<?php post_filter_message(); ?>
+			</header><!-- .page-header -->
+
+			<?php
 			if (!is_paged() && (is_tag() || is_category())) {
-				$sticky = get_option( 'sticky_posts' );
-				$query = new WP_Query( 
+				$sticky = get_option('sticky_posts');
+				$query = new WP_Query(
 					array(
-						 'category_name' => is_category() ? get_query_var('category_name') : get_query_var('tag'),
-						 'post__in' => $sticky
-				) );
-				
-				if ( $query->have_posts() ) : ?>
-					<?php
+						'category_name' => is_category() ? get_query_var('category_name') : get_query_var('tag'),
+						'post__in' => $sticky
+					)
+				);
+
+				if ($query->have_posts()) : ?>
+			<?php
 					// Start the loop.
 					echo '<div class="pinned-post">';
 					echo '<div class="blog-posts hfeed container">';
-					while ( $query->have_posts() ) :
+					while ($query->have_posts()) :
 						$query->the_post();
 
-						get_template_part( 'template-parts/content', get_post_format() );
+						get_template_part('template-parts/content', get_post_format());
 
-						// End the loop.
+					// End the loop.
 					endwhile;
 					echo '</div>';
 					echo '<hr class="divider"/>';
@@ -51,57 +53,59 @@ get_header(); ?>
 				endif;
 				wp_reset_query();
 			}
-		?>
-		
+			?>
 
-		<div class="blog-posts hfeed container">
-		<?php
-		if ( have_posts() ) : ?>
-			<?php
-			// Start the loop.
-			while ( have_posts() ) :
-				the_post();
 
-				/*
+			<div class="blog-posts hfeed container">
+				<?php
+				if (have_posts()) : ?>
+				<?php
+					// Start the loop.
+					while (have_posts()) :
+						the_post();
+
+						/*
 				 * Include the Post-Format-specific template for the content.
 				 * If you want to override this in a child theme, then include a file
 				 * called content-___.php (where ___ is the Post Format name) and that
 				 * will be used instead.
 				 */
-				get_template_part( 'template-parts/content', get_post_format() );
+						get_template_part('template-parts/content', get_post_format());
 
-				// End the loop.
-			endwhile;
+					// End the loop.
+					endwhile;
 
-			// Previous/next page navigation.
-			// the_posts_pagination(
-			// 	array(
-			// 		'prev_text'          => __( 'Previous page', 'twentysixteen' ),
-			// 		'next_text'          => __( 'Next page', 'twentysixteen' ),
-			// 		'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentysixteen' ) . ' </span>',
-			// 	)
-			// );
-			// blog_pager();
-			// echo get_page_list(page_list());
-			
-			// If no content, include the "No posts found" template.
-		else :
-			get_template_part( 'template-parts/content', 'none' );
+				// Previous/next page navigation.
+				// the_posts_pagination(
+				// 	array(
+				// 		'prev_text'          => __( 'Previous page', 'twentysixteen' ),
+				// 		'next_text'          => __( 'Next page', 'twentysixteen' ),
+				// 		'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentysixteen' ) . ' </span>',
+				// 	)
+				// );
+				// blog_pager();
+				// echo get_page_list(page_list());
 
-		endif;
-		?>
+				// If no content, include the "No posts found" template.
+				else :
+					get_template_part('template-parts/content', 'none');
+
+				endif;
+				?>
+
+			</div>
 
 		</div>
 		<?php
-			// echo $wp_query->paged;
-			// echo get_page_list(page_list());
-			
+		// echo $wp_query->paged;
+		// echo get_page_list(page_list());
+
 		blog_pager();
 		echo get_page_list(page_list());
-		
+
 		?>
-		</main><!-- .site-main -->
-	</div><!-- .content-area -->
+	</main><!-- .site-main -->
+</div><!-- .content-area -->
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
