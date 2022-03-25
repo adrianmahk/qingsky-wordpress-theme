@@ -391,7 +391,7 @@ width: 100%;
 .apps-icon {
 margin: 0 auto 16px auto;
 background: transparent;
-width: calc(100% - 16vw);
+/* width: calc(100% - 16vw); */
 color: #aaaaaa;
 }
 @media screen and (max-width: 750px) {
