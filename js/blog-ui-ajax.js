@@ -298,14 +298,17 @@ function getOrientation() {
   
   return local_orientation;
 }
-function fixBgHeight() {
+function  fixBgHeight() {
   var height = window.innerHeight || document.documentElement.clientHeight;
+  var width =  window.innerWidth || document.documentElement.clientWidth;
   if (height > 500) {
     var bg_div = document.getElementById("bg-div");
     if (window.matchMedia('(max-aspect-ratio: 1920/1200) and (min-height: 501px)').matches) {
-      var sat = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sat").replace("px", ""));
-      var bg_fixed_h = height + sat + 100;
-      console.log("fixed_h: "+bg_fixed_h);
+      // var sat = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sat").replace("px", ""));
+      var sat = 0;
+      // var bg_fixed_h = height + sat + 100;
+      var bg_fixed_h = height + sat + (height / width * 80);
+      // console.log("fixed_h: "+bg_fixed_h);
       bg_div.style.backgroundSize = "auto " + bg_fixed_h + "px";
     }
     else {

@@ -2842,6 +2842,8 @@ height: 100vh;
   position: fixed;
   background-color: rgba(0,0,0,.26);
   z-index: -1;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 /*body.home-view  .bg-div{
 position: fixed;
