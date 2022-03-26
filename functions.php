@@ -1069,7 +1069,7 @@ function blog_pager($show_subscribe_msg = true) {
 		}
 		$path =  '/' . $year . '/' . $month . '/';
 
-		printf($button, 'ajax-load-home', $path, $svg . ' 更多文章');
+		printf($button, 'ajax-load', $path, $svg . ' 更多文章');
 	}
 	else if (get_query_var('year')) {
 		// $path = paginate_links(['type' => 'array']);
