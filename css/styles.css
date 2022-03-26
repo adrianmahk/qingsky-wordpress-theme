@@ -625,6 +625,8 @@ display: table-cell;
     font-weight: 300;
 } */
 
-hr.divider {
+hr.divider:last-of-type {
   margin: 28px auto;
+  display: block;
 }
+

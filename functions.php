@@ -242,16 +242,16 @@ add_action( 'after_setup_theme', 'twentysixteen_content_width', 0 );
  * @param string $relation_type  The relation type the URLs are printed.
  * @return array $urls           URLs to print for resource hints.
  */
-function twentysixteen_resource_hints( $urls, $relation_type ) {
-	if ( wp_style_is( 'twentysixteen-fonts', 'queue' ) && 'preconnect' === $relation_type ) {
-		$urls[] = array(
-			'href' => 'https://fonts.gstatic.com',
-			'crossorigin',
-		);
-	}
+// function twentysixteen_resource_hints( $urls, $relation_type ) {
+// 	if ( wp_style_is( 'twentysixteen-fonts', 'queue' ) && 'preconnect' === $relation_type ) {
+// 		$urls[] = array(
+// 			'href' => 'https://fonts.gstatic.com',
+// 			'crossorigin',
+// 		);
+// 	}
 
-	return $urls;
-}
+// 	return $urls;
+// }
 // add_filter( 'wp_resource_hints', 'twentysixteen_resource_hints', 10, 2 );
 
 /**
@@ -411,16 +411,16 @@ if ( ! function_exists( 'twentysixteen_fonts_url' ) ) :
 			$fonts[] = 'Inconsolata:400';
 		}
 
-		if ( $fonts ) {
-			$fonts_url = add_query_arg(
-				array(
-					'family'  => urlencode( implode( '|', $fonts ) ),
-					'subset'  => urlencode( $subsets ),
-					'display' => urlencode( 'fallback' ),
-				),
-				'https://fonts.googleapis.com/css'
-			);
-		}
+		// if ( $fonts ) {
+		// 	$fonts_url = add_query_arg(
+		// 		array(
+		// 			'family'  => urlencode( implode( '|', $fonts ) ),
+		// 			'subset'  => urlencode( $subsets ),
+		// 			'display' => urlencode( 'fallback' ),
+		// 		),
+		// 		'https://fonts.googleapis.com/css'
+		// 	);
+		// }
 
 		return $fonts_url;
 	}
@@ -691,59 +691,67 @@ function twentysixteen_widget_tag_cloud_args( $args ) {
 	return $args;
 }
 add_filter( 'widget_tag_cloud_args', 'twentysixteen_widget_tag_cloud_args' );
-// add_action( 'pre_get_posts', 'wpshout_pages_blogindex');
-// // if (is_home() && is_front_page() && !is_paged()) {
-// // // if (false()) {
-// // 	// query_posts(array( 'posts_per_page' => 1 ));
-// // 	// add_query_arg(array('posts_per_page' => 1));
-	
 
-// // 	// $wp_query->set('posts_per_page', 1);
-// // 	// $wp_query->query($wp_query->query_vars);
-// // }
-// function wpshout_pages_blogindex( $query ) {
-// 	if ($query->is_main_query()){
-// 		if ( is_home()  && is_front_page() && !is_paged()) {
-// 			$query->set( 'posts_per_page', 1 );
-// 		}
-// 		else {
-// 			// echo get_query_var( 'paged' );
-// 			$query->set( 'offset', ($query->query_vars['paged'] * get_query_var('posts_per_page') + 1));
-// 		}
-// 	}
-// }
+add_action('pre_get_posts', 'home_archive_category', 1 );
+add_filter('found_posts', 'home_offset', 1, 2 );
+function home_archive_category(&$query) {
 
-add_action('pre_get_posts', 'nfg_query_offset', 1 );
-add_filter('found_posts', 'nfg_adjust_offset_pagination', 1, 2 );
-function nfg_query_offset(&$query) {
-	// echo json_encode($query);
-	// exit;
+	if (is_home() && !is_paged()) {
+		$date = strtotime(get_lastpostdate());
+		$query->set('monthnum', date('m', $date));
+		$query->set('year', date('Y', $date));
+	}
+	// if ($query->is_home() && !is_paged()) {
+	// 	$query->set( 'posts_per_page', 1 );
+	// 	return;
+	// }
+	// define the offset here
+
 	if (!is_single()) {
 		$sticky = get_option( 'sticky_posts' );
 		$query->set('ignore_sticky_posts', true);
 		$query->set('post__not_in', $sticky);
 	}
-	if ($query->is_home() && !is_paged()) {
-		$query->set( 'posts_per_page', 1 );
-		return;
-	}
-	// define the offset here
-	$offset = 1;
-	$ppp = get_option('posts_per_page');
-	// echo implode($query->query_vars);
-	
-	if ( $query->is_paged && !$query->is_tag && !$query->is_category && !$query->is_date && !$query->is_search) {
-		$page_offset = $offset + ( ($query->query_vars['paged'] - 2) * $ppp );
-		$query->set('offset', $page_offset );
+
+	if ($query->is_category) {
+
+		// echo json_encode($sticky);exit;
+		$query->set('ignore_sticky_posts', false);
+		$query->set('post__not_in', '');
+		$posts = get_posts( array(
+			'posts_per_page' => -1,
+			'category_name'  => $query->query_vars['category'],
+			'fields'         => 'ids'
+		) );
+		$array =  array_diff(array_merge($sticky,$posts),array_intersect($sticky,$posts));
+		$query->set('post__in', $array);
+		$query->set('orderby', 'post__in');
+		$query->set('order', 'DESC');
 	}
 	else if ($query->is_date){
 		$query->set('posts_per_page', -1);
 	// 	echo json_encode($query);
 	// exit;
 	}
+	else if ($query->is_home()) {
+		$date = strtotime(get_lastpostdate());
+		$posts_last_month = get_posts( array(
+			'posts_per_page' => -1,
+			'monthnum' => date('m', $date),
+			'year' => date('Y', $date),
+			'fields' => 'ids'
+		) );
+		$offset = sizeof($posts_last_month);
+		$ppp = get_option('posts_per_page');
+		if ( $query->is_paged && !$query->is_tag && !$query->is_category && !$query->is_date && !$query->is_search) {
+			$page_offset = $offset + ( ($query->query_vars['paged'] - 2) * $ppp );
+			$query->set('offset', $page_offset );
+		}
+	}
+	
 }
 
-function nfg_adjust_offset_pagination($found_posts, $query) {
+function home_offset($found_posts, $query) {
 	// define the offset here
     $offset = 1;
 	if ( $query->is_home() ) {
@@ -1028,7 +1036,39 @@ function blog_pager($show_subscribe_msg = true) {
 	// printf("%1d, %2d, %3d, %4d", is_home(), is_front_page(), is_paged(), is_date()); 
 	if (is_home() && !is_paged() && !is_date()) {
 		$date = strtotime(get_lastpostdate());
-		$path =  '/' . date('Y', $date) . '/' . date('m', $date) . '/';
+		$month = date('m', $date);
+		$year = date('Y', $date);
+		if (!$month) {
+			$year = $year - 1;
+			// printf($button, 'ajax-load', '/' . $year , $svg . ' 更多文章');
+		}
+		else {
+			switch ($month) {
+				case 1:
+					$month = '12';
+					$year = $year - 1;
+					break;
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+				case 7:
+				case 8: 
+				case 9:
+				case 10:
+					$month = strval(('0' . $month - 1));
+					break;
+				break;
+				case 11:
+				case 12:
+					$month = '' . $month - 1;
+					break;
+			}
+			// printf($button, 'ajax-load', '/' . $year . '/' . (string) $month, $svg . ' 更多文章');
+		}
+		$path =  '/' . $year . '/' . $month . '/';
+
 		printf($button, 'ajax-load-home', $path, $svg . ' 更多文章');
 	}
 	else if (get_query_var('year')) {
@@ -1064,14 +1104,6 @@ function blog_pager($show_subscribe_msg = true) {
 			}
 			printf($button, 'ajax-load', '/' . $year . '/' . (string) $month, $svg . ' 更多文章');
 		}
-
-		
-		// echo $year;
-		// echo $month;
-
-		// exit;
-		
-		
 	}
 	else {
 		printf($button, 'ajax-load', get_next_posts_page_link(), $svg . ' 更多文章');
@@ -1088,7 +1120,7 @@ function postTags() {
 		echo '<ul class="tabs inpost">';
 		foreach ($tags as $tag) {
 			// echo $tag->slug;
-			printf('<li class="pill-button ripple"><a href="%1$s" title="更多「%2$s」的文章">%2$s</a></li>', '/category/' . $tag->slug, $tag->name);
+			printf('<a href="%1$s" title="更多「%2$s」的文章"><li class="pill-button ripple">%2$s</li></a>', '/category/' . $tag->slug, $tag->name);
 		}
 		echo '</ul>';
 	}

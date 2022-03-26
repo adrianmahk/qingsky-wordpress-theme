@@ -26,33 +26,33 @@ get_header(); ?>
 			</header><!-- .page-header -->
 
 			<?php
-			if (!is_paged() && (is_tag() || is_category())) {
-				$sticky = get_option('sticky_posts');
-				$query = new WP_Query(
-					array(
-						'category_name' => is_category() ? get_query_var('category_name') : get_query_var('tag'),
-						'post__in' => $sticky
-					)
-				);
+			// if (!is_paged() && (is_tag() || is_category())) {
+			// 	$sticky = get_option('sticky_posts');
+			// 	$query = new WP_Query(
+			// 		array(
+			// 			'category_name' => is_category() ? get_query_var('category_name') : get_query_var('tag'),
+			// 			'post__in' => $sticky
+			// 		)
+			// 	);
 
-				if ($query->have_posts()) : ?>
+			// 	if ($query->have_posts()) : ?>
 			<?php
-					// Start the loop.
-					echo '<div class="pinned-post">';
-					echo '<div class="blog-posts hfeed container">';
-					while ($query->have_posts()) :
-						$query->the_post();
+			// 		// Start the loop.
+			// 		echo '<div class="pinned-post">';
+			// 		echo '<div class="blog-posts hfeed container">';
+			// 		while ($query->have_posts()) :
+			// 			$query->the_post();
 
-						get_template_part('template-parts/content', get_post_format());
+			// 			get_template_part('template-parts/content', get_post_format());
 
-					// End the loop.
-					endwhile;
-					echo '</div>';
-					echo '<hr class="divider"/>';
-					echo '</div>';
-				endif;
-				wp_reset_query();
-			}
+			// 		// End the loop.
+			// 		endwhile;
+			// 		echo '</div>';
+			// 		echo '<hr class="divider"/>';
+			// 		echo '</div>';
+			// 	endif;
+			// 	wp_reset_query();
+			// }
 			?>
 
 

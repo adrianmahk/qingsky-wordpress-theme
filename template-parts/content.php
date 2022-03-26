@@ -143,3 +143,8 @@
                                                 </div>
                                             </div>
                                         </article>
+                                        <?php
+                                        if (is_sticky()) {
+                                            echo '<hr class="divider" />';
+                                        }
+                                        ?>
