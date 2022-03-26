@@ -582,8 +582,8 @@ display: table-cell;
 .snippet-thumbnail img {
     width: 20vw;
     height: 20vw;
-    max-width: calc(12em - 15px);
-    max-height: calc(12em - 15px);
+    max-width: 12em;
+    max-height: 12em;
     margin: 0 3vw 3vw 0;
     box-shadow: 0 5px 10px rgba(0,0,0, 0.8);
     float: left;
