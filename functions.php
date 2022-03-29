@@ -528,9 +528,9 @@ function twentysixteen_body_classes( $classes ) {
 	}
 
 	// Adds a class of group-blog to sites with more than 1 published author.
-	if ( is_multi_author() ) {
-		$classes[] = 'group-blog';
-	}
+	// if ( is_multi_author() ) {
+	// 	$classes[] = 'group-blog';
+	// }
 
 	// Adds a class of no-sidebar to sites without active sidebar.
 	if ( ! is_active_sidebar( 'sidebar-1' ) ) {
