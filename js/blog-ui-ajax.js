@@ -140,7 +140,7 @@ function init() {
       fixBgHeight();
       makeCmUnfocusable();
     }
-    if (!document.body.getAttribute("loaded-main") && !document.body.className.match("item-view")) {
+    if (!document.body.getAttribute("loaded-main") && !document.body.className.match("blog")) {
       if (!checkNeedRefresh()) {
         loadMain();
       }
@@ -171,7 +171,7 @@ function init() {
       handleScrollEvent(e);
     });
     window.addEventListener("pagehide", function () {
-      if (!document.body.className.match("item-view")) {
+      if (document.body.className.match("blog")) {
         saveMain();
         //saveScrollPosOld();
       } 
@@ -510,6 +510,7 @@ function saveLastUrl() {
 //   }
 // }
 function loadMain() {
+  console.log("loadedmain");
   if (typeof (Storage) !== "undefined") {
     // if (sessionStorage.getItem("inPost") != null) {
       

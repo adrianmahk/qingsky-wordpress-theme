@@ -546,7 +546,7 @@ function twentysixteen_body_classes( $classes ) {
 		$classes[] = 'home-view';
 		// $classes[] = 'home';
 	}
-	if ( is_home() ) {
+	if ( is_home() || is_archive() ) {
 		$classes[] = 'blog';
 	}
 	if ( is_privacy_policy() ) {
@@ -880,6 +880,16 @@ function clear_br($content) {
 add_filter('the_content','clear_br');
 add_filter('post_thumbnail_html','clear_br');
 remove_filter ('the_content', 'wpautop');
+
+function mytheme_custom_excerpt_length( $length ) {
+	$post = get_post();
+	$limit = strpos($post->post_content, '<!--more-->');
+	if ($limit > 0) {
+		return $limit;
+	}
+    return 500;
+}
+add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
 
 function search_distinct() {
 	return "DISTINCT";
