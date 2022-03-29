@@ -140,7 +140,7 @@ function init() {
       fixBgHeight();
       makeCmUnfocusable();
     }
-    if (!document.body.getAttribute("loaded-main") && !document.body.className.match("blog")) {
+    if (!document.body.getAttribute("loaded-main") && document.body.className.match("blog")) {
       if (!checkNeedRefresh()) {
         loadMain();
       }
