@@ -880,6 +880,7 @@ function clear_br($content) {
 add_filter('the_content','clear_br');
 add_filter('post_thumbnail_html','clear_br');
 remove_filter ('the_content', 'wpautop');
+remove_filter( 'the_excerpt', 'wpautop' );
 
 function mytheme_custom_excerpt_length( $length ) {
 	$post = get_post();
