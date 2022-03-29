@@ -864,17 +864,6 @@ function loadReadingProgress() {
   }
 }
 var scrollTimer = 0;
-// var main = undefined;
-// ready(function () {
-//   main = document.getElementById("main") || (document.getElementsByClassName("main").length > 0) ? document.getElementsByClassName("main")[0] : undefined;
-// });
-
-  // if (!main) {
-  //   main = document.getElementsByClassName("main");
-  //   if (main.length > 0) {
-  //     main = main[0];
-  //   }
-  // }  
 function handleScrollEvent(e) {
   if (document.body.classList.contains("is-post")) {
   clearTimeout(scrollTimer);
@@ -888,18 +877,8 @@ function handleScrollEvent(e) {
   }, 500);
   }
   
-  // console.log(main);
-  // if (document.body.scrollHeight > 110) {
-  //   if(main.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
-  //     document.body.classList.add("collapsed-header");
-  //   }
-  //   else if (main.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
-  //     document.body.classList.remove("collapsed-header");
-  //   }
-  // }
-  // var main = document.getElementById("main");
   var article = document.querySelector(".post-outer");
-  if (article !== undefined) {
+  if (article) {
     if(article.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
       document.body.classList.add("collapsed-header");
     }
@@ -907,25 +886,6 @@ function handleScrollEvent(e) {
       document.body.classList.remove("collapsed-header");
     }
   }
-
-  // var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-  
-  // if (scrollTop > 100) {
-  //   if (!document.body.classList.contains("collapsed-header")){
-  //     document.body.classList.add("collapsed-header");
-  //   }
-  // }
-  // else if (document.body.classList.contains("collapsed-header")){
-  //   document.body.classList.remove("collapsed-header");
-  // }
-  // if (main !== undefined) {
-  //   if(main.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
-  //     document.body.classList.add("collapsed-header");
-  //   }
-  //   else if (main.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
-  //     document.body.classList.remove("collapsed-header");
-  //   }
-  // }
 
 }
 function updateItemViewProgressBar(progress = false) {
