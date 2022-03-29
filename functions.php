@@ -847,6 +847,10 @@ function custom_background_cb()
 
 function clear_br($content) { 
 	//this requires simplehtmldom
+	if (!is_singular()) {
+		return $content;
+	}
+
 	$html = str_get_html($content);
 	if (!$html) {
 		return str_replace("<br/>","<br clear='none'/>", $content);
