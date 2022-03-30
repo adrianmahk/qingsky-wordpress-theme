@@ -30,32 +30,6 @@
                                                     <div class="post-header">
                                                         <div class="post-header-line-1">
 															<?php twentysixteen_entry_meta(); ?>
-															<!-- <br />
-                                                            <span class="byline post-author vcard">
-                                                                <span class="post-author-label">
-                                                                    作者：
-                                                                </span>
-                                                                <span class="fn">
-                                                                    <span>Unknown</span>
-                                                                </span>
-                                                            </span> -->
-                                                            <!-- <span class="byline post-timestamp">
-                                                                -
-                                                                <meta
-                                                                    content="https://www.qwinna.hk/2022/02/blog-post.html">
-                                                                <a class="timestamp-link"
-                                                                    href="https://www.qwinna.hk/2022/02/blog-post.html"
-                                                                    rel="bookmark">
-                                                                    <time class="published"
-                                                                        datetime="2022-02-25T17:41:00+08:00"
-                                                                        title="2月 25, 2022">
-                                                                        2月 25, 2022
-                                                                    </time>
-                                                                    <span class="byline post-timestamp last-updated"
-                                                                        datetime="2022-02-25T17:41:00+08:00"
-                                                                        title="3月 01, 2022"> (已更新)</span>
-                                                                </a>
-                                                            </span> -->
                                                         </div>
                                                     </div>
                                                     <div class="container post-body entry-content"

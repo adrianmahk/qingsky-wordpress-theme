@@ -1042,16 +1042,27 @@ function post_filter_message() {
 	}
 }
 
+function subscribe_msg($in_post = false) {
+	if (!$in_post) {
+		echo '<div class="subscribe-message-container blog-pager">';
+	}
+	else {
+		echo '<hr />';
+	}
+	echo 
+		'<div class="subscribe-message">
+		<em>請支持自由創作者，如果喜歡可以<a href="/about/#subscribe" target="_blank">訂閱本站</a>、分享給好友及留言，也可以<a href="/about/#subscribe" target="_blank">按這裡支持作者</a>，你的支持將會給我很大的鼓勵，謝謝～</em>
+		</div>';
+	if (!$in_post) {
+		echo '</div>';
+	}
+}
+
 function blog_pager($show_subscribe_msg = true) {
 	// echo '' . (get_query_var( 'paged' ) * get_query_var('posts_per_page') + 1);
 	echo '<div class="blog-pager container widget" id="blog-pager">';
 	if ($show_subscribe_msg) {
-		echo 
-		'<div class="subscribe-message-container blog-pager">
-		<div class="subscribe-message">
-		<em>請支持自由創作者，如果喜歡可以分享給好友及留言，也可以<a href="/about/#subscribe" target="_blank">按這裡支持作者</a>，你的支持將會給我很大的鼓勵，謝謝～</em>
-		</div>
-		</div>';
+		subscribe_msg();
 	}
 	// echo '<div class="blog-pager">';
 	$button = '<a class="pill-button ripple %1$s" href="%2$s" id="blog-pager-older-link" title="較舊的文章">%3$s</a>';

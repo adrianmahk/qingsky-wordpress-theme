@@ -117,11 +117,6 @@ update_view_count();
 									<?php else:?>
 										<a class="home-page-button pill-button ripple" href="<?php echo esc_url(home_url('/')) ?>">首頁</a>
 									<?php endif; ?>
-
-									<?php //if ( is_active_sidebar( 'header-1' ) ) : ?>
-										
-		<!-- <?php //dynamic_sidebar( 'header-1' ); ?> -->
-									<!-- .sidebar .widget-area -->
                                 </div>
                                 <nav role="navigation">
                                 </nav>
@@ -130,8 +125,7 @@ update_view_count();
                     </header>
 
 					<!-- for PageList1 -->
-					<?php if (is_single() || is_page() ){// && is_active_sidebar( 'header-1' ) ){
-						// dynamic_sidebar( 'header-1' );
+					<?php if (is_single() || is_page() ){
 						echo get_page_list(page_list(), 'top_widget');
 					}?>
 
@@ -159,7 +153,7 @@ update_view_count();
                     </a>
                     <div class="right-button-container  flat-icon-button ripple">
                         <a class="return_link dark_mode_button" onclick="darkMode();" title="黑夜模式">
-                            <!--<img class='png_icon' src='https://1.bp.blogspot.com/-A_pnsq5GEqc/YBqL_8EdqaI/AAAAAAAABZw/77dK2uiIIE4c1eJtbvAbYmYnCBoELhPogCNcBGAsYHQ/s0/DarkMode.png'/>-->
+                            
                             <img class="png_icon light"
                                 src="<?php echo get_template_directory_uri() . '/icons/moon9.png'?>">
                             <img class="png_icon dark"
@@ -176,7 +170,7 @@ update_view_count();
             </a>
           </div>
 		  <?php endif?>
-                    <!--<b:if cond='true'> <div class='subscribe-section-container'> <a expr:title='data:messages.subscribe' href='/p/about.html#subscribe' target='_blank'><button class='subscribe-button pill-button'><b:eval expr='data:messages.subscribe'/></button></a> </div> </b:if>-->
+                    <div class='subscribe-section-container'> <a title='訂閱本站' href='/about/#' target='_blank'><button class='subscribe-button pill-button'>訂閱</button></a> </div>
                 </div>
             </div>
 		
