@@ -880,9 +880,14 @@ function clear_br($content) {
 add_filter('the_content','clear_br');
 add_filter('post_thumbnail_html','clear_br');
 remove_filter ('the_content', 'wpautop');
-remove_filter( 'the_excerpt', 'wpautop' );
+function trim_content_to_excerpts($text) {
+	$post = get_post();
+	$content = $post->post_content;
+	return substr($content, 0, custom_excerpt_length(0));
+	// return str_replace(' ', '<br />', $text);
+}
 
-function mytheme_custom_excerpt_length( $length ) {
+function custom_excerpt_length( $length ) {
 	$post = get_post();
 	$limit = strpos($post->post_content, '<!--more-->');
 	if ($limit > 0) {
@@ -890,7 +895,11 @@ function mytheme_custom_excerpt_length( $length ) {
 	}
     return 500;
 }
-add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
+remove_filter( 'the_excerpt', 'wpautop' );
+remove_filter( 'the_excerpt', 'wp_trim_excerpt' );
+add_filter( 'the_excerpt', 'trim_content_to_excerpts' );
+add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
+
 
 function search_distinct() {
 	return "DISTINCT";
