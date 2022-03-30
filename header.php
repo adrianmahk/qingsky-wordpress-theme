@@ -170,7 +170,7 @@ update_view_count();
             </a>
           </div>
 		  <?php endif?>
-                    <div class='subscribe-section-container'> <a title='訂閱本站' href='/about/#' target='_blank'><button class='subscribe-button pill-button'>訂閱</button></a> </div>
+                    <div class='subscribe-section-container'> <a title='訂閱本站' href='/about/#subscribe' target='_blank'><button class='subscribe-button pill-button'>訂閱</button></a> </div>
                 </div>
             </div>
 		
