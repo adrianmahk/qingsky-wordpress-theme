@@ -880,10 +880,12 @@ function clear_br($content) {
 add_filter('the_content','clear_br');
 add_filter('post_thumbnail_html','clear_br');
 remove_filter ('the_content', 'wpautop');
+add_shortcode('post_excerpt_custom', 'trim_content_to_excerpts');
 function trim_content_to_excerpts($text) {
 	$post = get_post();
 	$content = $post->post_content;
 	return substr($content, 0, custom_excerpt_length(0));
+	// return '';
 	// return str_replace(' ', '<br />', $text);
 }
 
