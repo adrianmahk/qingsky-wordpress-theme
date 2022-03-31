@@ -895,6 +895,10 @@ function custom_excerpt_length( $length ) {
 	if ($limit > 0) {
 		return $limit;
 	}
+	$len = strlen(utf8_decode($post->post_content));
+	if ($len < 500) {
+		return $len - 1;
+	}
     return 500;
 }
 remove_filter( 'the_excerpt', 'wpautop' );
@@ -1046,12 +1050,11 @@ function subscribe_msg($in_post = false) {
 	if (!$in_post) {
 		echo '<div class="subscribe-message-container blog-pager">';
 	}
-	else {
+	echo '<div class="subscribe-message">';
+	if ($in_post) {
 		echo '<hr />';
 	}
-	echo 
-		'<div class="subscribe-message">
-		<em>請支持自由創作者，如果喜歡可以<a href="/about/#subscribe" target="_blank">訂閱本站</a>、分享給好友及留言，也可以<a href="/about/#subscribe" target="_blank">按這裡支持作者</a>，你的支持將會給我很大的鼓勵，謝謝～</em>
+	echo '<em>請支持自由創作者，如果喜歡可以<a href="/about/#subscribe" target="_blank">訂閱本站</a>、分享給好友及留言，也可以<a href="/about/#subscribe" target="_blank">按這裡支持作者</a>，你的支持將會給我很大的鼓勵，謝謝～</em>
 		</div>';
 	if (!$in_post) {
 		echo '</div>';
