@@ -312,6 +312,18 @@ function twentysixteen_widgets_init() {
 
 	register_sidebar(
 		array(
+			'name'          => __( 'Subtitle 1', 'twentysixteen' ),
+			'id'            => 'subtitle-1',
+			'description'   => __( 'Appears at the bottom of the content on posts and pages.', 'twentysixteen' ),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h3 class="widget-title post-title main">',
+			'after_title'   => '</h3>',
+		)
+	);
+
+	register_sidebar(
+		array(
 			'name'          => __( 'FrontPage 1', 'twentysixteen' ),
 			'id'            => 'frontpage-1',
 			'description'   => __( 'Appears at the bottom of the content on posts and pages.', 'twentysixteen' ),
@@ -448,7 +460,7 @@ function twentysixteen_scripts() {
 	wp_enqueue_style( 'twentysixteen-fonts', twentysixteen_fonts_url(), array(), null );
 
 	// Add Genericons, used in the main stylesheet.
-	wp_enqueue_style( 'genericons', get_template_directory_uri() . '/genericons/genericons.css', array(), '3.4.1' );
+	// wp_enqueue_style( 'genericons', get_template_directory_uri() . '/genericons/genericons.css', array(), '3.4.1' );
 
 	// Theme stylesheet.
 	// wp_enqueue_style( 'twentysixteen-style', get_stylesheet_uri(), array(), '20190507' );

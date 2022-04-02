@@ -9,6 +9,9 @@
     --sab: env(safe-area-inset-bottom);
     --sal: env(safe-area-inset-left);
 }
+.disabled {
+    pointer-events: none !important;
+}
 
 /* For glassnote */
 .bg-safe-area-top {
@@ -227,11 +230,11 @@ body.dark-mode .toolbar .expanded-menu {
 body.dark-mode .toolbar .pill-button {
     border-color: #fefdf3;
 }
-body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
+/* body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
 body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
 body.dark-mode tbc, body.dark-mode cite, body.dark-mode cm   {
     color: #3aaac3;
-}
+} */
 
 body.opacity-0 .post-outer-container {
     background: rgba(254, 254, 253, 1) !important;

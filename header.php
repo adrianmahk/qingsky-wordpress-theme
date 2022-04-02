@@ -111,9 +111,12 @@ update_view_count();
                                         </div>
                                     </div>
 									<?php if ( is_front_page() && is_home() && !is_paged()) :?>
-										<div class="subtitle"><?php $description = get_bloginfo( 'description', 'display' ); echo $description; ?>
-										<span class="subtitle_desc">（本月主題）</span>
-										</div>
+										<!-- <div class="subtitle"><?php //$description = get_bloginfo( 'description', 'display' ); echo $description; ?>
+										<span class="subtitle_desc">（本月主題）</span></div> -->
+										<?php if (is_home() && is_front_page() && !is_paged() && is_active_sidebar( 'subtitle-1' )) {
+											dynamic_sidebar( 'subtitle-1' );
+										}?>
+										
 									<?php else:?>
 										<a class="home-page-button pill-button ripple" href="<?php echo esc_url(home_url('/')) ?>">首頁</a>
 									<?php endif; ?>
