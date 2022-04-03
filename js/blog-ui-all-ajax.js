@@ -2,8 +2,13 @@
 
 var timer = 0;
 // var ori;
-function showPageLoading() {
-  document.body.classList.add("page-loading");
+function showPageLoading(ajax = false) {
+  if (ajax) {
+    document.body.classList.add("page-loading", "ajax-loading");
+  }
+  else {
+    document.body.classList.add("page-loading");
+  }
   var el = document.getElementById('loading-bar');
   if (el) {
     el.style.animation = 'none';
@@ -15,7 +20,7 @@ function showPageLoading() {
 function hidePageLoading(delay = 1000) {
   if (delay > 0) {
     if (document.body.classList.contains('page-loading')) {
-      document.body.classList.remove('page-loading');
+      document.body.classList.remove('page-loading', 'ajax-loading');
       document.body.classList.add('page-loading-end');
     }
   }
@@ -135,6 +140,7 @@ function handleLink(anchorEl) {
   return true;
 }
 
+var resizeTimer = 0;
 function init() {
   if (!document.body.getAttribute("inited")) {
     document.body.setAttribute("orientation", getOrientation());
@@ -171,17 +177,11 @@ function init() {
     window.addEventListener("scroll", function (e) {
       handleScrollEvent(e);
     });
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
     window.addEventListener("popstate", function (e) {
-      console.log("popstate");
-      console.log(e.state);
-      // pageHideCallBack();
-      // ajaxLoadHTML(this.window.location, ajaxReplacePage, null, false, e.state);
-      var scrollY = document.body.scrollTop || document.scrollingElement.scrollTop;
-      var stateObj = {scrollPos: scrollY};
-      if (document.body.classList.contains("blog")) {
-        stateObj.main = main.innerHTML;
-      }
-      // history.replaceState(stateObj, document.title, document.referrer);
+      // this.window.scrollTo(0,0);
       ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
     });
     window.addEventListener("pagehide", pageHideCallBack);
@@ -206,10 +206,14 @@ function init() {
     // document.body.setAttribute("page-loaded", true);
     const resizeObserver = new ResizeObserver(entries => {
       console.log('Body height changed:', entries[0].target.clientHeight);
-      if (document.body.getAttribute("page-loaded") == "true") {
-        loadScrollPos(true);
-        document.body.removeAttribute("page-loaded");
-      }
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (document.body.getAttribute("page-loaded") == "true") {
+          loadScrollPos(document.body.getAttribute("ajax-popstate") == "true");
+          document.body.removeAttribute("page-loaded");
+          document.body.removeAttribute("ajax-popstate");
+        }
+      }, 100);
     });
     resizeObserver.observe(document.body);
     loadScrollPos();
@@ -234,10 +238,14 @@ function pageShowCallBack (event) {
   // loadScrollPos();
   loadReadingProgress();
   saveLastUrl();
+
+  // removeDuplicateWidgets();
+	showPopupMessage();
+	showTopMessage();
+	initImg();
 }
 
 function pageHideCallBack () {
-  console.log("page-hide");
     if (document.body.className.match("blog")) {
       saveMain();
     } 
@@ -455,28 +463,20 @@ function ajaxLoadOld(link, removeFirst = false, button = null) {
   }
 }
 
-// function ajaxLoadHTML(link, ajaxCallback = null, triggerCallback = null, push = true, state = null) {
 function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null) {
   var anchorEl = null;
-  // console.log(link);
-  // console.log();
   if (link.nodeType) {
     anchorEl = link;
     link = link.href;
   }
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
-    // if ((this.readyState == 4 && this.status == 200) || (this.readyState == 4 && this.status == 404)) {
     if (this.readyState == 4) {
-      console.log("200");
-      // var ajax_html = this.responseText;
-      // if (ajax_html.indexOf("</html>") == -1) {
-      //   console.log('-1');
-      //   return;
-      // }
+      console.log("ajaxLoadHTML: " + link + " success.");
       if (anchorEl) {
         anchorEl.classList.remove("disabled");
       }
+      clearTimeout(timer); 
       if (ajaxCallback) {
         var args = {
           responseText: this.responseText,
@@ -486,9 +486,8 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null) {
         };
         ajaxCallback(args);
       }
-      clearTimeout(timer); 
-      hidePageLoading();
-      loadReadingProgress();
+      // hidePageLoading();
+      // loadReadingProgress();
     }
   };
   if (link) {
@@ -497,17 +496,15 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null) {
     }
     xhttp.open("GET", link, true);
     xhttp.send();
-    showPageLoading();
-    // console.log(anchorEl);
-    setTimeout(function () {
-      timer = setTimeout(function () {
-        hidePageLoading(0);
-        xhttp.abort();
-        if (anchorEl) {
-          anchorEl.classList.remove("disabled");
-        }
-      }, 5000);
-    }, 1000);
+    showPageLoading(true);
+    timer = setTimeout(function () {
+      hidePageLoading(0);
+      xhttp.abort();
+      if (anchorEl) {
+        anchorEl.classList.remove("disabled");
+      }
+    }, 5000);
+
   }
 
   return false;
@@ -520,28 +517,24 @@ function ajaxReplacePage(args = null) {
   const state = args.state;
 
   var ajax_doc = new DOMParser().parseFromString(responseText, "text/html");
-  ajax_doc.body.classList.add("page-loading");
+  ajax_doc.body.classList.add("page-loading", "ajax-loading");
   var ajax_page = ajax_doc.getElementById("page");
   var body_page = document.getElementById("page");
-  var main = document.getElementById("main");
+
   pageHideCallBack();
   if (push) {
-    var scrollY = document.body.scrollTop || document.scrollingElement.scrollTop;
-    var stateObj = {scrollPos: scrollY};
-    if (document.body.classList.contains("blog")) {
-      stateObj.main = main.innerHTML;
-    }
-    history.replaceState(stateObj, document.title, window.location);
-    history.pushState({}, ajax_doc.title, link);
+    history.replaceState(document.body.classList.contains("blog") ? {main: document.getElementById("main").innerHTML} : null, document.title, window.location);
+    history.pushState(null, ajax_doc.title, link);
+    window.scrollTo(0,0);
   }
-
-  showPageLoading();
+  else {
+    document.body.setAttribute("ajax-popstate", true);
+  }
   // window.scrollTo(0, 0);
-  document.body.replaceChild(ajax_page ,body_page);
   document.body.classList = ajax_doc.body.classList;
+  document.body.replaceChild(ajax_page ,body_page);
   document.title = ajax_doc.title;
-  
-  var scrollPos = 0;
+
   if (state) {
     if (state.scrollPos) {
       scrollPos = state.scrollPos;
@@ -550,9 +543,12 @@ function ajaxReplacePage(args = null) {
       document.getElementById("main").innerHTML = state.main;
     }
   }
-  document.body.setAttribute("page-loaded", true);
-  
+  document.body.setAttribute("page-loaded", true);  
+  hidePageLoading();
   pageShowCallBack();
+  // setTimeout(() => {
+    // loadScrollPos(!push);
+  // }, 100);
 }
 
 function convertDateTime(dateTime) {
@@ -903,32 +899,31 @@ function convertScrollPosJson() {
 
 function loadScrollPos(isAjax = false, bottomPadding = 580) {
 // get scrollPos
+  console.log("isAjax: " + isAjax );
   if (isAjax || document.body.classList.contains("is-post")) {
     if (typeof (Storage) == "undefined") {
       return;
     }
 
-    var url1 = sessionStorage.getItem("last-url");
-    var url2 = window.location.href;
+    // var url1 = sessionStorage.getItem("last-url");
+    // var url2 = window.location.href;
     // console.log("last-url: " + url1);
     
     var scrollPosObj = getLocalStorageScrollPos();
     var scrollPos = scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0;
     console.log(scrollPos);
-    // if (scrollPos == undefined) {
-    //   scrollPos = scrollPosObj ? scrollPosObj[window.location.pathname] : 0;
-    // }
     updateItemViewProgressBar(scrollPos);
     if (scrollPos != undefined) {
       scrollPos = scrollPos / 100;
       if (document.body.classList.contains("is-post")) {
         console.log("document.documentElement.scrollHeight: " + document.documentElement.scrollHeight);
-        if (url1 != url2 || scrollPos < 0.05 || scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
+        // if (url1 != url2 || scrollPos < 0.05 || scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
+        if (scrollPos < 0.05 || scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
           // return;
         }
       }
       setTimeout(function (){
-        var scrollPosFromPercent = scrollPos * (document.body.clientHeight - document.documentElement.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0));
+        var scrollPosFromPercent = scrollPos * (document.documentElement.scrollHeight - document.documentElement.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0));
         window.scrollTo(0, scrollPosFromPercent);  
         console.log("scrollPosFromPercent: " + scrollPosFromPercent);
       // }, 500);
@@ -969,13 +964,16 @@ function loadReadingProgress() {
 var scrollTimer = 0;
 function handleScrollEvent(e) {
   // if (document.body.classList.contains("is-post")) {
-  clearTimeout(scrollTimer);
-  scrollTimer = setTimeout(function (){
-    var scrollPercent = getScrollPercent();
-    if (document.body.classList.contains("collapsed-header") && !document.body.classList.contains("page-loading") && scrollPercent > 1) {
-      document.body.setAttribute("scrollPos", scrollPercent);
-      saveScrollPos();
-      updateItemViewProgressBar();
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(function (){
+      var scrollPercent = getScrollPercent();
+      // console.log(document.body.classList.contains("collapsed-header") && (scrollPercent > 1) ) ;
+    if (!document.body.classList.contains("page-loading")) {
+      if (document.body.classList.contains("blog")  || (document.body.classList.contains("is-post") && document.body.classList.contains("collapsed-header") && (scrollPercent > 1)) ) {
+        document.body.setAttribute("scrollPos", scrollPercent);
+        saveScrollPos();
+        updateItemViewProgressBar();
+      }
     }
   }, 500);
   // }
