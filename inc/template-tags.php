@@ -84,7 +84,7 @@ if ( ! function_exists( 'twentysixteen_entry_date' ) ) :
 		
 		$string = '';
 		$publish = '<span class="byline post-timestamp"> - <a class="timestamp-link" href="%2$s" rel="bookmark">%3$s</a>';
-		$updated = '<span class="last-updated" title="%4$s">（已更新）</span></span>';
+		$updated = '<span class="last-updated" title="%4$s"> (已更新)</span></span>';
 		$update_inpost = '</span><br /><span class="byline post-timestamp last-updated">於 <time class="published"  title="%4$s">%4$s</time> 更新</span>';
 		if (!is_singular()) {
 			if (!is_sticky()) {
