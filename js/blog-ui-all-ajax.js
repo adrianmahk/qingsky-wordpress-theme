@@ -203,7 +203,7 @@ function init() {
       }
     });
     loadIndie();
-    document.body.setAttribute("page-loaded", true);
+    // document.body.setAttribute("page-loaded", true);
     const resizeObserver = new ResizeObserver(entries => {
       console.log('Body height changed:', entries[0].target.clientHeight);
       if (document.body.getAttribute("page-loaded") == "true") {
@@ -212,7 +212,7 @@ function init() {
       }
     });
     resizeObserver.observe(document.body);
-    // loadScrollPos();
+    loadScrollPos();
   
     document.body.setAttribute("inited", true);
 
