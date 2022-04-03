@@ -520,6 +520,7 @@ function ajaxReplacePage(args = null) {
   const state = args.state;
 
   var ajax_doc = new DOMParser().parseFromString(responseText, "text/html");
+  ajax_doc.body.classList.add("page-loading");
   var ajax_page = ajax_doc.getElementById("page");
   var body_page = document.getElementById("page");
   var main = document.getElementById("main");
