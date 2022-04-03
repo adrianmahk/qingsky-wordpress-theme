@@ -12,6 +12,9 @@
 .disabled {
     pointer-events: none !important;
 }
+body.page-loading #page {
+    visibility: hidden;
+}
 
 /* For glassnote */
 .bg-safe-area-top {
