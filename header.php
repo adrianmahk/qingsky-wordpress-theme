@@ -10,6 +10,19 @@
  */
 include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html_dom.php';
 update_view_count();
+
+if ($_GET['ajax']) {
+	global $wp_query;
+	if (!is_singular()) {
+		foreach ($wp_query->posts as $post) {
+			$post->post_excerpt = substr($post->post_content, 0, custom_excerpt_length(0));
+			$post->permalink = get_permalink($post);
+			unset($post->post_content);
+		}
+	}
+	echo print_r($wp_query->posts);
+	die();
+}
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
@@ -20,15 +33,17 @@ update_view_count();
 	<meta content="yes" name="apple-mobile-web-app-capable">
   	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script>
+	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script> -->
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=1' ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
 		}
 		function setupServiceWorker() {
-			if (document.body.classList.contains('home-view')) {
+			// if (document.body.classList.contains('home-view')) {
+			if (!document.body.classList.contains('error404')) {
 				if ('serviceWorker' in navigator) {
-					console.log('landing');
+					// console.log('landing');
 					navigator.serviceWorker.register("<?php echo  '/sw.js'?>", {scope: "<?php echo '/' ?>"}).then(function(registration) {
 						console.log('Service worker registration succeeded:', registration);
 					}, /*catch*/ function(error) {
