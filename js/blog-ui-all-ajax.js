@@ -932,7 +932,7 @@ function loadScrollPos(isAjax = false, bottomPadding = 580) {
         window.scrollTo(0, scrollPosFromPercent);  
         console.log("scrollPosFromPercent: " + scrollPosFromPercent);
       // }, 500);
-      }, 0);
+      }, isAjax ? 0 : 500);
     }
     
   }
