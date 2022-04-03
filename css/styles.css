@@ -15,8 +15,8 @@
 
 #page {
     opacity: 1;
-    transition: opacity 1s ease-in-out;
-    -webkit-transition: opacity 1s ease-in-out;
+    transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
 }
 
 body.page-loading.ajax-loading #page {

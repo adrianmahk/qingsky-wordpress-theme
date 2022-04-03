@@ -529,14 +529,15 @@ function ajaxReplacePage(args = null) {
   if (push) {
     history.replaceState(document.body.classList.contains("blog") ? {main: document.getElementById("main").innerHTML} : null, document.title, window.location);
     history.pushState(null, ajax_doc.title, link);
-    window.scrollTo(0,0);
+    // window.scrollTo(0,0);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
   }
-  // window.scrollTo(0, 0);
+  window.scrollTo(0, 0);
   document.body.classList = ajax_doc.body.classList;
-  document.body.replaceChild(ajax_page ,body_page);
+  // document.body.replaceChild(ajax_page ,body_page);
+  body_page.innerHTML = ajax_page.innerHTML;
   document.title = ajax_doc.title;
 
   if (state) {
@@ -550,9 +551,6 @@ function ajaxReplacePage(args = null) {
   document.body.setAttribute("page-loaded", true);  
   hidePageLoading();
   pageShowCallBack();
-  // setTimeout(() => {
-    // loadScrollPos(!push);
-  // }, 100);
 }
 
 function convertDateTime(dateTime) {
