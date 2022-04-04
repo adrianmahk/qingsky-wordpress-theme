@@ -396,7 +396,7 @@ function ajaxLoad(link, removeFirst = false, button = null) {
         removeAllButLast('[id=blog-pager]');
 
         history.replaceState({main: main.innerHTML}, document.title, window.location);
-        saveScrollPos();
+        // saveScrollPos();
         loadReadingProgress();
         hidePageLoading();
     }
@@ -526,10 +526,10 @@ function ajaxReplacePage(args = null) {
   var body_page = document.getElementById("page");
 
   pageHideCallBack();
+  saveScrollPos(document.body.getAttribute("url"));
   if (push) {
     history.replaceState(document.body.classList.contains("blog") ? {main: document.getElementById("main").innerHTML} : null, document.title, window.location);
     history.pushState(null, ajax_doc.title, link);
-    // window.scrollTo(0,0);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
@@ -540,15 +540,12 @@ function ajaxReplacePage(args = null) {
   body_page.innerHTML = ajax_page.innerHTML;
   document.title = ajax_doc.title;
 
-  if (state) {
-    if (state.scrollPos) {
-      scrollPos = state.scrollPos;
-    }
-    if (state.main) {
-      document.getElementById("main").innerHTML = state.main;
-    }
+  if (state && state.main) {
+    document.getElementById("main").innerHTML = state.main;
   }
-  document.body.setAttribute("page-loaded", true);  
+  document.body.setAttribute("page-loaded", true);
+  document.body.setAttribute("url", window.location.pathname);
+
   hidePageLoading();
   pageShowCallBack();
 }
@@ -868,10 +865,11 @@ function getLocalStorageScrollPos(key = "scrollPosJsonURIDecode") {
 }
 
 function saveScrollPos(path = undefined, scrollPercent = undefined) {
+
   if (!document.body.classList.contains("error404")) {
     if (typeof (Storage) !== "undefined") {
       var scrollPosObj = getLocalStorageScrollPos();
-      if (path === undefined) {
+      if (!path) {
         path = decodeURI(window.location.pathname);
       }
       else {
@@ -881,7 +879,7 @@ function saveScrollPos(path = undefined, scrollPercent = undefined) {
         // scrollPercent = (document.body.getAttribute("scrollPos") != undefined) ? document.body.getAttribute("scrollPos") : 0;
         scrollPercent = getScrollPercent();
       }
-    
+      console.log(path + ": " + scrollPercent);
       scrollPosObj[path] =  scrollPercent;
       // localStorage.setItem("scrollPosJson", JSON.stringify(scrollPosObj));
       localStorage.setItem("scrollPosJsonURIDecode", JSON.stringify(scrollPosObj));
