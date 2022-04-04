@@ -252,7 +252,7 @@ function pageShowCallBack (event) {
 	showPopupMessage();
 	showTopMessage();
 	initImg();
-  displayGoogleAds();
+  // displayGoogleAds();
 }
 
 function pageHideCallBack () {
