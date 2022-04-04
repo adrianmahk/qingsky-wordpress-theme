@@ -484,7 +484,7 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null, append
   }
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4) {
+    if (this.readyState == 4 && (this.status == 200 || this.status == 404)) {
       console.log("ajaxLoadHTML: " + link + " success.");
       if (anchorEl) {
         anchorEl.classList.remove("disabled");
@@ -549,16 +549,45 @@ function ajaxReplacePage(args = null) {
   document.body.classList = ajax_doc.body.classList;
   // document.body.replaceChild(ajax_page ,body_page);
   body_page.innerHTML = ajax_page.innerHTML;
-  document.title = ajax_doc.title;
+  // document.title = ajax_doc.title;
   
   if (state && state.main) {
     document.getElementById("main").innerHTML = state.main;
   }
   document.body.setAttribute("page-loaded", true);
   document.body.setAttribute("url", window.location.pathname);
+  nodeScriptReplace(body_page);
   
   hidePageLoading();
   pageShowCallBack();
+}
+
+function nodeScriptReplace(node) {
+  if ( nodeScriptIs(node) === true ) {
+          node.parentNode.replaceChild( nodeScriptClone(node) , node );
+  }
+  else {
+          var i = -1, children = node.childNodes;
+          while ( ++i < children.length ) {
+                nodeScriptReplace( children[i] );
+          }
+  }
+
+  return node;
+}
+function nodeScriptClone(node){
+  var script  = document.createElement("script");
+  script.text = node.innerHTML;
+
+  var i = -1, attrs = node.attributes, attr;
+  while ( ++i < attrs.length ) {                                    
+        script.setAttribute( (attr = attrs[i]).name, attr.value );
+  }
+  return script;
+}
+
+function nodeScriptIs(node) {
+  return node.tagName === 'SCRIPT';
 }
 
 function displayGoogleAds(){
