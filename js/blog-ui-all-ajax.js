@@ -99,8 +99,17 @@ function findLink(el) {
 };
 
 function handleLink(anchorEl) {
+
+  if (anchorEl.getAttribute('target')) {
+    // _blank
+    return true;
+  }
+  var href = anchorEl.getAttribute('href');
+  if (  new URL(window.location.href, "http://example.com").pathname == new URL(href, "http://example.com").pathname) {
+    return true;
+  }
+
   if (anchorEl.classList.contains("ajax-load-home")) {
-    // ajaxLoad(getLatestArchiveMonthLink(anchorEl.href), true, anchorEl);
     ajaxLoad(anchorEl.href, true, anchorEl);
     return false;
   }
@@ -124,15 +133,14 @@ function handleLink(anchorEl) {
     , '');
   
   var jsCheck = new RegExp('^(javascript:|\#|\\?).*?$');
-  var href = anchorEl.getAttribute('href');
+
 
   if (href) {
     if (!jsCheck.test(href) && !anchorEl.getAttribute('onclick')) {
       if (!internalLinkRegex.test(href)) {
         anchorEl.setAttribute('target', '_blank');
       }
-      else if ((new URL(window.location.href, "http://example.com").pathname != new URL(href, "http://example.com").pathname) && !anchorEl.getAttribute('target')) {
-        // return gotoUrlWithDelay(href); // which is always false
+      else {
         return ajaxLoadHTML(anchorEl, ajaxReplacePage,  null);
       }
     }
@@ -181,8 +189,9 @@ function init() {
       history.scrollRestoration = 'manual';
     }
     window.addEventListener("popstate", function (e) {
-      // this.window.scrollTo(0,0);
-      ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
+      if (e.state) {
+        ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
+      }
     });
     window.addEventListener("pagehide", pageHideCallBack);
     window.addEventListener("pageshow", pageShowCallBack);
@@ -243,6 +252,7 @@ function pageShowCallBack (event) {
 	showPopupMessage();
 	showTopMessage();
 	initImg();
+  displayGoogleAds();
 }
 
 function pageHideCallBack () {
@@ -518,18 +528,19 @@ function ajaxReplacePage(args = null) {
   const link = args.link;
   const push = args.push;
   const state = args.state;
-
+  
   var ajax_doc = new DOMParser().parseFromString(responseText, "text/html");
   document.body.classList.add("page-loading", "ajax-loading");
   ajax_doc.body.classList.add("page-loading", "ajax-loading");
   var ajax_page = ajax_doc.getElementById("page");
   var body_page = document.getElementById("page");
-
+  
   pageHideCallBack();
-  saveScrollPos(document.body.getAttribute("url"));
+  handleScrollEvent();
+  saveScrollPos(document.body.getAttribute("url"), document.body.getAttribute("scrollPos"));
   if (push) {
     history.replaceState(document.body.classList.contains("blog") ? {main: document.getElementById("main").innerHTML} : null, document.title, window.location);
-    history.pushState(null, ajax_doc.title, link);
+    history.pushState({}, ajax_doc.title, link);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
@@ -539,15 +550,23 @@ function ajaxReplacePage(args = null) {
   // document.body.replaceChild(ajax_page ,body_page);
   body_page.innerHTML = ajax_page.innerHTML;
   document.title = ajax_doc.title;
-
+  
   if (state && state.main) {
     document.getElementById("main").innerHTML = state.main;
   }
   document.body.setAttribute("page-loaded", true);
   document.body.setAttribute("url", window.location.pathname);
-
+  
   hidePageLoading();
   pageShowCallBack();
+}
+
+function displayGoogleAds(){
+  var ins = document.querySelectorAll("ins");
+  // for (var ad in ins) {
+  for (var i = 0; i < ins.length; i++) {
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  }
 }
 
 function convertDateTime(dateTime) {
@@ -879,7 +898,7 @@ function saveScrollPos(path = undefined, scrollPercent = undefined) {
         // scrollPercent = (document.body.getAttribute("scrollPos") != undefined) ? document.body.getAttribute("scrollPos") : 0;
         scrollPercent = getScrollPercent();
       }
-      console.log(path + ": " + scrollPercent);
+      // console.log(path + ": " + scrollPercent);
       scrollPosObj[path] =  scrollPercent;
       // localStorage.setItem("scrollPosJson", JSON.stringify(scrollPosObj));
       localStorage.setItem("scrollPosJsonURIDecode", JSON.stringify(scrollPosObj));
@@ -898,9 +917,21 @@ function convertScrollPosJson() {
   }
 }
 
-function loadScrollPos(isAjax = false, bottomPadding = 580) {
+function loadScrollPos(popstate = false, bottomPadding = 580) {
 // get scrollPos
-  if (isAjax || document.body.classList.contains("is-post")) {
+  if (window.location.hash) {
+    const anchor = document.querySelector("[id='" + window.location.hash.replace("#", "") + "'], [name='" + window.location.hash.replace("#", "") + "']");
+    // location.hash = "#" + location.hash;
+    console.log("anchor: " + anchor);
+    if (anchor) {
+      window.scrollTo({
+        top: anchor.getBoundingClientRect().top + window.pageYOffset, // scroll so that the element is at the top of the view
+        behavior: 'smooth' // smooth scroll
+      })
+    }
+  }
+
+  if (popstate || document.body.classList.contains("is-post")) {
     if (typeof (Storage) == "undefined") {
       return;
     }
@@ -912,17 +943,18 @@ function loadScrollPos(isAjax = false, bottomPadding = 580) {
     if (scrollPos != undefined) {
       scrollPos = scrollPos / 100;
       if (document.body.classList.contains("is-post")) {
-        // if (url1 != url2 || scrollPos < 0.05 || scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
         if (scrollPos < 0.05 || scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
           return;
         }
       }
       setTimeout(function (){
         var scrollPosFromPercent = scrollPos * (document.documentElement.scrollHeight - document.documentElement.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0));
-        window.scrollTo(0, scrollPosFromPercent);  
-        // console.log("scrollPosFromPercent: " + scrollPosFromPercent);
-      // }, 500);
-      }, isAjax ? 0 : 500);
+        // window.scrollTo(0, scrollPosFromPercent);
+        window.scrollTo({
+          top: scrollPosFromPercent,
+          behavior: popstate ? "auto" : "smooth"
+        });
+      }, popstate ? 0 : 0);
     }
     
   }
@@ -965,7 +997,7 @@ function handleScrollEvent(e) {
       // console.log(document.body.classList.contains("collapsed-header") && (scrollPercent > 1) ) ;
     if (!document.body.classList.contains("page-loading")) {
       if (document.body.classList.contains("blog")  || (document.body.classList.contains("is-post") && document.body.classList.contains("collapsed-header") && (scrollPercent > 1)) ) {
-        // document.body.setAttribute("scrollPos", scrollPercent);
+        document.body.setAttribute("scrollPos", scrollPercent);
         saveScrollPos();
         updateItemViewProgressBar();
       }
