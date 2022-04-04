@@ -23,9 +23,9 @@ body.page-loading.ajax-loading #page {
     opacity: 0.5;
     /* transform: translate(-50px, 0); */
 }
-.blog-name {
-    padding: 5px;
-    margin: -5px;
+.blog-name .site-title {
+    padding: 1em;
+    margin: -1em !important;
 }
 /* For glassnote */
 .bg-safe-area-top {
