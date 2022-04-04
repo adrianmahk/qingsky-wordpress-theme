@@ -471,25 +471,25 @@ function twentysixteen_scripts() {
 	// Theme block stylesheet.
 	wp_enqueue_style( 'twentysixteen-block-style', get_template_directory_uri() . '/css/blocks.css', array( 'twentysixteen-style' ), '20190102' );
 	
-	wp_enqueue_style( 'styles', get_template_directory_uri() . '/css/styles.css', array( 'twentysixteen-style' ), '20190103' );
+	// wp_enqueue_style( 'styles', get_template_directory_uri() . '/css/styles.css', array( 'twentysixteen-style' ), '20190103' );
 
 	// Load the Internet Explorer specific stylesheet.
-	wp_enqueue_style( 'twentysixteen-ie', get_template_directory_uri() . '/css/ie.css', array( 'twentysixteen-style' ), '20170530' );
-	wp_style_add_data( 'twentysixteen-ie', 'conditional', 'lt IE 10' );
+	// wp_enqueue_style( 'twentysixteen-ie', get_template_directory_uri() . '/css/ie.css', array( 'twentysixteen-style' ), '20170530' );
+	// wp_style_add_data( 'twentysixteen-ie', 'conditional', 'lt IE 10' );
 
-	// Load the Internet Explorer 8 specific stylesheet.
-	wp_enqueue_style( 'twentysixteen-ie8', get_template_directory_uri() . '/css/ie8.css', array( 'twentysixteen-style' ), '20170530' );
-	wp_style_add_data( 'twentysixteen-ie8', 'conditional', 'lt IE 9' );
+	// // Load the Internet Explorer 8 specific stylesheet.
+	// wp_enqueue_style( 'twentysixteen-ie8', get_template_directory_uri() . '/css/ie8.css', array( 'twentysixteen-style' ), '20170530' );
+	// wp_style_add_data( 'twentysixteen-ie8', 'conditional', 'lt IE 9' );
 
-	// Load the Internet Explorer 7 specific stylesheet.
-	wp_enqueue_style( 'twentysixteen-ie7', get_template_directory_uri() . '/css/ie7.css', array( 'twentysixteen-style' ), '20170530' );
-	wp_style_add_data( 'twentysixteen-ie7', 'conditional', 'lt IE 8' );
+	// // Load the Internet Explorer 7 specific stylesheet.
+	// wp_enqueue_style( 'twentysixteen-ie7', get_template_directory_uri() . '/css/ie7.css', array( 'twentysixteen-style' ), '20170530' );
+	// wp_style_add_data( 'twentysixteen-ie7', 'conditional', 'lt IE 8' );
 
-	// Load the html5 shiv.
-	wp_enqueue_script( 'twentysixteen-html5', get_template_directory_uri() . '/js/html5.js', array(), '3.7.3' );
-	wp_script_add_data( 'twentysixteen-html5', 'conditional', 'lt IE 9' );
+	// // Load the html5 shiv.
+	// wp_enqueue_script( 'twentysixteen-html5', get_template_directory_uri() . '/js/html5.js', array(), '3.7.3' );
+	// wp_script_add_data( 'twentysixteen-html5', 'conditional', 'lt IE 9' );
 
-	wp_enqueue_script( 'twentysixteen-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20170530', true );
+	// wp_enqueue_script( 'twentysixteen-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20170530', true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
@@ -704,8 +704,156 @@ function twentysixteen_widget_tag_cloud_args( $args ) {
 }
 add_filter( 'widget_tag_cloud_args', 'twentysixteen_widget_tag_cloud_args' );
 
-add_action('pre_get_posts', 'home_archive_category', 1 );
-add_filter('found_posts', 'home_offset', 1, 2 );
+function update_view_count() {	
+	if (is_home() || is_archive() || is_singular() || is_search() || is_404()) {
+		if (is_user_logged_in()) {
+			if (current_user_can( 'edit_post', get_the_ID() )) {
+				return;
+			}
+		}
+
+		global $wp;
+		global $wpdb;
+		// $view_count_table_sql = "CREATE TABLE `wordpress`.`wp_posts_viewcount` (`post_id` BIGINT(20) NOT NULL , `post_title` TEXT NULL , `post_url` VARCHAR(255) NOT NULL , `view_count` INT(11) NOT NULL DEFAULT '0' , PRIMARY KEY (`post_id`)) ENGINE = InnoDB;";
+		$view_count_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `is_valid` BOOLEAN NOT NULL DEFAULT TRUE, `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
+		$view_count_sql = "INSERT INTO `wp_viewcounts` (`url`, `date`, `update_time`, `view_count`, `is_valid`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request)) ."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, " . (is_404() ? 0 : 1)  . ", " . (is_singular() ?  get_the_ID() : 0) . ", '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+		// $view_count_sql = "INSERT INTO `wp_posts_viewcount` (`post_id`, `post_title`, `post_url`, `view_count`) VALUES(" . get_the_ID() . ", '" . get_the_title() . "', '" . get_permalink() . "', 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1";
+		$user_region = getIpData($_SERVER['REMOTE_ADDR']);
+		$user_region_table_sql = "CREATE TABLE `wordpress`.`wp_viewcounts_region` ( `region` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `view_count` INT(11) NOT NULL , PRIMARY KEY (`region`, `date`)) ENGINE = InnoDB;";
+		$user_region_sql = "INSERT INTO `wp_viewcounts_region` (`region`, `date`, `update_time`, `view_count`) VALUES('". $user_region . "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+		
+		// echo $user_region_sql;exit();
+		$wpdb->query( "START TRANSACTION" );
+		$wpdb->query($view_count_table_sql);
+		$wpdb->query($view_count_sql);
+		$wpdb->query($user_region_table_sql);
+		$wpdb->query($user_region_sql);
+		
+		$wpdb->query( "COMMIT" );
+	}
+}
+
+function getIpData($userIP) {
+	
+	// API end URL 
+	$apiURL = 'https://freegeoip.app/json/'.$userIP; 
+	
+	// Create a new cURL resource with URL 
+	$ch = curl_init($apiURL); 
+	
+	// Return response instead of outputting 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+	
+	// Execute API request 
+	$apiResponse = curl_exec($ch); 
+	// echo $apiResponse; exit;
+	
+	// Close cURL resource 
+	curl_close($ch); 
+	
+	// Retrieve IP data from API response 
+	$ipData = json_decode($apiResponse, true); 
+	
+	if(!empty($ipData)){ 
+		return $ipData['country_name'];
+	}else{ 
+	} 
+}
+
+add_shortcode('get_stats', 'get_stats');
+function get_stats($atts, $content = null) {
+	if (!current_user_can( 'edit_post', get_the_ID() ) || wp_make_link_relative(get_permalink()) != '/stat/') {
+	// if (!current_user_can( 'edit_post', get_the_ID() ) ) {
+		return;
+	}
+    extract(shortcode_atts(array(
+	'sql' => '',
+	'dev' => '',
+), $atts)); 
+	$servername = "localhost";
+	$username = "readonly";
+	$password = "123456";
+	$dbname = ($dev == '') ?  "wordpress" : "wordpress-dev";
+	// die($dbname);
+	// Create connection
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	// Check connection
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	} 
+	$sql = html_entity_decode($sql);
+	$output = $conn->query($sql);
+	$conn->close();
+	if ($output->num_rows > 0) {
+		// output data of each row
+		$keys = null;
+		$string = '<style>
+		table.stats {
+
+		}
+		table.stats td, table.stats th {
+			box-shadow: 1px 1px 0px #888;
+		}
+		td.numbers {
+			text-align: right;
+		}
+		</style><table class="stats" style="white-space: nowrap;">';
+		
+		
+		while($row = $output->fetch_assoc()) {
+		
+			if (!$keys) {
+				$keys = array_keys($row);
+				$string .= '<tr>';
+				foreach ($keys as $key) {
+					$string .= '<th>' . $key. '</th>';
+				}
+				$string .= '</tr>';
+				
+			}
+			$string .= '<tr>';
+			$values = array_values($row);
+			foreach ($values as $value) {
+				$string .= '<td class="'. (is_numeric($value) ? 'numbers' : '') .  '">' . $value. '</td>';
+			}
+			$string .= '</tr>';
+		}
+		$string .= '</table>';
+		return $string;
+	  }
+	  else {
+		// echo "0 results";
+	  }
+}
+
+add_shortcode('user_activation_key', 'user_activation_key2');
+function user_activation_key2($atts, $content = null) {
+    extract(shortcode_atts(array(
+	'id' => '',
+	// 'dev' => '',
+), $atts)); 
+	if ($id) {
+		global $wpdb;
+		$result = $wpdb->get_results( "SELECT `user_activation_key` FROM `wp_users` WHERE `id` = ". $id );
+		if ($result) {
+			return $result[0]->user_activation_key;
+		}
+	}
+	return '';
+}
+
+function get_last_update() {
+	if (!is_singular()) {
+		global $wpdb;
+		$sql = "SELECT MAX(GREATEST(`post_date`,`post_modified`)) as `last_update` FROM `wp_posts`";
+		$result = $wpdb->get_results($sql);
+		if (!empty($result)) {
+			echo 'last-update="' . $result[0]->last_update .'"';
+		}
+	}
+}
+
+
 function home_archive_category(&$query) {
 
 	if (is_home() && !is_paged()) {
@@ -762,6 +910,7 @@ function home_archive_category(&$query) {
 	}
 	
 }
+add_action('pre_get_posts', 'home_archive_category', 1 );
 
 function home_offset($found_posts, $query) {
 	// define the offset here
@@ -771,7 +920,22 @@ function home_offset($found_posts, $query) {
 	}
 	return $found_posts;
 }
+add_filter('found_posts', 'home_offset', 1, 2 );
 
+add_filter( 'posts_search_orderby', function( $search_orderby ) {
+	global $wp_query;
+	// echo html_entity_decode(json_encode($wp_query));exit;
+	// echo $wp_query->query_vars['s'];exit;
+	// echo $search_orderby;exit;
+	// $search_orderby = " REGEXP_COUNT(`post_content`, ". $wp_query->query_vars['s'] .")";
+	$search_orderby = "length(post_content)- length(REPLACE(post_content, '" . $wp_query->query_vars['s'] . "', '')) desc";
+	return $search_orderby;
+	// echo $search_orderby; exit;
+	// return 'relavance';
+    // global $wpdb;
+    // return "{$wpdb->posts}.post_type LIKE 'profiles' DESC, {$search_orderby}";
+    // return "COUNT () {$wpdb->posts}.post_type LIKE 'profiles' DESC, {$search_orderby}";
+});
 
 function custom_theme_support() {
 	add_theme_support('custom-background', array(
@@ -780,8 +944,7 @@ function custom_theme_support() {
 	));
 }
 add_action('after_setup_theme', 'custom_theme_support');
-function custom_background_cb()
-{
+function custom_background_cb() {
 	// $background is the saved custom image, or the default image.
 	$background = set_url_scheme( get_background_image() );
 
@@ -923,6 +1086,64 @@ function search_distinct() {
 	return "DISTINCT";
 }
 add_filter('posts_distinct', 'search_distinct');
+
+
+
+add_filter( 'manage_post_posts_columns', 'set_custom_edit_mycpt_columns', 10 );
+function set_custom_edit_mycpt_columns( $columns = null ) {
+  $columns['view_count'] = __( 'Views', '' );
+  return $columns;
+}
+
+add_action( 'manage_post_posts_custom_column' , 'custom_mycpt_column', 9, 2 );
+function custom_mycpt_column( $column, $post_id ) {
+  global $wpdb;
+  $result = $wpdb->get_col("SELECT `view_count` FROM `wp_stats_bypost` WHERE `post_id` = ". $post_id. "");
+//   echo json_encode($result);
+  switch ( $column ) {
+    // display a thumbnail photo
+    case 'view_count' :
+      echo empty($result) ? 0 : $result[0];
+      break;
+
+  }
+}
+add_filter( 'manage_edit-post_sortable_columns', 'set_custom_mycpt_sortable_columns' );
+function set_custom_mycpt_sortable_columns( $columns ) {
+  $columns['view_count'] = 'view_count';
+
+  return $columns;
+}
+add_filter( 'request', 'city_column_orderby');
+function city_column_orderby( $vars ) {
+	// die(json_encode($vars));
+	// global $wpdb;
+  	// $result = $wpdb->get_col("SELECT `view_count` FROM `wp_stats_bypost` WHERE `post_id` = ". $post_id. "");
+	if ( isset( $vars['orderby'] ) && $vars['orderby'] == 'view_count' ) {
+		$vars = array_merge( $vars, array(
+			
+			'meta_key' => 'view_count',
+			// 'meta_value' => "",
+			// 'meta_compare' => 'exists',
+			// 'orderby' => 'view_count', // does not work
+			'orderby' => 'meta_key', // does not work
+			// 'orderby' => 'post_mime_type',
+			// 'orderby' => 'relavance',
+			// 'meta_type' => 'NUMERIC',
+			
+			//'order' => 'asc' // don't use this; blocks toggle UI
+		) );
+	}
+	return $vars;
+}
+
+add_action( 'post_updated', 'aaaaa', 10, 3 );
+function aaaaa ($new_status, $old_status, $post ) {
+	// die($post);
+}
+
+// Page Elements
+
 
 function page_list(){
 	return [
@@ -1267,141 +1488,11 @@ function blogArchive() {
 	return $echo;
 }
 
-function update_view_count() {	
-	if (is_home() || is_archive() || is_singular() || is_search() || is_404()) {
-		if (is_user_logged_in()) {
-			if (current_user_can( 'edit_post', get_the_ID() )) {
-				return;
-			}
-		}
 
-		global $wp;
-		global $wpdb;
-		// $view_count_table_sql = "CREATE TABLE `wordpress`.`wp_posts_viewcount` (`post_id` BIGINT(20) NOT NULL , `post_title` TEXT NULL , `post_url` VARCHAR(255) NOT NULL , `view_count` INT(11) NOT NULL DEFAULT '0' , PRIMARY KEY (`post_id`)) ENGINE = InnoDB;";
-		$view_count_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `is_valid` BOOLEAN NOT NULL DEFAULT TRUE, `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
-		$view_count_sql = "INSERT INTO `wp_viewcounts` (`url`, `date`, `update_time`, `view_count`, `is_valid`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request)) ."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, " . (is_404() ? 0 : 1)  . ", " . (is_singular() ?  get_the_ID() : 0) . ", '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
-		// $view_count_sql = "INSERT INTO `wp_posts_viewcount` (`post_id`, `post_title`, `post_url`, `view_count`) VALUES(" . get_the_ID() . ", '" . get_the_title() . "', '" . get_permalink() . "', 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1";
-		$user_region = getIpData($_SERVER['REMOTE_ADDR']);
-		$user_region_table_sql = "CREATE TABLE `wordpress`.`wp_viewcounts_region` ( `region` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `view_count` INT(11) NOT NULL , PRIMARY KEY (`region`, `date`)) ENGINE = InnoDB;";
-		$user_region_sql = "INSERT INTO `wp_viewcounts_region` (`region`, `date`, `update_time`, `view_count`) VALUES('". $user_region . "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
-		
-		// echo $user_region_sql;exit();
-		$wpdb->query( "START TRANSACTION" );
-		$wpdb->query($view_count_table_sql);
-		$wpdb->query($view_count_sql);
-		$wpdb->query($user_region_table_sql);
-		$wpdb->query($user_region_sql);
-		
-		$wpdb->query( "COMMIT" );
-	}
-}
 
-function getIpData($userIP) {
-	
-	// API end URL 
-	$apiURL = 'https://freegeoip.app/json/'.$userIP; 
-	
-	// Create a new cURL resource with URL 
-	$ch = curl_init($apiURL); 
-	
-	// Return response instead of outputting 
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-	
-	// Execute API request 
-	$apiResponse = curl_exec($ch); 
-	// echo $apiResponse; exit;
-	
-	// Close cURL resource 
-	curl_close($ch); 
-	
-	// Retrieve IP data from API response 
-	$ipData = json_decode($apiResponse, true); 
-	
-	if(!empty($ipData)){ 
-		return $ipData['country_name'];
-	}else{ 
-	} 
-}
-
-add_shortcode('get_stats', 'get_stats');
-function get_stats($atts, $content = null) {
-	if (!current_user_can( 'edit_post', get_the_ID() ) || wp_make_link_relative(get_permalink()) != '/stat/') {
-	// if (!current_user_can( 'edit_post', get_the_ID() ) ) {
-		return;
-	}
-    extract(shortcode_atts(array(
-	'sql' => '',
-	'dev' => '',
-), $atts)); 
-	$servername = "localhost";
-	$username = "readonly";
-	$password = "123456";
-	$dbname = ($dev == '') ?  "wordpress" : "wordpress-dev";
-	// die($dbname);
-	// Create connection
-	$conn = new mysqli($servername, $username, $password, $dbname);
-	// Check connection
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	} 
-	$sql = html_entity_decode($sql);
-	$output = $conn->query($sql);
-	$conn->close();
-	if ($output->num_rows > 0) {
-		// output data of each row
-		$keys = null;
-		$string = '<style>
-		table.stats {
-
-		}
-		table.stats td, table.stats th {
-			box-shadow: 1px 1px 0px #888;
-		}
-		td.numbers {
-			text-align: right;
-		}
-		</style><table class="stats" style="white-space: nowrap;">';
-		
-		
-		while($row = $output->fetch_assoc()) {
-		
-			if (!$keys) {
-				$keys = array_keys($row);
-				$string .= '<tr>';
-				foreach ($keys as $key) {
-					$string .= '<th>' . $key. '</th>';
-				}
-				$string .= '</tr>';
-				
-			}
-			$string .= '<tr>';
-			$values = array_values($row);
-			foreach ($values as $value) {
-				$string .= '<td class="'. (is_numeric($value) ? 'numbers' : '') .  '">' . $value. '</td>';
-			}
-			$string .= '</tr>';
-		}
-		$string .= '</table>';
-		return $string;
-	  }
-	  else {
-		// echo "0 results";
-	  }
-}
-
-function get_last_update() {
-	if (!is_singular()) {
-		global $wpdb;
-		$sql = "SELECT MAX(GREATEST(`post_date`,`post_modified`)) as `last_update` FROM `wp_posts`";
-		$result = $wpdb->get_results($sql);
-		if (!empty($result)) {
-			echo 'last-update="' . $result[0]->last_update .'"';
-		}
-	}
-}
 
 function a() {
-	return '';
+	return 'a';
 }
 // remove_all_filters('wp_get_document_title');
 
