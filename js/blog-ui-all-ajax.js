@@ -99,16 +99,11 @@ function findLink(el) {
 };
 
 function handleLink(anchorEl) {
-
   if (anchorEl.getAttribute('target')) {
     // _blank
     return true;
   }
-  var href = anchorEl.getAttribute('href');
-  if (  new URL(window.location.href, "http://example.com").pathname == new URL(href, "http://example.com").pathname) {
-    return true;
-  }
-
+  
   if (anchorEl.classList.contains("ajax-load-home")) {
     ajaxLoad(anchorEl.href, true, anchorEl);
     return false;
@@ -117,7 +112,8 @@ function handleLink(anchorEl) {
     ajaxLoad(anchorEl.href, false, anchorEl);
     return false;
   }
-
+  
+  var href = anchorEl.getAttribute('href');
   var website = window.location.hostname;
   website = website.replace("www.", "");
   
@@ -140,7 +136,7 @@ function handleLink(anchorEl) {
       if (!internalLinkRegex.test(href)) {
         anchorEl.setAttribute('target', '_blank');
       }
-      else {
+      else if ( new URL(window.location.href, "http://example.com").pathname != new URL(href, "http://example.com").pathname) {
         return ajaxLoadHTML(anchorEl, ajaxReplacePage,  null);
       }
     }
