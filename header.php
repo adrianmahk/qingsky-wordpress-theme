@@ -34,7 +34,7 @@ if ($_GET['ajax']) {
   	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
 	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script> -->
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=20220404001' ?>" type="text/javascript"> </script>
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=20220405' ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
