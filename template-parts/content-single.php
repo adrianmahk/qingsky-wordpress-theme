@@ -60,7 +60,7 @@
 			postTags();
 		}
 		?>
-		</div>-->
+		</div>
 		<?php subscribe_msg(true);?>
 		<?php //twentysixteen_entry_meta(); ?>
 		<?php
