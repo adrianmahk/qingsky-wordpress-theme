@@ -549,8 +549,9 @@ function ajaxReplacePage(args = null) {
   // handleScrollEvent();
   pageHideCallBack();
   if (push) {
-    history.replaceState(document.body.classList.contains("blog") ? {page: body_page.innerHTML, classList: document.body.classList.value} : null, document.title, window.location);
-    history.pushState({}, ajax_doc.title, link);
+    // history.replaceState(document.body.classList.contains("blog") ? {page: body_page.innerHTML, classList: document.body.classList.value} : {}, document.title, window.location);
+    history.replaceState({page: body_page.innerHTML, classList: document.body.classList.value}, document.title, window.location);
+    history.pushState({page: ajax_page.innerHTML, classList: ajax_doc.body.classList.value}, ajax_doc.title, link);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
@@ -664,8 +665,9 @@ function saveMain(str) {
   }
   return "unload!";
 }
+
 function saveLastUrl() {
-  document.body.setAttribute("last-url", window.location);
+  // document.body.setAttribute("last-url", window.location);
   if (typeof (Storage) !== "undefined") {
     sessionStorage.setItem("last-url", window.location);
     // console.log("last url: " + sessionStorage.getItem("last-url"));
