@@ -178,8 +178,9 @@ function init() {
       }
     }, false);
     
-    // window.addEventListener("scroll", handleScrollEvent);
-    document.getElementById("page").addEventListener("scroll", handleScrollEvent);
+    window.addEventListener("scroll", function (e) {
+      handleScrollEvent(e);
+    });
     if ('scrollRestoration' in history) {
       // history.scrollRestoration = 'manual';
     }
@@ -908,11 +909,8 @@ function darkModeInit() {
 
 // ScrollPos
 function getScrollPercent(bottomPadding = 580) {
-  var 
-      // h = document.documentElement, 
-      h = document.getElementById("page"),
-      // b = document.body,
-      b = document.getElementById("page"),
+  var h = document.documentElement, 
+      b = document.body,
       st = 'scrollTop',
       sh = 'scrollHeight';
   // console.log("scrollHeight: " + (h[st]||b[st]));

@@ -17,8 +17,6 @@
     opacity: 1;
     transition: opacity .5s ease-in-out;
     -webkit-transition: opacity .5s ease-in-out;
-    max-height: 100vh;
-    overflow: scroll;
 }
 
 body.page-loading.ajax-loading #page {
