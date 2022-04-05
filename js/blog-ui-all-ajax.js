@@ -182,7 +182,7 @@ function init() {
       handleScrollEvent(e);
     });
     if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+      // history.scrollRestoration = 'manual';
     }
     window.addEventListener("popstate", function (e) {
       if (e.state) {
