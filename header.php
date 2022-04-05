@@ -34,7 +34,8 @@ if ($_GET['ajax']) {
   	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
 	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script> -->
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=20220405' ?>" type="text/javascript"> </script>
+	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=20220405' ?>" type="text/javascript"> </script> -->
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/js/blog-ui-all-ajax.js'), 0, 8) ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
@@ -72,8 +73,11 @@ if ($_GET['ajax']) {
 				unicode-range: U + 0000-00FF, U + 0131, U + 0152-0153, U + 02BB-02BC, U + 02C6, U + 02DA, U + 02DC, U + 2000-206F, U + 2074, U + 20AC, U + 2122, U + 2191, U + 2193, U + 2212, U + 2215, U + FEFF, U + FFFD;
             }
 	</style>
-	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?v=20220404' ?>" rel="stylesheet">
-	<link href="<?php echo get_template_directory_uri() . '/css/styles.css?v=20220404' ?>" rel="stylesheet">
+	<!-- <link href="<?php  //echo get_template_directory_uri() . '/css/blog.css?v=20220404' ?>" rel="stylesheet">
+	<link href="<?php //echo get_template_directory_uri() . '/css/styles.css?v=20220404' ?>" rel="stylesheet"> -->
+	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/css/blog.css'), 0, 8) ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/css/styles.css'), 0, 8) ?>" rel="stylesheet">
+	
 	
 	
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
