@@ -27,7 +27,6 @@ get_header(); ?>
 			endif;
 		?>
 		<div class="blog-posts hfeed container">
-
 		<?php
 		if ( have_posts() ) : ?>
 
@@ -55,11 +54,7 @@ get_header(); ?>
 
 		endif;
 		?>
-		<?php
-			// echo get_page_list(page_list());
-		?>
 		</div>
-
 		</div>
 		<?php
 		blog_pager();

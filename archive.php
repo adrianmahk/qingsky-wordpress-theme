@@ -17,14 +17,12 @@
  */
 
 get_header(); ?>
-
 <div id="page_body" class="content-area centered">
 	<main id="main" class="site-main centered-bottom" role="main">
 		<div class="widget Blog">
 			<header class="page-header">
 				<?php post_filter_message(); ?>
 			</header><!-- .page-header -->
-
 			<?php
 			// if (!is_paged() && (is_tag() || is_category())) {
 			// 	$sticky = get_option('sticky_posts');
@@ -54,8 +52,6 @@ get_header(); ?>
 			// 	wp_reset_query();
 			// }
 			?>
-
-
 			<div class="blog-posts hfeed container">
 				<?php
 				if (have_posts()) : ?>
@@ -92,17 +88,11 @@ get_header(); ?>
 
 				endif;
 				?>
-
 			</div>
-
 		</div>
 		<?php
-		// echo $wp_query->paged;
-		// echo get_page_list(page_list());
-
 		blog_pager();
 		echo get_page_list(page_list());
-
 		?>
 	</main><!-- .site-main -->
 </div><!-- .content-area -->
