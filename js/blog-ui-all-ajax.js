@@ -417,7 +417,7 @@ function ajaxLoad(link, removeFirst = false, button = null) {
         removeAllButLast('[id=blog-pager]');
 
         // history.replaceState({main: main.innerHTML}, document.title, window.location);
-        history.replaceState({page: document.getElementById("page").innerHTML}, document.title, window.location);
+        history.replaceState({page: document.getElementById("page").innerHTML, classList: document.body.classList.value}, document.title, window.location);
         // saveScrollPos();
         loadReadingProgress();
         hidePageLoading();
