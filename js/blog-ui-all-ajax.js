@@ -117,15 +117,16 @@ function handleLink(anchorEl) {
   var website = window.location.hostname;
   website = website.replace("www.", "");
   
+  // var internalLinkRegex = new RegExp('^((((http:\/\/|https:\/\/)(www\.)?)?(qingsky.hk|localhost?(:\d{1,5})))|((\/|#|\?|javascript:).*))((\/(?!wp-)|\?|#).*)?$', '');
   var internalLinkRegex = new RegExp(
     '^('
-      +'(((http:\\/\\/|https:\\/\\/)(www\\.)?)?(' + website + '|(localhost.*)))' //starts with host
+      +'(((http:\\/\\/|https:\\/\\/)(www\\.)?)?(' + website + '|localhost?(:[0-9]{1,5})))' //starts with host
       +'|'  // or
-      +'(localhost.*)' //starts with localhost
-      +'|' // or
+      // +'(localhost.*)' //starts with localhost
+      // +'|' // or
       +'((\\/|#|\\?|javascript:).*))'  //starts with / # ? javascript:
-      +'((\\/|\\?|\#).*'  //ends with / # $
-    +')?$'
+      +'((\\/(?!wp-)|\\?|\#).*)?$'  //ends with / # $ and not "wp-"
+// +''
     , '');
   
   var jsCheck = new RegExp('^(javascript:|\#|\\?).*?$');
@@ -560,6 +561,7 @@ function ajaxReplacePage(args = null) {
   document.body.classList = ajax_doc.body.classList;
   // document.body.replaceChild(ajax_page ,body_page);
   body_page.innerHTML = ajax_page.innerHTML;
+  // document.body.appendChild(ajax_page ,body_page);
   // document.title = ajax_doc.title;
   // if (state && state.main) {
   //   document.getElementById("main").innerHTML = state.main;
