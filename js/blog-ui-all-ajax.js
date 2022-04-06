@@ -190,7 +190,7 @@ function init() {
       if (e.state) {
         // ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
         if (!popstateReplacePage(e.state)) {
-          console.log("ready to ajax");
+          // console.log("ready to ajax");
           ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
         }
       }
@@ -217,7 +217,7 @@ function init() {
     loadIndie();
     // document.body.setAttribute("page-loaded", true);
     const resizeObserver = new ResizeObserver(entries => {
-      console.log('Body height changed:', entries[0].target.clientHeight);
+      // console.log('Body height changed:', entries[0].target.clientHeight);
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         if (document.body.getAttribute("page-loaded") == "true") {
@@ -247,7 +247,6 @@ function bodyInit() {
 }
 
 function pageShowCallBack (event, isAjax = false, isPopstate = false) {
-  console.log(event);
   if (event && event.detail) {
     isAjax = event.detail.isAjax;
     isPopstate = event.detail.isPopstate;
@@ -420,76 +419,12 @@ function ajaxLoad(link, removeFirst = false, button = null) {
         removeAllButLast('[id*=blog-pager-older-link]');
         removeAllButLast('[id=blog-pager]');
 
-        // history.replaceState({main: main.innerHTML}, document.title, window.location);
-        history.replaceState({page: document.getElementById("page").innerHTML, classList: document.body.classList.value}, document.title, window.location);
+        history.replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value}, document.title, window.location);
         // saveScrollPos();
         loadReadingProgress();
         hidePageLoading();
     }
   }, null, true);
-}
-function ajaxLoadOld(link, removeFirst = false, button = null) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if ((this.readyState == 4 && this.status == 200) || (this.readyState == 4 && this.status == 404)) {
-      console.log("200");
-      var ajax_html = this.responseText;
-      if (ajax_html.indexOf("</html>") == -1) {
-        console.log('-1');
-        return;
-      }
-      
-      var ajax_doc = new DOMParser().parseFromString(ajax_html, "text/html");
-      var ajax_main = ajax_doc.getElementById("main");
-      if (ajax_main) {
-          var ajax_articles = ajax_main.getElementsByTagName("article");
-          if (removeFirst) {
-            if (ajax_articles.length > 1) {
-              ajax_articles[0].parentNode.removeChild(ajax_articles[0]);
-            }
-            else if (ajax_articles.length == 1) {
-                var next_link = ajax_doc.getElementById('blog-pager-older-link');
-                ajaxLoad(next_link.href);
-                return;
-            }
-          }
-          var main = document.getElementById("main");
-          main.insertAdjacentHTML('beforeend', ajax_main.innerHTML);
-          // main.innerHTML = main.innerHTML + ajax_main.innerHTML;
-
-          removeAllButLast('[id*=blog-pager-older-link]');
-          removeAllButLast('[id=blog-pager]');
-          clearTimeout(timer);    
-      }
-      hidePageLoading();
-      loadReadingProgress();
-    }
-  };
-  if (link) {
-    var tempMoreMsg = "更多文章";
-
-    showPageLoading();
-    if (button) {
-      tempMoreMsg = button.innerHTML;
-      button.innerHTML = "載入中…";
-      button.style["pointer-events"] = "none";
-    }
-
-    var real_link = link;
-    xhttp.open("GET", real_link, true);
-    xhttp.send();
-
-    setTimeout(function () {
-      timer = setTimeout(function () {
-        if (button) {
-          button.innerHTML = tempMoreMsg;
-          button.style["pointer-events"] = "all";
-        }
-        hidePageLoading(0);
-        xhttp.abort();
-      }, 5000);
-    }, 1000);
-  }
 }
 
 function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null, appendMode = false) {
@@ -515,8 +450,6 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null, append
         };
         ajaxCallback(args);
       }
-      // hidePageLoading();
-      // loadReadingProgress();
     }
   };
   if (link) {
@@ -551,24 +484,21 @@ function ajaxReplacePage(args = null) {
   var ajax_page = ajax_doc.getElementById("page");
   var body_page = document.getElementById("page");
   
-  // handleScrollEvent();
   pageHideCallBack();
   if (push) {
-    // history.replaceState(document.body.classList.contains("blog") ? {page: body_page.innerHTML, classList: document.body.classList.value} : {}, document.title, window.location);
-    history.replaceState({page: body_page.innerHTML, classList: document.body.classList.value}, document.title, window.location);
-    history.pushState({page: ajax_page.innerHTML, classList: ajax_doc.body.classList.value}, ajax_doc.title, link);
+    history.replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value}, document.title, window.location);
+    history.pushState({page: ajax_page.innerHTML, title: ajax_doc.title, classList: ajax_doc.body.classList.value}, ajax_doc.title, link);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
   }
   window.scrollTo(0, 0);
   document.body.classList = ajax_doc.body.classList;
-  // document.body.replaceChild(ajax_page ,body_page);
   body_page.innerHTML = ajax_page.innerHTML;
-  // document.body.appendChild(ajax_page ,body_page);
+  document.title = ajax_doc.title;
   hidePageLoading();
-  // pageShowCallBack(null, true);
 
+  // pageShowCallBack(null, true);
   const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true}, bubbles: true, cancelable: true, composed: false});
   body_page.dispatchEvent(customEvent);
 }
@@ -579,11 +509,12 @@ function popstateReplacePage(state) {
     const body_page = document.getElementById("page");
     body_page.innerHTML = state.page;
     document.body.classList = state.classList;//.replace("page-loading", "").replace("ajax-loading","");
+    document.title = state.title ? state.title : "";
+    
     // pageShowCallBack(null, true, true);
     const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true, isPopstate: true}, bubbles: true, cancelable: true, composed: false});
     body_page.dispatchEvent(customEvent);
     hidePageLoading();
-    console.log("replacepage");
     return true;
   }
   return false;
