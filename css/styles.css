@@ -60,6 +60,11 @@ body.page-loading.ajax-loading #page {
     background-attachment: scroll !important;
 }
 
+body.popup-message-showing {
+    position: sticky;
+    overflow: hidden;
+}
+
 body.user-bg .bg-div,
 .bg-div-cust {
     display: none;
