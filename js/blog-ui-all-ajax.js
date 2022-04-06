@@ -44,6 +44,7 @@ function ready(fn) {
     fn();
   } else if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', fn);
+    document.addEventListener('ajaxload', fn);
   } else {
     document.attachEvent('onreadystatechange', function () {
       if (document.readyState != 'loading')
@@ -182,9 +183,9 @@ function init() {
     window.addEventListener("scroll", function (e) {
       handleScrollEvent(e);
     });
-    if ('scrollRestoration' in history) {
+    // if ('scrollRestoration' in history) {
       // history.scrollRestoration = 'manual';
-    }
+    // }
     window.addEventListener("popstate", function (e) {
       if (e.state) {
         // ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
@@ -196,6 +197,7 @@ function init() {
     });
     window.addEventListener("pagehide", pageHideCallBack);
     window.addEventListener("pageshow", pageShowCallBack);
+    window.addEventListener("ajaxload", pageShowCallBack);
     window.addEventListener("resize", function () {
       // console.log("resize");
       var ori_old = document.body.getAttribute("orientation");
@@ -228,6 +230,7 @@ function init() {
     });
     resizeObserver.observe(document.body);
     loadScrollPos();
+
   
     document.body.setAttribute("inited", true);
 
@@ -244,16 +247,17 @@ function bodyInit() {
 }
 
 function pageShowCallBack (event, isAjax = false, isPopstate = false) {
+  console.log(event);
+  if (event && event.detail) {
+    isAjax = event.detail.isAjax;
+    isPopstate = event.detail.isPopstate;
+  }
+
   darkModeInit();
   changeFontSizeInit();
   // loadScrollPos();
   loadReadingProgress();
   saveLastUrl();
-
-  // removeDuplicateWidgets();
-	showPopupMessage();
-	showTopMessage();
-	initImg();
   // displayGoogleAds();
 
   if (isAjax) {
@@ -562,20 +566,22 @@ function ajaxReplacePage(args = null) {
   // document.body.replaceChild(ajax_page ,body_page);
   body_page.innerHTML = ajax_page.innerHTML;
   // document.body.appendChild(ajax_page ,body_page);
-  // document.title = ajax_doc.title;
-  // if (state && state.main) {
-  //   document.getElementById("main").innerHTML = state.main;
-  // }
   hidePageLoading();
-  pageShowCallBack(null, true);
+  // pageShowCallBack(null, true);
+
+  const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true}, bubbles: true, cancelable: true, composed: false});
+  body_page.dispatchEvent(customEvent);
 }
 
 function popstateReplacePage(state) {
   if (state && state.page && state.classList) {
     showPageLoading(true);
-    document.getElementById("page").innerHTML = state.page;
+    const body_page = document.getElementById("page");
+    body_page.innerHTML = state.page;
     document.body.classList = state.classList;//.replace("page-loading", "").replace("ajax-loading","");
-    pageShowCallBack(null, true, true);
+    // pageShowCallBack(null, true, true);
+    const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true, isPopstate: true}, bubbles: true, cancelable: true, composed: false});
+    body_page.dispatchEvent(customEvent);
     hidePageLoading();
     console.log("replacepage");
     return true;
