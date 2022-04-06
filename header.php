@@ -8,9 +8,11 @@
  * @subpackage Twenty_Sixteen
  * @since Twenty Sixteen 1.0
  */
-include ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk/simple_html_dom.php';
+$themeLocalPath =  ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk';
+include  $themeLocalPath . '/simple_html_dom.php';
+// date_default_timezone_set('Asia/Hong_Kong');
 update_view_count();
-
+// echo filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js');die();
 if ($_GET['ajax']) {
 	global $wp_query;
 	if (!is_singular()) {
@@ -35,7 +37,8 @@ if ($_GET['ajax']) {
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
 	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-ajax.js?v=1' ?>" type="text/javascript"> </script> -->
 	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=20220405' ?>" type="text/javascript"> </script> -->
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/js/blog-ui-all-ajax.js'), 0, 8) ?>" type="text/javascript"> </script>
+	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/js/blog-ui-all-ajax.js'), 0, 8) ?>" type="text/javascript"> </script> -->
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
@@ -75,8 +78,10 @@ if ($_GET['ajax']) {
 	</style>
 	<!-- <link href="<?php  //echo get_template_directory_uri() . '/css/blog.css?v=20220404' ?>" rel="stylesheet">
 	<link href="<?php //echo get_template_directory_uri() . '/css/styles.css?v=20220404' ?>" rel="stylesheet"> -->
-	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/css/blog.css'), 0, 8) ?>" rel="stylesheet">
-	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/css/styles.css'), 0, 8) ?>" rel="stylesheet">
+	<!-- <link href="<?php  //echo get_template_directory_uri() . '/css/blog.css?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/css/blog.css'), 0, 8) ?>" rel="stylesheet"> -->
+	<!-- <link href="<?php  //echo get_template_directory_uri() . '/css/styles.css?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/css/styles.css'), 0, 8) ?>" rel="stylesheet"> -->
+	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?v=' . filemtime($themeLocalPath . '/css/blog.css') ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?v=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" rel="stylesheet">
 	
 	
 	
