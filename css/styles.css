@@ -477,7 +477,7 @@ body.home-view .label-all-container, body.search-view .label-all-container, body
     object-fit: cover;
 }
 .post-body {
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 .comment-body {
