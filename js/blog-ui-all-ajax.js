@@ -850,14 +850,10 @@ function darkModeInit() {
 
 // ScrollPos
 function getScrollPercent(bottomPadding = 580) {
-  var h = document.documentElement, 
-      b = document.body,
-      st = 'scrollTop',
-      sh = 'scrollHeight';
-  // console.log("scrollHeight: " + (h[st]||b[st]));
-  var percent = (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0)) * 100;
-  // console.log("scrollPercent: " + percent);
-  
+  const post = document.querySelector(document.body.classList.contains("item-view") ? ".post" : "#page");
+  const top = post.getBoundingClientRect().top;
+  const height = post.getBoundingClientRect().height - document.documentElement.clientHeight;
+  var percent = 100.0 * (top < 0 ? -top : 0) / height;
   return Math.min(100, (Math.round(percent * 100) / 100));
 }
 
@@ -908,8 +904,7 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
 // get scrollPos
   if (window.location.hash) {
     const anchor = document.querySelector("[id='" + window.location.hash.replace("#", "") + "'], [name='" + window.location.hash.replace("#", "") + "']");
-    // location.hash = "#" + location.hash;
-    console.log("anchor: " + anchor);
+    // console.log("anchor: " + anchor);
     if (anchor) {
       window.scrollTo({
         top: anchor.getBoundingClientRect().top + window.pageYOffset, // scroll so that the element is at the top of the view
@@ -935,8 +930,10 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
         }
       }
       setTimeout(function (){
-        var scrollPosFromPercent = scrollPos * (document.documentElement.scrollHeight - document.documentElement.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0));
-        // window.scrollTo(0, scrollPosFromPercent);
+        // var scrollPosFromPercent = scrollPos * (document.documentElement.scrollHeight - document.documentElement.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0));
+        const post = document.querySelector(document.body.classList.contains("item-view") ? ".post" : "#page");
+        var scrollPosFromPercent = post.getBoundingClientRect().top + window.pageYOffset + scrollPos * (post.getBoundingClientRect().height  - document.documentElement.clientHeight);
+        // console.log(scrollPos, scrollPosFromPercent);
         window.scrollTo({
           top: scrollPosFromPercent,
           behavior: popstate ? "auto" : "smooth"
@@ -977,11 +974,9 @@ function loadReadingProgress() {
 }
 var scrollTimer = 0;
 function handleScrollEvent(e) {
-  // if (document.body.classList.contains("is-post")) {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(function (){
-      var scrollPercent = getScrollPercent();
-      // console.log(document.body.classList.contains("collapsed-header") && (scrollPercent > 1) ) ;
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(function (){
+    var scrollPercent = getScrollPercent();
     if (!document.body.classList.contains("page-loading")) {
       if (document.body.classList.contains("blog")  || (document.body.classList.contains("is-post") && document.body.classList.contains("collapsed-header") && (scrollPercent > 1)) ) {
         document.body.setAttribute("scrollPos", scrollPercent);
@@ -990,7 +985,6 @@ function handleScrollEvent(e) {
       }
     }
   }, 500);
-  // }
   
   var article = document.querySelector(".post-outer");
   if (article) {
@@ -1013,7 +1007,6 @@ function updateItemViewProgressBar(progress = false) {
     else {
       //alert('null');
     }
-
     if (progress) {
       document.body.setAttribute("scrollPos", progress);
     }
