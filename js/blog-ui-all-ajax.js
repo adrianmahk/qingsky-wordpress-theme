@@ -974,11 +974,9 @@ function loadReadingProgress() {
 }
 var scrollTimer = 0;
 function handleScrollEvent(e) {
-  // if (document.body.classList.contains("is-post")) {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(function (){
-      var scrollPercent = getScrollPercent();
-      // console.log(document.body.classList.contains("collapsed-header") && (scrollPercent > 1) ) ;
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(function (){
+    var scrollPercent = getScrollPercent();
     if (!document.body.classList.contains("page-loading")) {
       if (document.body.classList.contains("blog")  || (document.body.classList.contains("is-post") && document.body.classList.contains("collapsed-header") && (scrollPercent > 1)) ) {
         document.body.setAttribute("scrollPos", scrollPercent);
@@ -987,7 +985,6 @@ function handleScrollEvent(e) {
       }
     }
   }, 500);
-  // }
   
   var article = document.querySelector(".post-outer");
   if (article) {
@@ -1010,7 +1007,6 @@ function updateItemViewProgressBar(progress = false) {
     else {
       //alert('null');
     }
-
     if (progress) {
       document.body.setAttribute("scrollPos", progress);
     }
