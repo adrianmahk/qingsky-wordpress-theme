@@ -1260,7 +1260,7 @@ function post_filter_message() {
 		echo urldecode($name);
 		echo '</h3>';
 		// echo '<div class="post-filter-message"><div>目前顯示的是有「<span class="search-label">散文</span>」標籤的文章</div><div><a class="flat-button ripple" href="/p/allposts.html#tags" target="_blank" title="查找所有文章">標籤列表</a></div></div>';
-		printf($tag_msg, urldecode($name), '/allposts#tags', '標籤列表');
+		printf($tag_msg, urldecode($name), '/allposts/#tags', '標籤列表');
 	}
 	else if (get_query_var('year')) {
 		$year = get_query_var('year');
@@ -1275,7 +1275,7 @@ function post_filter_message() {
 		echo '<a class="pill-button ripple" href="/allposts" onclick="togglePopupArchive(' . $year  . ' ,' . $month . '); return false;" style="font-size: 12px; margin: -1px" title="選擇其他月份">選擇</a>';
 		echo '</h3>';
 	
-		echo '<div class="post-filter-message"><div>目前顯示的是 '. $month_str . $year.' 的文章</div><div><a class="flat-button ripple" href="/allposts#archive" target="_blank" title="查找所有文章">文章列表</a></div></div>';
+		echo '<div class="post-filter-message"><div>目前顯示的是 '. $month_str . $year.' 的文章</div><div><a class="flat-button ripple" href="/allposts/#archive" target="_blank" title="查找所有文章">文章列表</a></div></div>';
 	}
 }
 
