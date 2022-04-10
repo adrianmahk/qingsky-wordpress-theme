@@ -180,9 +180,7 @@ function init() {
       }
     }, false);
     
-    window.addEventListener("scroll", function (e) {
-      handleScrollEvent(e);
-    });
+    window.addEventListener("scroll", handleScrollEvent);
     // if ('scrollRestoration' in history) {
       // history.scrollRestoration = 'manual';
     // }
@@ -225,7 +223,8 @@ function init() {
           document.body.removeAttribute("page-loaded");
           document.body.removeAttribute("ajax-popstate");
         }
-        saveScrollPos(document.body.getAttribute("url"));
+        // saveScrollPos(document.body.getAttribute("url"));
+        handleScrollEvent(0);
       }, 100);
     });
     resizeObserver.observe(document.body);
@@ -260,7 +259,7 @@ function pageShowCallBack (event, isAjax = false, isPopstate = false) {
   // displayGoogleAds();
 
   if (isAjax) {
-    handleScrollEvent();
+    handleScrollEvent(0);
     document.body.setAttribute("page-loaded", true);
     document.body.setAttribute("url", decodeURI(window.location.pathname));
     nodeScriptReplace(document.getElementById("page"));
@@ -881,6 +880,7 @@ function saveScrollPos(path = undefined, scrollPercent = undefined) {
         // scrollPercent = (document.body.getAttribute("scrollPos") != undefined) ? document.body.getAttribute("scrollPos") : 0;
         scrollPercent = getScrollPercent();
       }
+      
       console.log(path + ": " + scrollPercent);
       scrollPosObj[path] =  scrollPercent;
       // localStorage.setItem("scrollPosJson", JSON.stringify(scrollPosObj));
@@ -973,9 +973,9 @@ function loadReadingProgress() {
   }
 }
 var scrollTimer = 0;
-function handleScrollEvent(e) {
+function handleScrollEvent(e, delay = 500) {
   clearTimeout(scrollTimer);
-  scrollTimer = setTimeout(function (){
+  var handleScrollPercent = function (){
     var scrollPercent = getScrollPercent();
     if (!document.body.classList.contains("page-loading")) {
       if (document.body.classList.contains("blog")  || (document.body.classList.contains("is-post") && document.body.classList.contains("collapsed-header") && (scrollPercent > 1)) ) {
@@ -984,7 +984,13 @@ function handleScrollEvent(e) {
         updateItemViewProgressBar();
       }
     }
-  }, 500);
+  };
+  if (delay > 0) {
+    scrollTimer = setTimeout(handleScrollPercent, delay);
+  }
+  else {
+    handleScrollPercent();
+  }
   
   var article = document.querySelector(".post-outer");
   if (article) {
