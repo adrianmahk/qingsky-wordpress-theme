@@ -1272,7 +1272,7 @@ function post_filter_message() {
 
 		echo $h3;
 		echo ($year ? ($year . ' 年 ') : '') . ($month ? ($month . ' 月 '): '') . (get_query_var('date') ? get_query_var('date') : '');
-		echo '<a class="pill-button ripple" href="/allposts" onclick="togglePopupArchive(' . $year  . ' ,' . $month . '); return false;" style="font-size: 12px; margin: -1px" title="選擇其他月份">選擇</a>';
+		echo '<a class="pill-button ripple" href="/allposts/#archive" onclick="togglePopupArchive(' . $year  . ' ,' . $month . '); return false;" style="font-size: 12px; margin: -1px" title="選擇其他月份">選擇</a>';
 		echo '</h3>';
 	
 		echo '<div class="post-filter-message"><div>目前顯示的是 '. $month_str . $year.' 的文章</div><div><a class="flat-button ripple" href="/allposts/#archive" target="_blank" title="查找所有文章">文章列表</a></div></div>';
