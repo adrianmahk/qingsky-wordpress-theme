@@ -45,10 +45,10 @@
 				get_template_part( 'template-parts/biography' );
 			}
 			// echo wp_make_link_relative(get_permalink()); exit;
-			if (wp_make_link_relative(get_permalink()) == '/allposts/'){
-				echo '<h2>按月份瀏覽</h2><a name="archive"/>';
-				echo blogArchive();
-			}
+			// if (wp_make_link_relative(get_permalink()) == '/allposts/'){
+				// echo '<h2>按月份瀏覽</h2><a name="archive"/>';
+				// echo blogArchive();
+			// }
 					
 			?>
 	</div><!-- .entry-content -->

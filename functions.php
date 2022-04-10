@@ -1442,9 +1442,11 @@ function share_button() {
 		</div>';
 }
 
-function blogArchive() {
+add_shortcode('blog_archive', 'blog_archive');
+function blog_archive() {
 	global $wpdb;
-	$echo = '<blockquote>';
+	// $echo = '<blockquote>';
+	$echo = '';
 	$echo .= '<div id="ArchiveList">';
 	$echo .= '<div id="BlogArchive2_ArchiveList">';
 	// $echo .= '<ul class="nzcaNewsList">';
@@ -1464,7 +1466,7 @@ function blogArchive() {
 								AND YEAR(post_date) = '".$year."'
 								ORDER BY post_date DESC");
 		foreach($months as $month) {
-			$echo .= '<li><a href="#">' .$year . ' 年 ' . $month . ' 月</a>
+			$echo .= '<li><a href="'. get_month_link($year , $month) .'">' .$year . ' 年 ' . $month . ' 月</a>
 				<ul>';
 				$days = $wpdb->get_col("SELECT ID
 								FROM $wpdb->posts
@@ -1484,7 +1486,7 @@ function blogArchive() {
 	// $echo .= '</ul>';
 	$echo .= '</div>';
 	$echo .= '</div>';
-	$echo .= '</blockquote>';
+	// $echo .= '</blockquote>';
 	return $echo;
 }
 
