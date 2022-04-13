@@ -39,6 +39,7 @@ if ($_GET['ajax']) {
 	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=20220405' ?>" type="text/javascript"> </script> -->
 	<!-- <script src="<?php //echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . substr(hash_file('sha1', get_template_directory_uri() . '/js/blog-ui-all-ajax.js'), 0, 8) ?>" type="text/javascript"> </script> -->
 	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" type="text/javascript"> </script>
+	<script src="<?php echo get_template_directory_uri() . '/js/popupmsg.js?v=' . filemtime($themeLocalPath . '/js/popupmsg.js') ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
