@@ -705,7 +705,8 @@ function twentysixteen_widget_tag_cloud_args( $args ) {
 add_filter( 'widget_tag_cloud_args', 'twentysixteen_widget_tag_cloud_args' );
 
 function update_view_count() {	
-	if (is_home() || is_archive() || is_singular() || is_search() || is_404()) {
+	// if (is_home() || is_archive() || is_singular() || is_search() || is_404()) {
+	if (is_home() || is_archive() || is_singular()) {
 		if (is_user_logged_in()) {
 			if (current_user_can( 'edit_post', get_the_ID() )) {
 				return;
