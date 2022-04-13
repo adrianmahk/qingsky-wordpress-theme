@@ -855,7 +855,8 @@ function darkModeInit() {
 function getScrollPercent(bottomPadding = 580) {
   const post = document.querySelector(document.body.classList.contains("item-view") ? ".post" : "#page");
   const top = post.getBoundingClientRect().top;
-  const height = post.getBoundingClientRect().height - document.documentElement.clientHeight;
+  // const height = post.getBoundingClientRect().height - document.documentElement.clientHeight;
+  const height = post.getBoundingClientRect().height - window.innerHeight;
   var percent = 100.0 * (top < 0 ? -top : 0) / height;
   return Math.min(100, (Math.round(percent * 100) / 100));
 }
@@ -929,14 +930,14 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
     if (scrollPos != undefined) {
       scrollPos = scrollPos / 100;
       if (document.body.classList.contains("is-post")) {
-        if (scrollPos < 0.05 || scrollPos > 0.99 || (document.documentElement.clientHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
+        if (scrollPos < 0.05 || scrollPos > 0.99 || (window.innerHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
           return;
         }
       }
       setTimeout(function (){
         // var scrollPosFromPercent = scrollPos * (document.documentElement.scrollHeight - document.documentElement.clientHeight - (document.body.classList.contains("is-post") ? bottomPadding : 0));
         const post = document.querySelector(document.body.classList.contains("item-view") ? ".post" : "#page");
-        var scrollPosFromPercent = post.getBoundingClientRect().top + window.pageYOffset + scrollPos * (post.getBoundingClientRect().height  - document.documentElement.clientHeight);
+        var scrollPosFromPercent = post.getBoundingClientRect().top + window.pageYOffset + scrollPos * (post.getBoundingClientRect().height  - window.innerHeight);
         // console.log(scrollPos, scrollPosFromPercent);
         window.scrollTo({
           top: scrollPosFromPercent,
