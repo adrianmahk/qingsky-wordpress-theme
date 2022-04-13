@@ -450,6 +450,10 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null, append
         ajaxCallback(args);
       }
     }
+    else if (this.readyState == 4) {
+      hidePageLoading();
+      showPopupMessage(this.responseText);
+    }
   };
   if (link) {
     if (anchorEl) {
