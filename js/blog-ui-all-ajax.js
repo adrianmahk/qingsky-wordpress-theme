@@ -928,7 +928,10 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
     var scrollPos = scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0;
     // console.log(scrollPos);
     updateItemViewProgressBar(scrollPos);
-    if (scrollPos != undefined) {
+    if (scrollPos === undefined) {
+      saveScrollPos();
+    }
+    else {
       scrollPos = scrollPos / 100;
       if (document.body.classList.contains("is-post")) {
         if (scrollPos < 0.05 || scrollPos > 0.99 || (window.innerHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
