@@ -32,8 +32,8 @@ if ($_GET['ajax']) {
 	<meta content="yes" name="apple-mobile-web-app-capable">
   	<meta content="black" name="apple-mobile-web-app-status-bar-style">
 	<link href="<?php echo get_template_directory_uri() . '/assests/manifest.json' ?>" rel="manifest">
-	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?v=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" type="text/javascript"> </script>
-	<script src="<?php echo get_template_directory_uri() . '/js/popupmsg.js?v=' . filemtime($themeLocalPath . '/js/popupmsg.js') ?>" type="text/javascript"> </script>
+	<script src="<?php echo get_template_directory_uri() . '/js/blog-ui-all-ajax.js?t=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" type="text/javascript"> </script>
+	<script src="<?php echo get_template_directory_uri() . '/js/popupmsg.js?t=' . filemtime($themeLocalPath . '/js/popupmsg.js') ?>" type="text/javascript"> </script>
 	<script>
 		function loadIndie() {
 
@@ -41,7 +41,7 @@ if ($_GET['ajax']) {
 		function setupServiceWorker() {
 			if (!document.body.classList.contains('error404')) {
 				if ('serviceWorker' in navigator) {
-					navigator.serviceWorker.register("<?php echo  '/sw.js?last-update=' . get_last_update();?>", {scope: "<?php echo '/' ?>"}).then(function(registration) {
+					navigator.serviceWorker.register("<?php echo  '/sw.js?t=' . get_last_update();?>", {scope: "<?php echo '/' ?>"}).then(function(registration) {
 						console.log('Service worker registration succeeded:', registration);
 					}, /*catch*/ function(error) {
 						console.log('Service worker registration failed:', error);
@@ -71,8 +71,8 @@ if ($_GET['ajax']) {
 				unicode-range: U + 0000-00FF, U + 0131, U + 0152-0153, U + 02BB-02BC, U + 02C6, U + 02DA, U + 02DC, U + 2000-206F, U + 2074, U + 20AC, U + 2122, U + 2191, U + 2193, U + 2212, U + 2215, U + FEFF, U + FFFD;
             }
 	</style>
-	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?v=' . filemtime($themeLocalPath . '/css/blog.css') ?>" rel="stylesheet">
-	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?v=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?t=' . filemtime($themeLocalPath . '/css/blog.css') ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?t=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" rel="stylesheet">
 	
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
 	<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>">
