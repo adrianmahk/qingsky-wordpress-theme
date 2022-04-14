@@ -843,13 +843,18 @@ function user_activation_key2($atts, $content = null) {
 	return '';
 }
 
-function get_last_update() {
+function get_last_update($return = false) {
 	if (!is_singular()) {
 		global $wpdb;
 		$sql = "SELECT MAX(GREATEST(`post_date`,`post_modified`)) as `last_update` FROM `wp_posts`";
 		$result = $wpdb->get_results($sql);
 		if (!empty($result)) {
-			echo 'last-update="' . $result[0]->last_update .'"';
+			if ($return) {
+				echo 'last-update="' . $result[0]->last_update .'"';
+			}
+			else {
+				return strtotime($result[0]->last_update);
+			}
 		}
 	}
 }
