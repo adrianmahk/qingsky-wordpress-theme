@@ -1032,7 +1032,7 @@ function clear_br($content) {
 		return $content;
 	}
 
-	$html = str_get_html($content);
+	$html = str_get_html($content, true, true, DEFAULT_TARGET_CHARSET, false);
 	if (!$html) {
 		return str_replace("<br/>","<br clear='none'/>", $content);
 	}
