@@ -661,6 +661,10 @@ hr.divider:last-of-type {
         display: block;
         float: left;
     }
+    .snippet-text {
+        /* margin: 1em auto; */
+        margin: 0;
+    }
     .snippet-text .post-body {
         display: inline;
     }

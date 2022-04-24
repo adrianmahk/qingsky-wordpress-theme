@@ -236,7 +236,7 @@ margin-bottom: .5em;
 color: #414141;
 font: 14px 微軟正黑體, 新細明體, 'PingFang HK', 'PingFang TC', 'Heiti TC', Roboto, sans-serif;
 line-height: calc(1.5em + .25vw);
-margin: 2em auto;
+margin: 1em auto;
 display: block;
 /* 27/06/2017*/
 text-align:left;
@@ -245,6 +245,9 @@ letter-spacing: .03em;
 NOTE: if line height changed, must change heights in .post-snippet.snippet-container and {.post-snippet .snippet-fade {*/
 /*12/08/2017 reverted coz ugly on phone*/
 /*max-width: 100ch;*/
+}
+body.item-view .post-body {
+  margin: 2em auto;
 }
 @media screen and (min-width: 870px){/*(min-width: 887px){*/
 .post-body {
