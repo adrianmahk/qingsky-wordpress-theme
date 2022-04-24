@@ -1198,7 +1198,7 @@ flex: 0 0 auto;
 -ms-flex-order: 2;
 order: 2;
 }
-.snippet-thumbnail {
+.snippet-thumbnail, .post-thumbnail {
 /* display: table-cell; */
 display: block;
 vertical-align: middle;

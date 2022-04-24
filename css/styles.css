@@ -592,10 +592,10 @@ display: table-cell;
     display: block;
     height: 1.2em;
 }
-.snippet-text.has-featured-image {
+/* .snippet-text.has-featured-image {
     left: -5px;
     position: relative;
-}
+} */
 .snippet-text img {
     display: none;
 }
