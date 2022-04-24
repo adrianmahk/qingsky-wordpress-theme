@@ -611,7 +611,7 @@ display: table-cell;
     min-width: 80px;
     min-height: 80px;
     margin: 0 3vw 3vw 0;
-    box-shadow: 0 5px 10px rgba(0,0,0, 0.8);
+    box-shadow: 0 4px 10px rgba(0,0,0, 0.8);
     float: left;
     /* margin-left: 5px; */
     object-fit: cover;
