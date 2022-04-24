@@ -34,9 +34,9 @@
         </div>
         <div class="container post-body entry-content"
             id="post-snippet-2928964363418182385"
-            style="display:table; position:relative">
-            <?php twentysixteen_post_thumbnail(); ?>
+            style="display:block; position:relative">
             <div class="snippet-text<?php echo has_post_thumbnail() ? ' has-featured-image' : '';?>">
+                <?php twentysixteen_post_thumbnail(); ?>
             <div class="post-body entry-content float-container entry-content">
 
 <?php //twentysixteen_excerpt(); ?>
