@@ -1065,7 +1065,7 @@ function generateThumbnail($src, $thumbWidth = 0) {
 	$sourcePath = $uploadFolder . '/' .  $name . $type;
 
 	if (file_exists($destPath)) {
-		return $uploadFolder . '/s/' . $destName;
+		return wp_upload_dir()['baseurl'] . '/s/' . $destName;
 	}
 	if (!file_exists($sourcePath)) {
 		// no file
@@ -1106,7 +1106,7 @@ function generateThumbnail($src, $thumbWidth = 0) {
 		imagejpeg($destImage, $destPath);
 		imagedestroy($sourceImage);
 		imagedestroy($destImage);
-		return $uploadFolder . '/s/' . $destName;
+		return wp_upload_dir()['baseurl'] . '/s/' . $destName;
 	}
 
 }
