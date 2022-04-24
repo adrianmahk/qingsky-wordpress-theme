@@ -71,8 +71,8 @@ if ($_GET['ajax']) {
 				unicode-range: U + 0000-00FF, U + 0131, U + 0152-0153, U + 02BB-02BC, U + 02C6, U + 02DA, U + 02DC, U + 2000-206F, U + 2074, U + 20AC, U + 2122, U + 2191, U + 2193, U + 2212, U + 2215, U + FEFF, U + FFFD;
             }
 	</style>
-	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?t=' . filemtime($themeLocalPath . '/css/blog.css') ?>" rel="stylesheet">
-	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?t=' . filemtime($themeLocalPath . '/js/blog-ui-all-ajax.js') ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?v=' . filemtime($themeLocalPath . '/css/blog.css') ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?v=' . filemtime($themeLocalPath . '/css/styles.css') ?>" rel="stylesheet">
 	
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
 	<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>">
