@@ -83,8 +83,9 @@ if ( ! function_exists( 'twentysixteen_setup' ) ) :
 		 *
 		 * @link https://developer.wordpress.org/reference/functions/add_theme_support/#post-thumbnails
 		 */
-		add_theme_support( 'post-thumbnails' );
-		set_post_thumbnail_size( 1200, 9999 );
+		// add_theme_support( 'post-thumbnails' );
+		// set_post_thumbnail_size( 1200, 9999 );
+		// set_post_thumbnail_size( 0, 0 );
 
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus(
@@ -660,7 +661,12 @@ function twentysixteen_content_image_sizes_attr( $sizes, $size ) {
 
 	return $sizes;
 }
-add_filter( 'wp_calculate_image_sizes', 'twentysixteen_content_image_sizes_attr', 10, 2 );
+// add_filter( 'wp_calculate_image_sizes', 'twentysixteen_content_image_sizes_attr', 10, 2 );
+remove_image_size('1536x1536');
+remove_image_size('2048x2048');
+remove_image_size('medium_large');
+remove_image_size('post-thumbnail');
+remove_image_size('scaled');
 
 /**
  * Add custom image sizes attribute to enhance responsive image functionality
@@ -683,7 +689,7 @@ function twentysixteen_post_thumbnail_sizes_attr( $attr, $attachment, $size ) {
 	}
 	return $attr;
 }
-add_filter( 'wp_get_attachment_image_attributes', 'twentysixteen_post_thumbnail_sizes_attr', 10, 3 );
+// add_filter( 'wp_get_attachment_image_attributes', 'twentysixteen_post_thumbnail_sizes_attr', 10, 3 );
 
 /**
  * Modifies tag cloud widget arguments to display all tags in the same font size
@@ -1026,7 +1032,86 @@ function custom_background_cb() {
 	<?php
 }
 
+function generateThumbnail($src, $thumbWidth = 0) {
+	$relativeSrc = preg_replace('/https?:\/\/(www.qingsky.hk|dev.qingsky.hk|localhost:81)/', '', $src);
+	$relativeSrc = preg_replace('/\/wp-content\/uploads\/(s\/)?/', '', $relativeSrc);
+
+	if (filter_var($relativeSrc, FILTER_VALIDATE_URL) && $relativeSrc == $src) {
+		// is external image, do nothing
+		return $src;
+	}
+	$relativeSrc = preg_replace('/-[0-9]{1,}x[0-9]{1,}(?=\.(gif|jpg|jpeg|png)$)/', '', $relativeSrc);
+	// if (preg_match('/(?:\/s)?\/([^\/]*)(?:-[0-9]{1,}x[0-9]{1,})(?:~s([0-9]{1,}))?(\.jpg|\.jpeg|\.png|\.gif)$/', $relativeSrc, $matches)) {
+	if (preg_match('/(?:\/s)?\/?([^\/]*(?=~s)|[^\/]*)(?:~s([0-9]{1,}))?(\.jpg|\.jpeg|\.png|\.gif)$/', $relativeSrc, $matches)) {
+		// echo $relativeSrc;
+		$name = $matches[1];
+		$thumbWidth = ($thumbWidth > 0) ? $thumbWidth : $matches[2];
+		$type = $matches[3];
+		// echo json_encode($matches);
+	}
+	else {
+		// no width variable found in path & not override mode
+		return $src;
+	}
+
+	if (!isset($name) || !isset($type) || $thumbWidth == 0) {
+		//error
+		return $src;
+	}
+	
+	$destName = $name . '~s' . $thumbWidth . $type;
+	$destPath = wp_upload_dir()['basedir'] . '/s/'  . $destName;
+	$sourcePath = wp_upload_dir()['basedir'] . '/' .  $name . $type;
+
+	if (file_exists($destPath)) {
+		return wp_upload_dir()['baseurl'] . '/s/' . $destName;
+	}
+	if (!file_exists($sourcePath)) {
+		// no file
+		return $src;
+	}
+	else {
+		switch (strtolower($type)) {
+			case '.jpg':
+			case '.jpeg':
+				$sourceImage = @imagecreatefromjpeg($sourcePath);
+				break;
+			case '.gif':
+				$sourceImage = @imagecreatefromgif($sourcePath);
+				break;
+			case '.png':
+				$sourceImage = @imagecreatefrompng($sourcePath);
+				break;
+			case '.bmp':
+				$sourceImage = @imagecreatefrombmp($sourcePath);
+				break;
+		}
+		
+		if (!$sourceImage) {
+			return $src;
+		}
+		$orgWidth = imagesx($sourceImage);
+		$orgHeight = imagesy($sourceImage);
+		if ($thumbWidth >= $orgWidth) {
+			//nth to do
+			return $src;
+		}
+		$thumbHeight = floor($orgHeight * ($thumbWidth / $orgWidth));
+		$destImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
+		imagecopyresampled($destImage, $sourceImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $orgWidth, $orgHeight);
+		if (!file_exists( wp_upload_dir()['basedir'] . '/s')) {
+			mkdir( wp_upload_dir()['basedir'] . '/s');
+		}
+		imagejpeg($destImage, $destPath);
+		imagedestroy($sourceImage);
+		imagedestroy($destImage);
+		return wp_upload_dir()['baseurl'] . '/s/' . $destName;
+	}
+
+}
+
 function clear_br($content) { 
+	require_once ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk' . '/simple_html_dom.php';
 	//this requires simplehtmldom
 	if (!is_singular()) {
 		return $content;
@@ -1037,24 +1122,21 @@ function clear_br($content) {
 		return str_replace("<br/>","<br clear='none'/>", $content);
 	}
 	$domain = $_SERVER['HTTP_HOST'];
-	// for links to work the same on localhost and prod
+	// for links to work the same on localhost, devand prod
 	foreach($html->find('a') as $element) {
-		$element->href = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->href));
+		// $element->href = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->href));
+		$element->href = preg_replace('/https?:\/\/(www.qingsky.hk|dev.qingsky.hk|localhost:81)/', '', $element->href);
 	 }
 
-	// for me to have imgs shown in both localhost and prod
+	// generate small size imgs and 2x srcset if not exist
 	foreach($html->find('img') as $element) {
-    	$element->src = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->src));
-		if (!isset($element->srcset) && $element->parent->tag == "a") {
-			$id = attachment_url_to_postid('https://' . $domain . $element->parent->href);
-			if (!$id) {
-				preg_match('/((\.jpg)|(\.jpeg)|(\.png)|(\.gif)$)/i', $element->parent->href, $match, PREG_OFFSET_CAPTURE);
-				$url = substr_replace($element->parent->href, '-scaled', $match[0][1], 0);
-				$id = attachment_url_to_postid('https://' . $domain . $url);
-			}
-			$element->srcset = wp_get_attachment_image_srcset($id);
+		$width = $element->width;
+		$src = $element->src;
+		$src = generateThumbnail($element->src, ($width > 0) ? $width : 0);
+		if ($src != $element->src) {
+			$element->src = $src;
+			$element->srcset = generateThumbnail($src, ($width > 0) ? $width * 2 : 0) . ' 2x';
 		}
-	    $element->srcset = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->srcset));
 	}
 	return str_replace("<br/>","<br clear='none'/>", $html);
 } 

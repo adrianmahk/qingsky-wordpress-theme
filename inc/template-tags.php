@@ -174,15 +174,18 @@ if ( ! function_exists( 'twentysixteen_post_thumbnail' ) ) :
 			return;
 		}
 		else if (!has_post_thumbnail()) {
-			global $post, $posts;
-			$first_img = '';
-			ob_start();
-			ob_end_clean();
-			$output = preg_match_all('/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i', $post->post_content, $matches);
+			global $post;
+			$first_img = ''; 
+			preg_match_all('/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i', $post->post_content, $matches);
 			$first_img = $matches[1][0];
-			// echo $first_img;
 			if ($first_img == null) {
 				return;
+			}
+			$thumb = generateThumbnail($first_img, 240);
+			if ($thumb != $first_img ) {
+				// generated thumb
+				$srcset = generateThumbnail($first_img, 480);
+				$first_img = $thumb;
 			}
 		}
 
@@ -192,7 +195,8 @@ if ( ! function_exists( 'twentysixteen_post_thumbnail' ) ) :
 
 		<div class="post-thumbnail">
 			<?php if ($first_img) {
-				echo '<img src="'. $first_img . '</img>';
+				echo '<img src="'. $first_img . '"></img>';
+				
 			} else {
 				the_post_thumbnail();
 			} ?>
@@ -203,7 +207,8 @@ if ( ! function_exists( 'twentysixteen_post_thumbnail' ) ) :
 	<div class="post-thumbnail snippet-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true">
 		<?php 
 		if ($first_img) {
-			echo '<img src="'. $first_img . '"></img>';
+			// echo '<img id="img-' . $id . '" src="'. $first_img .  '"' .  (true ?  (' srcset="'. $srcset .'"') : '') .'/>';
+			echo '<img src="'. $first_img . '" '. ((isset($srcset)) ? ' srcset="' . $srcset . ' 2x"' : '') . '></img>';
 		} else {
 			the_post_thumbnail( 'post-thumbnail', array( 'alt' => the_title_attribute( 'echo=0' ) ) );
 		} 
