@@ -608,8 +608,8 @@ display: table-cell;
     max-height: calc(12em - 15px); */
     max-width: 160px;
     max-height: 160px;
-    min-width: 80px;
-    min-height: 80px;
+    min-width: 100px;
+    min-height: 100px;
     margin: 0 3vw 3vw 0;
     box-shadow: 0 4px 10px rgba(0,0,0, 0.8);
     float: left;
