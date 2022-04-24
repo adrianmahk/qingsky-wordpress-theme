@@ -2114,7 +2114,7 @@ width: auto;
 white-space: normal;
 }
 .subscribe-popup div.widget.FollowByEmail .follow-by-email-submit:disabled {
-cursor: default;*
+cursor: default;
 opacity: .3;
 }
 .centered-top-container .svg-icon-24, body.collapsed-header .centered-top-placeholder .svg-icon-24 {
@@ -2346,7 +2346,7 @@ text-align: right;
 position: relative;
 float: right;
 margin: 12px 8px;
-transiton: opacity 1s;
+transition: opacity 1s;
 -webkit-transition: opacity 1s;
 z-index: 51;
 pointer-events: all;
@@ -3097,7 +3097,7 @@ z-index : 50;
 opacity: 0;
 visibility: visible;
 transition: visibility 0s, opacity .5s ease-in-out;
-font-color: #ffffff;
+color: #ffffff;
 font-size: 4em;
 text-align: right;
 pointer-events: none;
@@ -3134,7 +3134,7 @@ text-align: center;
   }
   50% {
     left: 0%;
-    background-color: $(body.cm.color);
+    background-color: #0e758a;
     width: 100%;
   }
   100% {
@@ -3151,7 +3151,7 @@ text-align: center;
   }
   50% {
     left: 0%;
-    background-color: $(body.cm.color);
+    background-color: #0e758a;
     width: 100%;
   }
   100% {
@@ -3168,7 +3168,7 @@ text-align: center;
   width: 100%;
   top: -2px;
   left: 0;
-  background-color: $(body.cm.color);
+  background-color: #0e758a;
   -webkit-animation: page-load 5 ease-in-out 1s forwards;
   animation: page-load 5 ease-in-out 1s forwards;
   /*box-shadow: 0 2px 5px $(body.shadow.color);*/
