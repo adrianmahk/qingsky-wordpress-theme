@@ -9,7 +9,7 @@
  * @since Twenty Sixteen 1.0
  */
 $themeLocalPath =  ($_SERVER['DOCUMENT_ROOT']) . '/wp-content/themes/qingsky-hk';
-include  $themeLocalPath . '/simple_html_dom.php';
+// include  $themeLocalPath . '/simple_html_dom.php';
 update_view_count();
 if ($_GET['ajax']) {
 	global $wp_query;
