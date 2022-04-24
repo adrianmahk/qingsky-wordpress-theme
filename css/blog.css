@@ -1216,7 +1216,7 @@ box-shadow: 0 5px 10px rgba(0,0,0, 0.8);
 /* display: table-cell; */
 display: block;
 vertical-align: top;
-padding: 1em 0;
+padding: .5em 0 1.5em 0;
 max-height: 12em;
 line-height: 1.5em;
 overflow: hidden;
