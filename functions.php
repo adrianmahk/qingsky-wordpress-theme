@@ -1035,6 +1035,7 @@ function custom_background_cb() {
 function generateThumbnail($src, $thumbWidth = 0) {
 	$relativeSrc = preg_replace('/https?:\/\/(www.qingsky.hk|dev.qingsky.hk|localhost:81)/', '', $src);
 	$relativeSrc = preg_replace('/\/wp-content\/uploads\/(s\/)?/', '', $relativeSrc);
+	$uploadFolder = (is_link(wp_upload_dir()['basedir'])) ? readlink(wp_upload_dir()['basedir']) : wp_upload_dir()['basedir'];
 
 	if (filter_var($relativeSrc, FILTER_VALIDATE_URL) && $relativeSrc == $src) {
 		// is external image, do nothing
@@ -1060,11 +1061,11 @@ function generateThumbnail($src, $thumbWidth = 0) {
 	}
 	
 	$destName = $name . '~s' . $thumbWidth . $type;
-	$destPath = wp_upload_dir()['basedir'] . '/s/'  . $destName;
-	$sourcePath = wp_upload_dir()['basedir'] . '/' .  $name . $type;
+	$destPath = $uploadFolder . '/s/'  . $destName;
+	$sourcePath = $uploadFolder . '/' .  $name . $type;
 
 	if (file_exists($destPath)) {
-		return wp_upload_dir()['baseurl'] . '/s/' . $destName;
+		return $uploadFolder . '/s/' . $destName;
 	}
 	if (!file_exists($sourcePath)) {
 		// no file
@@ -1099,13 +1100,13 @@ function generateThumbnail($src, $thumbWidth = 0) {
 		$thumbHeight = floor($orgHeight * ($thumbWidth / $orgWidth));
 		$destImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
 		imagecopyresampled($destImage, $sourceImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $orgWidth, $orgHeight);
-		if (!file_exists( wp_upload_dir()['basedir'] . '/s')) {
-			mkdir( wp_upload_dir()['basedir'] . '/s');
+		if (!file_exists( $uploadFolder. '/s')) {
+			mkdir( $uploadFolder . '/s');
 		}
 		imagejpeg($destImage, $destPath);
 		imagedestroy($sourceImage);
 		imagedestroy($destImage);
-		return wp_upload_dir()['baseurl'] . '/s/' . $destName;
+		return $uploadFolder . '/s/' . $destName;
 	}
 
 }
