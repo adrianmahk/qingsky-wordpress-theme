@@ -1032,10 +1032,15 @@ function custom_background_cb() {
 	<?php
 }
 
+$uploadFolder = null;
 function generateThumbnail($src, $thumbWidth = 0) {
 	$relativeSrc = preg_replace('/https?:\/\/(www.qingsky.hk|dev.qingsky.hk|localhost:81)/', '', $src);
 	$relativeSrc = preg_replace('/\/wp-content\/uploads\/(s\/)?/', '', $relativeSrc);
-	$uploadFolder = (is_link(wp_upload_dir()['basedir'])) ? readlink(wp_upload_dir()['basedir']) : wp_upload_dir()['basedir'];
+
+	global $uploadFolder;
+	if (!$uploadFolder) {
+		$uploadFolder = (is_link(wp_upload_dir()['basedir'])) ? readlink(wp_upload_dir()['basedir']) : wp_upload_dir()['basedir'];
+	}
 
 	if (filter_var($relativeSrc, FILTER_VALIDATE_URL) && $relativeSrc == $src) {
 		// is external image, do nothing
@@ -1122,7 +1127,7 @@ function clear_br($content) {
 	if (!$html) {
 		return str_replace("<br/>","<br clear='none'/>", $content);
 	}
-	$domain = $_SERVER['HTTP_HOST'];
+
 	// for links to work the same on localhost, devand prod
 	foreach($html->find('a') as $element) {
 		// $element->href = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->href));
@@ -1130,13 +1135,16 @@ function clear_br($content) {
 	 }
 
 	// generate small size imgs and 2x srcset if not exist
-	foreach($html->find('img') as $element) {
-		$width = $element->width;
-		$src = $element->src;
-		$src = generateThumbnail($element->src, ($width > 0) ? $width : 0);
-		if ($src != $element->src) {
-			$element->src = $src;
-			$element->srcset = generateThumbnail($src, ($width > 0) ? $width * 2 : 0) . ' 2x';
+	foreach($html->find('a > img') as $element) {
+		// echo ($element->parent->tag == 'a' && is_array($element->parent->children) && sizeof($element->parent->children) == 1);
+		if ($element->parent->tag == 'a' && is_array($element->parent->children) && sizeof($element->parent->children) == 1) {
+			$width = $element->width;
+			$src = $element->src;
+			$src = generateThumbnail($element->src, ($width > 0) ? $width : 0);
+			if ($src != $element->src) {
+				$element->src = $src;
+				$element->srcset = generateThumbnail($src, ($width > 0) ? $width * 2 : 0) . ' 2x';
+			}
 		}
 	}
 	return str_replace("<br/>","<br clear='none'/>", $html);
