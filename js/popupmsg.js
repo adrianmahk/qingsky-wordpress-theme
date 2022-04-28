@@ -235,7 +235,7 @@ function showThumbnails(e, id = null) {
 	popupMsg.setAttribute("style", "text-align: center");
 	popupMsg.setAttribute("isImage", "true");
 
-	let postBodyImgs = document.querySelectorAll('#main a > img:only-child');
+	let postBodyImgs = document.querySelectorAll('#main a > img:only-child[src]');
 	let thumbDiv = document.createElement("div");
 	thumbDiv.id = "popup-img-thumbnail";
 	thumbDiv.classList.add("thumbnail");
