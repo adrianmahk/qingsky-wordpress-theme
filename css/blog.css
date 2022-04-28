@@ -5,7 +5,7 @@ html{
 -ms-text-size-adjust: 100%;
 text-size-adjust: 100%;
 font: -apple-system-body;
-scroll-behavior: smooth;
+/* scroll-behavior: smooth; */
 }
 .skip-navigation {
 background-color: #fff;
