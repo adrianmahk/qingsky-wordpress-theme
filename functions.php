@@ -325,7 +325,7 @@ function twentysixteen_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'FrontPage 1', 'twentysixteen' ),
+			'name'          => __( 'Icons', 'twentysixteen' ),
 			'id'            => 'frontpage-1',
 			'description'   => __( 'Appears at the bottom of the content on posts and pages.', 'twentysixteen' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -337,7 +337,7 @@ function twentysixteen_widgets_init() {
 
 	register_sidebar(
 		array(
-			'name'          => __( 'FrontPage 2', 'twentysixteen' ),
+			'name'          => __( 'Greetings', 'twentysixteen' ),
 			'id'            => 'frontpage-2',
 			'description'   => __( 'Appears at the bottom of the content on posts and pages.', 'twentysixteen' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -359,17 +359,17 @@ function twentysixteen_widgets_init() {
 		)
 	);
 
-	register_sidebar(
-		array(
-			'name'          => __( 'Popup 2', 'twentysixteen' ),
-			'id'            => 'popup-2',
-			'description'   => __( 'Appears at the bottom of the content on posts and pages.', 'twentysixteen' ),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
-			'before_title'  => '<h3 class="widget-title post-title main">',
-			'after_title'   => '</h3>',
-		)
-	);
+	// register_sidebar(
+	// 	array(
+	// 		'name'          => __( 'Popup 2', 'twentysixteen' ),
+	// 		'id'            => 'popup-2',
+	// 		'description'   => __( 'Appears at the bottom of the content on posts and pages.', 'twentysixteen' ),
+	// 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+	// 		'after_widget'  => '</section>',
+	// 		'before_title'  => '<h3 class="widget-title post-title main">',
+	// 		'after_title'   => '</h3>',
+	// 	)
+	// );
 
 	register_sidebar(
 		array(
