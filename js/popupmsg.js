@@ -54,6 +54,7 @@ function showPopupMessage(message = null) {
 		var expires = item.getAttribute("expires");
 		var important = item.getAttribute("important");
 		var isImage = item.getAttribute("isImage");
+		var isArchive = item.getAttribute("isArchive");
 		
 		if (expires) {
 			expires = new Date(expires);
@@ -76,6 +77,9 @@ function showPopupMessage(message = null) {
 			}
 			if (isImage == "true") {
 				container.classList.add("image");
+			}
+			if (isArchive == "true") {
+				container.classList.add("archive");
 			}
 		}
 		else {
@@ -283,11 +287,10 @@ function removePlaceHolderClass(img) {
 function togglePopupArchive(year, month) {
 	// document.body.classList.toggle("popup-archive-showing");
 	const popupArchive = document.getElementById("popup-archive").cloneNode(true);
-	console.log(popupArchive);
 	popupArchive.classList.add("popup-message");
 	popupArchive.setAttribute("important", true);
+	popupArchive.setAttribute("isArchive", true);
 	document.body.appendChild(popupArchive);
-	// showPopupMessage(popupArchive);
 	showPopupMessage();
 	if (year) {
 		document.querySelector(".popup-message #popup-archive-text-year").innerText = year;
