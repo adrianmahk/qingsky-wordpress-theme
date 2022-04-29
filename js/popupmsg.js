@@ -32,8 +32,7 @@ function addPopupMessageToBlockList() {
 function dismissPopupMessage() {
 	//console.log("container clicked");
 	container = document.getElementById("popup-message-outer");
-	container.classList.remove("important");
-	container.classList.remove("image");
+	container.classList.remove("important", "image", "thumbnail", "archive");
     document.body.classList.remove("popup-message-showing");
 	
 	var popupMessage = container.getElementsByClassName("popup-message");
@@ -53,8 +52,9 @@ function showPopupMessage(message = null) {
 		var url = item.getAttribute("url");
 		var expires = item.getAttribute("expires");
 		var important = item.getAttribute("important");
-		var isImage = item.getAttribute("isImage");
-		var isArchive = item.getAttribute("isArchive");
+		const classOuter = item.getAttribute("class-outer");
+		// var isImage = item.getAttribute("isImage");
+		// var isArchive = item.getAttribute("isArchive");
 		
 		if (expires) {
 			expires = new Date(expires);
@@ -72,14 +72,11 @@ function showPopupMessage(message = null) {
 		    container.appendChild(item);
 
 			if (important == "true") {
-				container.classList.add("important");
-				//console.log(container);
+				container.classList.add("important")
 			}
-			if (isImage == "true") {
-				container.classList.add("image");
-			}
-			if (isArchive == "true") {
-				container.classList.add("archive");
+			if (classOuter) {
+				let classes = classOuter.split(" ");
+				container.classList.add(...classes);
 			}
 		}
 		else {
@@ -163,7 +160,8 @@ function showPopupImage(e, a, id = null) {
 	popupMsg.setAttribute("class", "popup-message post-body img-loading");
 	popupMsg.setAttribute("important", true);
 	popupMsg.setAttribute("style", "text-align: center; position: relative");
-	popupMsg.setAttribute("isImage", "true");
+	// popupMsg.setAttribute("isImage", "true");
+	popupMsg.setAttribute("class-outer", "image");
 
 	if (id) {
 		a = document.getElementById(id);
@@ -195,43 +193,35 @@ function showPopupImage(e, a, id = null) {
 		imgId = aEl.getAttribute("id");
 	}
 	
-	let nav = document.createElement("div");
-	nav.classList.add("popup-img-navigation");
-	let svg = '<svg class="svg-icon-24" style="height: 30px; width: 30px; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M88 352C110.1 352 128 369.9 128 392V440C128 462.1 110.1 480 88 480H40C17.91 480 0 462.1 0 440V392C0 369.9 17.91 352 40 352H88zM280 352C302.1 352 320 369.9 320 392V440C320 462.1 302.1 480 280 480H232C209.9 480 192 462.1 192 440V392C192 369.9 209.9 352 232 352H280zM40 320C17.91 320 0 302.1 0 280V232C0 209.9 17.91 192 40 192H88C110.1 192 128 209.9 128 232V280C128 302.1 110.1 320 88 320H40zM280 192C302.1 192 320 209.9 320 232V280C320 302.1 302.1 320 280 320H232C209.9 320 192 302.1 192 280V232C192 209.9 209.9 192 232 192H280z"/>';
-	nav.appendChild(getPopupImageOffsetLink(imgOlds[0].parentNode.id, -1));
-	nav.innerHTML += "<a class='flat-button' onclick='showThumbnails(event, \""+ a.id +"\");'>" + svg + "</a>";
-	nav.appendChild(getPopupImageOffsetLink(imgOlds[imgOlds.length - 1].parentNode.id, 1));
-
 	document.body.appendChild(popupMsg);
 	showPageLoading();
 	showPopupMessage();
+	let nav = document.getElementById("popup-img-navigation").cloneNode(true);
 	
 	let bottomButtons = document.getElementById("popup-message-bottom-button");
 	let importantButton = document.getElementById("popup-message-dismiss-button");
 	bottomButtons.innerHTML = "";
 	bottomButtons.appendChild(importantButton);
 	bottomButtons.appendChild(nav);
+
+	getPopupImageOffsetLink(imgOlds[0].parentNode.id, -1, document.querySelector("#popup-message-bottom-button #popup-img-navigation-prev"));
+	getPopupImageOffsetLink(imgOlds[imgOlds.length - 1].parentNode.id, 1, document.querySelector("#popup-message-bottom-button #popup-img-navigation-next"));
+	document.querySelector("#popup-message-bottom-button #popup-img-navigation-thumbnail").setAttribute("onclick", 'showThumbnails(event, \"'+ a.id +'\");');
 }
 
-function getPopupImageOffsetLink(imgId, offset = 1, text = "next") {
+function getPopupImageOffsetLink(imgId, offset = 1, node = null) {
 	let id = "post-body-img-" + (parseInt(imgId.replace("post-body-img-", "")) + parseInt(offset));
 	let link = document.querySelector("#main #" +id);
-    let a = document.createElement("a");
-	a.classList.add("flat-button");
-
-	let svgNext = document.createElement("svg");
-	svgNext.setAttribute("viewBox", "0 0 384 512");
-	svgNext.setAttribute("class", "svg-icon-24");
-	svgNext.innerHTML = '<path d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z"/>';
-	console.log(svgNext);
-	if (link) {
-		if (offset < 0) {
-			svgNext.setAttribute("style", "transform: scaleX(-1)");
+    // console.log(node);
+	if (node) {
+		if (link) {
+			node.style.visibility = "visible";
+			node.setAttribute("onclick", "dismissPopupMessage(); showPopupImage(event, this, '" + id + "')");
 		}
-	    a.innerHTML += svgNext.outerHTML;
-	    a.setAttribute("onclick", "dismissPopupMessage(); showPopupImage(event, this, '" + id + "')");
+		else {
+			node.style.visibility = "hidden";
+		}
 	}
-	return a;
 }
 
 function showThumbnails(e, id = null) {
@@ -247,7 +237,7 @@ function showThumbnails(e, id = null) {
 	popupMsg.setAttribute("class", "popup-message post-body");
 	popupMsg.setAttribute("important", true);
 	popupMsg.setAttribute("style", "text-align: center");
-	popupMsg.setAttribute("isImage", "true");
+	popupMsg.setAttribute("class-outer", "image thumbnail");
 
 	let postBodyImgs = document.querySelectorAll('#main a > img:only-child[src]');
 	let thumbDiv = document.createElement("div");
@@ -272,6 +262,10 @@ function showThumbnails(e, id = null) {
 	document.body.appendChild(popupMsg);
 
 	showPopupMessage();
+	// if (id) {
+	// 	console.log("#popup-img-thumbnail #" + id);
+	// 	document.body.scrollIntoView(document.querySelector("#popup-img-thumbnail #" + id));
+	// }
 }
 
 function removePlaceHolder(img) {
@@ -289,7 +283,8 @@ function togglePopupArchive(year, month) {
 	const popupArchive = document.getElementById("popup-archive").cloneNode(true);
 	popupArchive.classList.add("popup-message");
 	popupArchive.setAttribute("important", true);
-	popupArchive.setAttribute("isArchive", true);
+	// popupArchive.setAttribute("isArchive", true);
+	popupArchive.setAttribute("class-outer", "archive");
 	document.body.appendChild(popupArchive);
 	showPopupMessage();
 	if (year) {
