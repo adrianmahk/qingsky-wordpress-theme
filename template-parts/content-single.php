@@ -11,7 +11,6 @@
 <article id="post-<?php the_ID(); ?>" class="post-outer-container">
 <div class="post-outer">
 	<div class="post">
-		<a name="9110926056781354028"></a>
 		<?php the_title( '<h3 class="post-title entry-title">', '</h2>' ); ?>
 		<?php 
 			share_button();
