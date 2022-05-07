@@ -1128,11 +1128,11 @@ function clear_br($content) {
 		return str_replace("<br/>","<br clear='none'/>", $content);
 	}
 
-	// for links to work the same on localhost, devand prod
-	foreach($html->find('a') as $element) {
-		// $element->href = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->href));
-		$element->href = preg_replace('/https?:\/\/(www.qingsky.hk|dev.qingsky.hk|localhost:81)/', '', $element->href);
-	 }
+	// for links to work the same on localhost, dev and prod
+	// foreach($html->find('a') as $element) {
+	// 	// $element->href = str_replace('http://' . $domain, '', str_replace('https://' . $domain, '', $element->href));
+	// 	$element->href = preg_replace('/https?:\/\/(www.qingsky.hk|dev.qingsky.hk|localhost:81)/', '', $element->href);
+	//  }
 
 	// generate small size imgs and 2x srcset if not exist
 	foreach($html->find('a > img') as $element) {
