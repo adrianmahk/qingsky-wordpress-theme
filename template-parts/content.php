@@ -95,14 +95,19 @@ array(
                                 ?>
                             </a>
                         </span>
+                        <span class="jump-link flat-button ripple">
+                    <a href="<?php echo get_permalink()."#more"?>">
+                        繼續看 ≫
+                    </a>
+                            </span>
                     </div>
                     <div class="post-footer-line post-footer-line-2">
                     </div>
                 </div>
                 <div class="jump-link flat-button ripple">
-                    <a href="<?php echo get_permalink()."#more"?>">
+                    <!-- <a href="<?php echo get_permalink()."#more"?>">
                         繼續看 ≫
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
