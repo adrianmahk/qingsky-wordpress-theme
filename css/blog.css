@@ -3220,6 +3220,8 @@ body.page-loading-end .loading-bar {
   body.item-view .progress-bar-container {
     top: 0px;
     left: 16px;
+    left: calc(16px + env(safe-area-inset-left));
     width: calc(100% - 34px);
+    width: calc(100% - 34px - env(safe-area-inset-left) - env(safe-area-inset-right));
   }
   
