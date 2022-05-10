@@ -186,7 +186,7 @@ width: auto;
 }
 @media screen and (max-width: 886px){ /*calc(870px + 16px)){*/
 body.item-view .blog-posts.hfeed.container{
-margin: 0 max(8px, 16px);
+margin: 0 max(8px, 2vw);
 }
 }
 .post {
@@ -1793,8 +1793,8 @@ background: rgba(254,254,253,0.95);
 @media screen and (max-width: 886px) {
 body.item-view .widget.BlogSearch .widget-content {
 /* margin: 0 8px; */
-margin: 0 max(8px, 16px);
-width: calc(100% - max(16px, 32px));
+margin: 0 max(8px, 2vw);
+width: calc(100% - max(16px, 4vw));
 }
 }
 body.home-view .widget.BlogSearch .widget-content {
