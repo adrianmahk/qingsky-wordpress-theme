@@ -192,7 +192,7 @@ margin: 0 max(8px, 2vw);
 .post {
 padding-left: 4%;
 padding-right: 4%;
-padding-top: 5%;
+padding-top: 4%;
 }
 img.post-title-pin-icon {
 float: right;
@@ -1390,7 +1390,7 @@ top: -50px;
 position: absolute;
 width: calc(100% - 32px);
 width: calc(100% - max(16px, env(safe-area-inset-left)) - max(16px, env(safe-area-inset-right)));
-max-width: calc(870px * .8 + 20vw - 32px);
+max-width: calc(870px * .7 + 30vw - 32px);
 margin: auto;
 z-index: 51;
 pointer-events: none;
@@ -1793,8 +1793,8 @@ background: rgba(254,254,253,0.95);
 @media screen and (max-width: 886px) {
 body.item-view .widget.BlogSearch .widget-content {
 /* margin: 0 8px; */
-margin: 0 max(8px, 2vw);
-width: calc(100% - max(16px, 4vw));
+margin: 0 max(8px, 16px);
+width: calc(100% - max(16px, 32px));
 }
 }
 body.home-view .widget.BlogSearch .widget-content {
@@ -2257,7 +2257,8 @@ display: flex;
 -ms-flex-direction: column;
 flex-direction: column;
 margin: 0 auto;
-max-width: calc(870px * .8 + 20vw);
+/* max-width: calc(870px * .8 + 20vw); */
+max-width: calc(870px * .7 + 30vw);
 }
 .page_body .centered>* {
 -webkit-box-flex: 0;
@@ -2403,7 +2404,7 @@ visibility: hidden;
 .centered-top-container.sticky .centered-top {
 /*margin: 4px auto;*/
 margin: 0px auto;
-max-width: calc(870px * .8 + 20vw - 32px);
+max-width: calc(870px * .7 + 30vw - 32px);
 min-height: 48px;
 }
 /*.centered-top-container.sticky .centered-top.search-focused .subscribe-section-container, body.item-view .centered-top.search-focused .subscribe-section-container, .search-focused .subscribe-section-container{
@@ -2417,7 +2418,7 @@ padding: 0 8px 50px 8px;
 margin: 8px 8px -50px 8px;
 height: calc(100% - 58px);
 width: calc(100% - 32px);
-max-width: calc(870px * .8 + 20vw);
+max-width: calc(870px * .7 + 30vw);
 display: none;
 }
 .page_body.vertical-ads .centered .centered-bottom {
@@ -3014,7 +3015,7 @@ display: none;
 color: #ffffff;
 /*width: calc(100vw - 16vw) !important;*/
 width: 100%;
-max-width: calc(870px * .8 + 20vw - 16vw);
+max-width: calc(870px * .7 + 30vw - 16vw);
 left: 0;
 right: 0;
 height: 50px;
