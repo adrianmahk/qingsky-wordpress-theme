@@ -207,7 +207,9 @@ margin: 0 8px;
 @media screen and (min-width: 480px) {
 .post {
 padding-left: 8%;
+padding-left: min(8%, calc(4% + ((100vw - 480px) * 0.2)));
 padding-right: 8%;
+padding-right: min(8%, calc(4% + ((100vw - 480px) * 0.2)));
 }
 }
 @media screen and (min-width: 871px) {
