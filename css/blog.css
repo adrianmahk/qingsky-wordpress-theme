@@ -195,6 +195,8 @@ margin: 0 max(8px, 2vw);
 padding-left: 4%;
 padding-right: 4%;
 padding-top: 4%;
+/* max-width: 80%;
+margin: auto; */
 }
 img.post-title-pin-icon {
 float: right;
@@ -204,8 +206,11 @@ margin: 0 8px;
 }
 @media screen and (min-width: 480px) {
 .post {
-padding-left: 8%;
-padding-right: 8%;
+padding-left: 10%;
+/* padding-left: max(8%, calc(100vw, 870px)); */
+padding-right: 10%;
+/* padding-right: max(8%, calc(100vw, 870px)); */
+/* padding-right: 8%; */
 }
 }
 .post-title {
