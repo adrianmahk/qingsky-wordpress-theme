@@ -206,11 +206,17 @@ margin: 0 8px;
 }
 @media screen and (min-width: 480px) {
 .post {
+padding-left: 8%;
+padding-right: 8%;
+}
+}
+@media screen and (min-width: 871px) {
+body.item-view .post {
+padding-top: 5%;
 padding-left: 10%;
-/* padding-left: max(8%, calc(100vw, 870px)); */
+padding-left: min(10%, calc(8% + ((100vw - 870px) * 0.05)));
 padding-right: 10%;
-/* padding-right: max(8%, calc(100vw, 870px)); */
-/* padding-right: 8%; */
+padding-right: min(10%, calc(8% + ((100vw - 870px) * 0.05)));
 }
 }
 .post-title {
