@@ -213,7 +213,7 @@ padding-right: min(8%, calc(4% + ((100vw - 480px) * 0.2)));
 }
 }
 @media screen and (min-width: 871px) {
-.post {
+body.item-view .post, .post.intro {
 padding-left: 10%;
 padding-left: min(10%, calc(8% + ((100vw - 870px) * 0.05)));
 padding-right: 10%;
