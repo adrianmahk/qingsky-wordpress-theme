@@ -213,12 +213,14 @@ padding-right: min(8%, calc(4% + ((100vw - 480px) * 0.2)));
 }
 }
 @media screen and (min-width: 871px) {
-body.item-view .post {
-padding-top: 5%;
+.post {
 padding-left: 10%;
 padding-left: min(10%, calc(8% + ((100vw - 870px) * 0.05)));
 padding-right: 10%;
 padding-right: min(10%, calc(8% + ((100vw - 870px) * 0.05)));
+}
+body.item-view .post {
+  padding-top: 5%;
 }
 }
 .post-title {
