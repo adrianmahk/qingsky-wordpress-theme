@@ -1,6 +1,16 @@
 // blog-ui-ajax-dev.js
 
-var timer = 0;
+var Singleton = (function (){
+  var cache;
+  return function(){
+    if(typeof cache === 'object') return cache;
+    this.p = 'public'
+    cache = this;
+  }
+}());
+var singleton = () => {
+  return new Singleton();
+};
 // var ori;
 function showPageLoading(ajax = false) {
   if (ajax) {
@@ -146,7 +156,6 @@ function handleLink(anchorEl) {
   return true;
 }
 
-var resizeTimer = 0;
 function init() {
   if (!document.body.getAttribute("inited")) {
     document.body.setAttribute("orientation", getOrientation());
@@ -216,8 +225,8 @@ function init() {
     // document.body.setAttribute("page-loaded", true);
     const resizeObserver = new ResizeObserver(entries => {
       // console.log('Body height changed:', entries[0].target.clientHeight);
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
+      clearTimeout(singleton().resizeTimer);
+      singleton().resizeTimer = setTimeout(() => {
         if (document.body.getAttribute("page-loaded") == "true") {
           loadScrollPos(document.body.getAttribute("ajax-popstate") == "true");
           document.body.removeAttribute("page-loaded");
@@ -439,7 +448,7 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null, append
       if (anchorEl) {
         anchorEl.classList.remove("disabled");
       }
-      clearTimeout(timer); 
+      clearTimeout(singleton().ajaxTimer); 
       if (ajaxCallback) {
         var args = {
           responseText: this.responseText,
@@ -463,7 +472,7 @@ function ajaxLoadHTML(link, ajaxCallback = null, ajaxCallBackArgs = null, append
     xhttp.open("GET", link, true);
     xhttp.send();
     showPageLoading(!appendMode);
-    timer = setTimeout(function () {
+    singleton().ajaxTimer = setTimeout(function () {
       hidePageLoading(0);
       xhttp.abort();
       if (anchorEl) {
@@ -981,9 +990,9 @@ function loadReadingProgress() {
     }
   }
 }
-var scrollTimer = 0;
+
 function handleScrollEvent(e, delay = 500) {
-  clearTimeout(scrollTimer);
+  clearTimeout(singleton().scrollTimer);
   var handleScrollPercent = function (){
     var scrollPercent = getScrollPercent();
     if (!document.body.classList.contains("page-loading")) {
@@ -995,7 +1004,7 @@ function handleScrollEvent(e, delay = 500) {
     }
   };
   if (delay > 0) {
-    scrollTimer = setTimeout(handleScrollPercent, delay);
+    singleton().scrollTimer = setTimeout(handleScrollPercent, delay);
   }
   else {
     handleScrollPercent();
