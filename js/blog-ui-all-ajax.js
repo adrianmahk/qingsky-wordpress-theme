@@ -1,5 +1,9 @@
 // blog-ui-ajax-dev.js
 
+// var timer = 0;
+// var resizeTimer = 0;
+// var currentState = 0;
+// var scrollTimer = 0;
 var Singleton = (function (){
   var cache;
   return function(){
@@ -194,6 +198,7 @@ function init() {
       // history.scrollRestoration = 'manual';
     // }
     window.addEventListener("popstate", function (e) {
+      console.log("popstate");
       if (e.state) {
         // ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
         if (!popstateReplacePage(e.state)) {
@@ -228,11 +233,11 @@ function init() {
       clearTimeout(singleton().resizeTimer);
       singleton().resizeTimer = setTimeout(() => {
         if (document.body.getAttribute("page-loaded") == "true") {
-          loadScrollPos(document.body.getAttribute("ajax-popstate") == "true");
+          loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
           document.body.removeAttribute("page-loaded");
           document.body.removeAttribute("ajax-popstate");
+          document.body.removeAttribute("scrollToPos");
         }
-        // saveScrollPos(document.body.getAttribute("url"));
         handleScrollEvent(0);
       }, 100);
     });
@@ -401,6 +406,19 @@ function removeAllButLast(query) {
   }
 }
 
+function replaceState(stateObj = null) {
+  // if (stateObj || !singleton().currentState) {
+  //   singleton().currentState = stateObj ? stateObj : {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
+  // }
+  // else {
+  //   singleton().currentState.scrollPos = getScrollPercent();
+  // }
+  singleton().currentState = {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
+  // console.log(singleton().currentState);
+  history.replaceState(singleton().currentState, document.title, window.location);
+
+}
+
 function ajaxLoad(link, removeFirst = false, button = null) {
   if (!button) {
     button = link;
@@ -427,7 +445,7 @@ function ajaxLoad(link, removeFirst = false, button = null) {
         removeAllButLast('[id*=blog-pager-older-link]');
         removeAllButLast('[id=blog-pager]');
 
-        history.replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value}, document.title, window.location);
+        replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value});
         // saveScrollPos();
         loadReadingProgress();
         hidePageLoading();
@@ -499,7 +517,8 @@ function ajaxReplacePage(args = null) {
   
   pageHideCallBack();
   if (push) {
-    history.replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value}, document.title, window.location);
+    console.log("saved state.scrollPos: " + getScrollPercent());
+    replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()}, document.title, window.location);
     history.pushState({page: ajax_page.innerHTML, title: ajax_doc.title, classList: ajax_doc.body.classList.value}, ajax_doc.title, link);
   }
   else {
@@ -527,6 +546,12 @@ function popstateReplacePage(state) {
     // pageShowCallBack(null, true, true);
     const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true, isPopstate: true}, bubbles: true, cancelable: true, composed: false});
     body_page.dispatchEvent(customEvent);
+
+    if (state.scrollPos) {
+      console.log("loaded state.scrollPos: ", state.scrollPos);
+      document.body.setAttribute("scrollToPos", state.scrollPos);
+      // loadScrollPos(true, state.scrollPos);
+    }
     hidePageLoading();
     return true;
   }
@@ -882,7 +907,9 @@ function getLocalStorageScrollPos(key = "scrollPosJsonURIDecode") {
 }
 
 function saveScrollPos(path = undefined, scrollPercent = undefined) {
-  if (!document.body.classList.contains("error404")) {
+  // if (!document.body.classList.contains("error404", "ajax-loading", "page-loading")) {
+  if (!document.body.classList.contains("error404") && !document.body.classList.contains("ajax-loading") && !document.body.classList.contains("page-loading")) {
+  // if (!document.body.classList.value.match(/error404|ajax-loading|page-loading/)) {
     if (typeof (Storage) !== "undefined") {
       var scrollPosObj = getLocalStorageScrollPos();
       if (!path) {
@@ -896,10 +923,16 @@ function saveScrollPos(path = undefined, scrollPercent = undefined) {
         scrollPercent = getScrollPercent();
       }
       
-      console.log(path + ": " + scrollPercent);
-      scrollPosObj[path] =  scrollPercent;
+      if (document.body.classList.contains("item-view")) {
+        // console.log(path + ": " + scrollPercent);
+        scrollPosObj[path] =  scrollPercent;
+      }
+      else {
+        delete scrollPosObj[path];
+      }
       // localStorage.setItem("scrollPosJson", JSON.stringify(scrollPosObj));
       localStorage.setItem("scrollPosJsonURIDecode", JSON.stringify(scrollPosObj));
+      replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()});
     }
   }
 }
@@ -915,8 +948,9 @@ function convertScrollPosJson() {
   }
 }
 
-function loadScrollPos(popstate = false, bottomPadding = 580) {
+function loadScrollPos(popstate = false, scrollToPos) {
 // get scrollPos
+  const bottomPadding = 580;
   if (window.location.hash) {
     const anchor = document.querySelector("[id='" + window.location.hash.replace("#", "") + "'], [name='" + window.location.hash.replace("#", "") + "']");
     // console.log("anchor: " + anchor);
@@ -924,9 +958,18 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
       window.scrollTo({
         top: anchor.getBoundingClientRect().top + window.pageYOffset, // scroll so that the element is at the top of the view
         behavior: 'smooth' // smooth scroll
-      })
+      });
+      return;
     }
   }
+
+  // if (popstate && scrollToPos) {
+  //   console.log("scrollToPos: ", scrollToPos);
+  //   window.scrollTo({
+  //     top: scrollPos,
+  //     behavior: "auto"
+  //   });
+  // }
 
   if (popstate || document.body.classList.contains("is-post")) {
     if (typeof (Storage) == "undefined") {
@@ -934,7 +977,8 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
     }
 
     var scrollPosObj = getLocalStorageScrollPos();
-    var scrollPos = scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0;
+    var scrollPos = scrollToPos ? scrollToPos : (scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0);
+
     // console.log(scrollPos);
     updateItemViewProgressBar(scrollPos);
     if (scrollPos === undefined) {
