@@ -934,7 +934,7 @@ function loadScrollPos(popstate = false, bottomPadding = 580) {
     else {
       scrollPos = scrollPos / 100;
       if (document.body.classList.contains("is-post")) {
-        if (scrollPos < 0.05 || scrollPos > 0.99 || (window.innerHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
+        if (scrollPos < 0.1 || scrollPos > 0.95 || (window.innerHeight > ((document.documentElement.scrollHeight || document.body.scrollHeight) - bottomPadding))) {
           return;
         }
       }
