@@ -75,7 +75,7 @@ function fixDropboxImgSrc() {
   for (var i = 0; i < imgEls.length; i++) {
       var src = imgEls[i].getAttribute("src");
       if (src && src.includes("www.dropbox.com")) {
-          imgEl[i].setAttribute("onerror", "replaceDropboxLink(this)");
+          imgEls[i].setAttribute("onerror", "replaceDropboxLink(this)");
           // console.log(imgEls[i]);
       }
   }
