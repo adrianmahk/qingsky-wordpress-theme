@@ -1056,10 +1056,10 @@ function handleScrollEvent(e, delay = 500) {
   
   var article = document.querySelector(".post-outer");
   if (article) {
-    if(article.getBoundingClientRect().top < 0 && !document.body.classList.contains("collapsed-header")){
+    if(article.getBoundingClientRect().top < 24 && !document.body.classList.contains("collapsed-header")){
       document.body.classList.add("collapsed-header");
     }
-    else if (article.getBoundingClientRect().top > 0 && document.body.classList.contains("collapsed-header")) {
+    else if (article.getBoundingClientRect().top > 24 && document.body.classList.contains("collapsed-header")) {
       document.body.classList.remove("collapsed-header");
     }
   }
