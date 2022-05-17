@@ -547,7 +547,7 @@ function popstateReplacePage(state) {
     const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true, isPopstate: true}, bubbles: true, cancelable: true, composed: false});
     body_page.dispatchEvent(customEvent);
 
-    if (state.scrollPos) {
+    if (state.scrollPos !== undefined) {
       console.log("loaded state.scrollPos: ", state.scrollPos);
       document.body.setAttribute("scrollToPos", state.scrollPos);
       // loadScrollPos(true, state.scrollPos);
@@ -932,7 +932,6 @@ function saveScrollPos(path = undefined, scrollPercent = undefined) {
       }
       // localStorage.setItem("scrollPosJson", JSON.stringify(scrollPosObj));
       localStorage.setItem("scrollPosJsonURIDecode", JSON.stringify(scrollPosObj));
-      replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()});
     }
   }
 }
@@ -963,24 +962,19 @@ function loadScrollPos(popstate = false, scrollToPos) {
     }
   }
 
-  // if (popstate && scrollToPos) {
-  //   console.log("scrollToPos: ", scrollToPos);
-  //   window.scrollTo({
-  //     top: scrollPos,
-  //     behavior: "auto"
-  //   });
-  // }
-
   if (popstate || document.body.classList.contains("is-post")) {
     if (typeof (Storage) == "undefined") {
       return;
     }
 
     var scrollPosObj = getLocalStorageScrollPos();
-    var scrollPos = scrollToPos ? scrollToPos : (scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0);
+    var scrollPos =  scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0;
+    updateItemViewProgressBar(scrollPos);
+    if (scrollToPos) {
+      scrollPos =  scrollToPos;
+    }
 
     // console.log(scrollPos);
-    updateItemViewProgressBar(scrollPos);
     if (scrollPos === undefined) {
       saveScrollPos();
     }
@@ -1039,12 +1033,13 @@ function handleScrollEvent(e, delay = 500) {
   clearTimeout(singleton().scrollTimer);
   var handleScrollPercent = function (){
     var scrollPercent = getScrollPercent();
-    if (!document.body.classList.contains("page-loading")) {
+    if (!document.body.classList.contains("page-loading") && !document.body.classList.contains("error404")) {
       if (document.body.classList.contains("blog")  || (document.body.classList.contains("is-post") && document.body.classList.contains("collapsed-header") && (scrollPercent > 1)) ) {
         document.body.setAttribute("scrollPos", scrollPercent);
         saveScrollPos();
         updateItemViewProgressBar();
       }
+      replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()});
     }
   };
   if (delay > 0) {
