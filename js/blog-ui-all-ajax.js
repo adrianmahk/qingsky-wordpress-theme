@@ -231,8 +231,8 @@ function init() {
       resizeObserver.observe(document.body);
     }
     else {
-      window.addEventListener("pageshow", bodyResizeCallback());
-      window.addEventListener("ajaxload", bodyResizeCallback());
+      window.addEventListener("pageshow", bodyResizeCallback);
+      window.addEventListener("ajaxload", bodyResizeCallback);
     }
     loadScrollPos();
 
@@ -246,7 +246,7 @@ function init() {
   console.log("init");
 }
 
-function bodyResizeCallback() {
+function bodyResizeCallback(delay = 100) {
   clearTimeout(singleton().resizeTimer);
   singleton().resizeTimer = setTimeout(() => {
     if (document.body.getAttribute("page-loaded") == "true") {
@@ -260,7 +260,7 @@ function bodyResizeCallback() {
       document.body.removeAttribute("scrollToPos");
     }
     handleScrollEvent(0);
-  }, 100);
+  }, delay);
 }
 
 function bodyInit() {
