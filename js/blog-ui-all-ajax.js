@@ -251,13 +251,9 @@ function bodyResizeCallback(delay = 100) {
   singleton().resizeTimer = setTimeout(() => {
     if (document.body.getAttribute("page-loaded") == "true") {
       singleton().firstArticle = null;
-      loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
-      // if (!document.body.getAttribute("ajax-popstate")) {
-      //   loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
-      // }
+      loadScrollPos(document.body.getAttribute("ajax-popstate") == "true");
       document.body.removeAttribute("page-loaded");
       document.body.removeAttribute("ajax-popstate");
-      document.body.removeAttribute("scrollToPos");
     }
     handleScrollEvent(0);
   }, delay);
@@ -413,19 +409,6 @@ function removeAllButLast(query) {
   }
 }
 
-function replaceState(stateObj = null) {
-  if (stateObj || !singleton().currentState) {
-    singleton().currentState = stateObj ? stateObj : {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
-  }
-  else {
-    singleton().currentState.scrollPos = getScrollPercent();
-  }
-  singleton().currentState = {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
-  // console.log(singleton().currentState);
-  history.replaceState(singleton().currentState, document.title, window.location);
-
-}
-
 function ajaxLoad(link, removeFirst = false, button = null) {
   if (!button) {
     button = link;
@@ -452,7 +435,7 @@ function ajaxLoad(link, removeFirst = false, button = null) {
         removeAllButLast('[id*=blog-pager-older-link]');
         removeAllButLast('[id=blog-pager]');
 
-        replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value});
+        history.replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value}, document.title, window.location);
         // saveScrollPos();
         loadReadingProgress();
         hidePageLoading();
@@ -524,10 +507,8 @@ function ajaxReplacePage(args = null) {
   
   pageHideCallBack();
   if (push) {
-    console.log("saved state.scrollPos: " + getScrollPercent());
-    history.replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()}, document.title, window.location);
-    singleton().currentState = {page: ajax_page.innerHTML, title: ajax_doc.title, classList: ajax_doc.body.classList.value};
-    history.pushState(singleton().currentState, ajax_doc.title, link);
+    history.replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value}, document.title, window.location);
+    history.pushState( {page: ajax_page.innerHTML, title: ajax_doc.title, classList: ajax_doc.body.classList.value}, ajax_doc.title, link);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
@@ -556,10 +537,6 @@ function popstateReplacePage(state) {
     const customEvent = new CustomEvent("ajaxload", {detail: {isAjax: true, isPopstate: true}, bubbles: true, cancelable: true, composed: false});
     body_page.dispatchEvent(customEvent);
 
-    if (state.scrollPos !== undefined) {
-      // document.body.setAttribute("scrollToPos", state.scrollPos);
-      // loadScrollPos(true, state.scrollPos);
-    }
     hidePageLoading();
     return true;
   }
@@ -1050,10 +1027,8 @@ function handleScrollEvent(e, delay = 500) {
         saveScrollPos();
         updateItemViewProgressBar();
       }
-      // replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()});
     }
   };
-  // replaceState();
   if (delay > 0) {
     singleton().scrollTimer = setTimeout(handleScrollPercent, delay);
   }
