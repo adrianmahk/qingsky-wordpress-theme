@@ -3224,6 +3224,7 @@ body.page-loading-end .loading-bar {
   background: #30a080 !important;*/
   pointer-events: none;
   opacity: 70%;
+  z-index: 1;
   }
   body.item-view .progress-bar {
     top: 0;
