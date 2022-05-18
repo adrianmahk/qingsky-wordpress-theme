@@ -194,9 +194,6 @@ function init() {
     }, false);
     
     window.addEventListener("scroll", handleScrollEvent);
-    // if ('scrollRestoration' in history) {
-      // history.scrollRestoration = 'manual';
-    // }
     window.addEventListener("popstate", function (e) {
       if (e.state) {
         // ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
@@ -226,21 +223,17 @@ function init() {
     });
     loadIndie();
     // document.body.setAttribute("page-loaded", true);
-    // const resizeObserver = new ResizeObserver(entries => {
-    //   // console.log('Body height changed:', entries[0].target.clientHeight);
-    //   clearTimeout(singleton().resizeTimer);
-    //   singleton().resizeTimer = setTimeout(() => {
-    //     if (document.body.getAttribute("page-loaded") == "true") {
-    //       singleton().firstArticle = null;
-    //       loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
-    //       document.body.removeAttribute("page-loaded");
-    //       document.body.removeAttribute("ajax-popstate");
-    //       document.body.removeAttribute("scrollToPos");
-    //     }
-    //     handleScrollEvent(0);
-    //   }, 100);
-    // });
-    // resizeObserver.observe(document.body);
+
+    if (ResizeObserver) {
+      const resizeObserver = new ResizeObserver(entries => {
+        bodyResizeCallback();
+      });
+      resizeObserver.observe(document.body);
+    }
+    else {
+      window.addEventListener("pageshow", bodyResizeCallback());
+      window.addEventListener("ajaxload", bodyResizeCallback());
+    }
     loadScrollPos();
 
   
@@ -252,6 +245,21 @@ function init() {
   }
   console.log("init");
 }
+
+function bodyResizeCallback() {
+  clearTimeout(singleton().resizeTimer);
+  singleton().resizeTimer = setTimeout(() => {
+    if (document.body.getAttribute("page-loaded") == "true") {
+      singleton().firstArticle = null;
+      loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
+      document.body.removeAttribute("page-loaded");
+      document.body.removeAttribute("ajax-popstate");
+      document.body.removeAttribute("scrollToPos");
+    }
+    handleScrollEvent(0);
+  }, 100);
+}
+
 function bodyInit() {
   darkModeInit();
   changeFontSizeInit();
@@ -414,12 +422,12 @@ function removeAllButLast(query) {
 }
 
 function replaceState(stateObj = null) {
-  // if (stateObj || !singleton().currentState) {
-  //   singleton().currentState = stateObj ? stateObj : {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
-  // }
-  // else {
-  //   singleton().currentState.scrollPos = getScrollPercent();
-  // }
+  if (stateObj || !singleton().currentState) {
+    singleton().currentState = stateObj ? stateObj : {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
+  }
+  else {
+    singleton().currentState.scrollPos = getScrollPercent();
+  }
   singleton().currentState = {page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()};
   // console.log(singleton().currentState);
   history.replaceState(singleton().currentState, document.title, window.location);
@@ -525,8 +533,9 @@ function ajaxReplacePage(args = null) {
   pageHideCallBack();
   if (push) {
     console.log("saved state.scrollPos: " + getScrollPercent());
-    replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()}, document.title, window.location);
-    history.pushState({page: ajax_page.innerHTML, title: ajax_doc.title, classList: ajax_doc.body.classList.value}, ajax_doc.title, link);
+    history.replaceState({page: body_page.innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()}, document.title, window.location);
+    singleton().currentState = {page: ajax_page.innerHTML, title: ajax_doc.title, classList: ajax_doc.body.classList.value};
+    history.pushState(singleton().currentState, ajax_doc.title, link);
   }
   else {
     document.body.setAttribute("ajax-popstate", true);
@@ -544,6 +553,7 @@ function ajaxReplacePage(args = null) {
 
 function popstateReplacePage(state) {
   if (state && state.page && state.classList) {
+    console.log("popstatereplacepage");
     showPageLoading(true);
     const body_page = document.getElementById("page");
     body_page.innerHTML = state.page;
@@ -555,7 +565,6 @@ function popstateReplacePage(state) {
     body_page.dispatchEvent(customEvent);
 
     if (state.scrollPos !== undefined) {
-      console.log("loaded state.scrollPos: ", state.scrollPos);
       document.body.setAttribute("scrollToPos", state.scrollPos);
       // loadScrollPos(true, state.scrollPos);
     }
