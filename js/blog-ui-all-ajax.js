@@ -224,7 +224,7 @@ function init() {
     loadIndie();
     // document.body.setAttribute("page-loaded", true);
 
-    if (ResizeObserver) {
+    if (typeof(ResizeObserver) == "function") {
       const resizeObserver = new ResizeObserver(entries => {
         bodyResizeCallback();
       });
