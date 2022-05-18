@@ -892,9 +892,7 @@ function getLocalStorageScrollPos(key = "scrollPosJsonURIDecode") {
 }
 
 function saveScrollPos(path = undefined, scrollPercent = undefined) {
-  // if (!document.body.classList.contains("error404", "ajax-loading", "page-loading")) {
   if (!document.body.classList.contains("error404") && !document.body.classList.contains("ajax-loading") && !document.body.classList.contains("page-loading")) {
-  // if (!document.body.classList.value.match(/error404|ajax-loading|page-loading/)) {
     if (typeof (Storage) !== "undefined") {
       var scrollPosObj = getLocalStorageScrollPos();
       if (!path) {
@@ -954,8 +952,8 @@ function loadScrollPos(popstate = false, scrollToPos) {
     
     var scrollPosObj = getLocalStorageScrollPos();
     var scrollPos =  scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0;
+    updateItemViewProgressBar(scrollPos);
     if (popstate) {
-      updateItemViewProgressBar(scrollPos);
       return;
     }
     if (scrollToPos) {
