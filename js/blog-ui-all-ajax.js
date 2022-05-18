@@ -198,11 +198,9 @@ function init() {
       // history.scrollRestoration = 'manual';
     // }
     window.addEventListener("popstate", function (e) {
-      console.log("popstate");
       if (e.state) {
         // ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
         if (!popstateReplacePage(e.state)) {
-          // console.log("ready to ajax");
           ajaxLoadHTML(this.window.location, ajaxReplacePage, {push: false, state: e.state});
         }
       }
@@ -228,20 +226,21 @@ function init() {
     });
     loadIndie();
     // document.body.setAttribute("page-loaded", true);
-    const resizeObserver = new ResizeObserver(entries => {
-      // console.log('Body height changed:', entries[0].target.clientHeight);
-      clearTimeout(singleton().resizeTimer);
-      singleton().resizeTimer = setTimeout(() => {
-        if (document.body.getAttribute("page-loaded") == "true") {
-          loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
-          document.body.removeAttribute("page-loaded");
-          document.body.removeAttribute("ajax-popstate");
-          document.body.removeAttribute("scrollToPos");
-        }
-        handleScrollEvent(0);
-      }, 100);
-    });
-    resizeObserver.observe(document.body);
+    // const resizeObserver = new ResizeObserver(entries => {
+    //   // console.log('Body height changed:', entries[0].target.clientHeight);
+    //   clearTimeout(singleton().resizeTimer);
+    //   singleton().resizeTimer = setTimeout(() => {
+    //     if (document.body.getAttribute("page-loaded") == "true") {
+    //       singleton().firstArticle = null;
+    //       loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
+    //       document.body.removeAttribute("page-loaded");
+    //       document.body.removeAttribute("ajax-popstate");
+    //       document.body.removeAttribute("scrollToPos");
+    //     }
+    //     handleScrollEvent(0);
+    //   }, 100);
+    // });
+    // resizeObserver.observe(document.body);
     loadScrollPos();
 
   
@@ -281,15 +280,23 @@ function pageShowCallBack (event, isAjax = false, isPopstate = false) {
   if (isPopstate) {
     document.body.setAttribute("ajax-popstate", true);
   }
+
+  setTimeout(() => {
+    if (document.body.getAttribute("page-loaded") == "true") {
+      // singleton().firstArticle = null;
+      loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
+      document.body.removeAttribute("page-loaded");
+      document.body.removeAttribute("ajax-popstate");
+      document.body.removeAttribute("scrollToPos");
+    }
+    handleScrollEvent(0);
+  }, 10);
 }
 
 function pageHideCallBack (isAjax = true) {
-    if (document.body.className.match("blog")) {
-      saveMain();
-    } 
-    else {
-      setFlag();
-    }
+  clearTimeout(singleton().scrollTimer);
+  clearTimeout(singleton().resizeTimer);
+  clearTimeout(singleton().ajaxTimer);
 }
 
 function detectmob() {
@@ -1039,9 +1046,10 @@ function handleScrollEvent(e, delay = 500) {
         saveScrollPos();
         updateItemViewProgressBar();
       }
-      replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()});
+      // replaceState({page: document.getElementById("page").innerHTML, title: document.title, classList: document.body.classList.value, scrollPos: getScrollPercent()});
     }
   };
+  // replaceState();
   if (delay > 0) {
     singleton().scrollTimer = setTimeout(handleScrollPercent, delay);
   }
