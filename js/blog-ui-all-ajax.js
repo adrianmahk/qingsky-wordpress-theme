@@ -252,6 +252,9 @@ function bodyResizeCallback() {
     if (document.body.getAttribute("page-loaded") == "true") {
       singleton().firstArticle = null;
       loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
+      // if (!document.body.getAttribute("ajax-popstate")) {
+      //   loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
+      // }
       document.body.removeAttribute("page-loaded");
       document.body.removeAttribute("ajax-popstate");
       document.body.removeAttribute("scrollToPos");
@@ -288,17 +291,6 @@ function pageShowCallBack (event, isAjax = false, isPopstate = false) {
   if (isPopstate) {
     document.body.setAttribute("ajax-popstate", true);
   }
-
-  setTimeout(() => {
-    if (document.body.getAttribute("page-loaded") == "true") {
-      // singleton().firstArticle = null;
-      loadScrollPos(document.body.getAttribute("ajax-popstate") == "true", document.body.getAttribute("scrollToPos"));
-      document.body.removeAttribute("page-loaded");
-      document.body.removeAttribute("ajax-popstate");
-      document.body.removeAttribute("scrollToPos");
-    }
-    handleScrollEvent(0);
-  }, 10);
 }
 
 function pageHideCallBack (isAjax = true) {
@@ -565,7 +557,7 @@ function popstateReplacePage(state) {
     body_page.dispatchEvent(customEvent);
 
     if (state.scrollPos !== undefined) {
-      document.body.setAttribute("scrollToPos", state.scrollPos);
+      // document.body.setAttribute("scrollToPos", state.scrollPos);
       // loadScrollPos(true, state.scrollPos);
     }
     hidePageLoading();
@@ -978,14 +970,17 @@ function loadScrollPos(popstate = false, scrollToPos) {
     }
   }
 
-  if (popstate || document.body.classList.contains("is-post")) {
+  if (document.body.classList.contains("is-post")) {
     if (typeof (Storage) == "undefined") {
       return;
     }
-
+    
     var scrollPosObj = getLocalStorageScrollPos();
     var scrollPos =  scrollPosObj ? scrollPosObj[decodeURI(window.location.pathname)] : 0;
-    updateItemViewProgressBar(scrollPos);
+    if (popstate) {
+      updateItemViewProgressBar(scrollPos);
+      return;
+    }
     if (scrollToPos) {
       scrollPos =  scrollToPos;
     }
