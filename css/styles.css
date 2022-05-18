@@ -61,6 +61,8 @@ body.page-loading.ajax-loading #page {
 }
 
 body.popup-message-showing {
+    position: absolute;
+    position: -webkit-sticky;
     position: sticky;
     overflow: hidden;
 }

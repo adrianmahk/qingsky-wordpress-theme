@@ -1440,6 +1440,8 @@ transform: none !important;
 .top-bar-container {
   width: 100%;
 z-index: 51;
+position: absolute;
+position: -webkit-sticky;
 position: sticky;
 top: 50px;
 }
