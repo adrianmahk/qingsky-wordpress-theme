@@ -191,6 +191,11 @@ body.item-view .blog-posts.hfeed.container{
 margin: 0 max(8px, 2vw);
 }
 }
+@media screen and (min-width: 887px) and (max-width: 906px) { /*calc(870px + 16px)){*/
+  body.item-view .blog-posts.hfeed.container{
+  margin: 0 min(2vw, max(0px, calc(906px - 100vw)));
+  }
+}
 .post {
 padding-left: 4%;
 padding-right: 4%;
@@ -1820,6 +1825,12 @@ body.item-view .widget.BlogSearch .widget-content {
 margin: 0 max(8px, 2vw);
 width: calc(100% - max(16px, 4vw));
 }
+}
+@media screen and (min-width: 887px) and (max-width: 906px) { /*calc(870px + 16px)){*/
+  body.item-view .widget.BlogSearch .widget-content {
+  margin: 0 min(2vw, max(0px, calc(906px - 100vw)));
+  width: calc(100% - min(4vw, max(0px, calc((906px - 100vw) * 2))));
+  }
 }
 body.home-view .widget.BlogSearch .widget-content {
 border-radius: 12px;
