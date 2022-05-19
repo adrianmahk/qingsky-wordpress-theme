@@ -242,8 +242,8 @@ function init() {
     //Obselete
     getStars();
     getStarsYear();
+    console.log("init");
   }
-  console.log("init");
 }
 
 function bodyResizeCallback(delay = 100) {
