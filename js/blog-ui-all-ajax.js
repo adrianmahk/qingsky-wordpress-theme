@@ -526,7 +526,7 @@ function ajaxReplacePage(args = null) {
 
 function popstateReplacePage(state) {
   if (state && state.page && state.classList) {
-    console.log("popstatereplacepage");
+    // console.log("popstatereplacepage");
     showPageLoading(true);
     const body_page = document.getElementById("page");
     body_page.innerHTML = state.page;
