@@ -40,7 +40,8 @@ if ($_GET['ajax']) {
 		}
 		function setupServiceWorker() {
 			if (!document.body.classList.contains('error404')) {
-				if ('serviceWorker' in navigator && navigator.serviceWorker.controller === null) {
+				// if ('serviceWorker' in navigator && navigator.serviceWorker.controller === null) {
+				if ('serviceWorker' in navigator) {
 					navigator.serviceWorker.register("<?php echo  '/sw.js?t=' . get_last_update();?>", {scope: "<?php echo '/' ?>"}).then(function(registration) {
 						console.log('Service worker registration succeeded:', registration);
 					}, /*catch*/ function(error) {
@@ -49,7 +50,8 @@ if ($_GET['ajax']) {
 				}
 			}
 		}
-		ready(setupServiceWorker);
+		window.addEventListener("load", setupServiceWorker);
+		// ready(setupServiceWorker);
 		// setupServiceWorker();
 	</script>
 	<style type="text/css">
