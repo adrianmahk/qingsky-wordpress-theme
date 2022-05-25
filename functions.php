@@ -833,6 +833,12 @@ function get_stats($atts, $content = null) {
 	  }
 }
 
+add_filter( 'auth_cookie_expiration', 'keep_me_logged_in_for_1_year' );
+function keep_me_logged_in_for_1_year( $expirein ) {
+    return YEAR_IN_SECONDS; // 1 year in seconds
+}
+
+
 add_shortcode('user_activation_key', 'user_activation_key2');
 function user_activation_key2($atts, $content = null) {
     extract(shortcode_atts(array(
