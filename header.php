@@ -72,6 +72,7 @@ if ($_GET['ajax']) {
 	</style>
 	<link href="<?php  echo get_template_directory_uri() . '/css/blog.css?t=' . filemtime($themeLocalPath . '/css/blog.css') ?>" rel="stylesheet">
 	<link href="<?php  echo get_template_directory_uri() . '/css/styles.css?t=' . filemtime($themeLocalPath . '/css/styles.css') ?>" rel="stylesheet">
+	<link href="<?php  echo get_template_directory_uri() . '/css/popupmsg.css?t=' . filemtime($themeLocalPath . '/css/popupmsg.css') ?>" rel="stylesheet">
 	
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
 	<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>">
