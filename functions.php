@@ -1453,7 +1453,7 @@ function blog_pager($show_subscribe_msg = true) {
 		$month = get_query_var("monthnum");
 		if (!$month) {
 			$year = $year - 1;
-			printf($button, 'ajax-load', '/' . $year , $svg . ' 更多文章');
+			printf($button, 'ajax-load', '/' . $year . '/' , $svg . ' 更多文章');
 		}
 		else {
 			switch ($month) {
@@ -1478,7 +1478,7 @@ function blog_pager($show_subscribe_msg = true) {
 					$month = '' . $month - 1;
 					break;
 			}
-			printf($button, 'ajax-load', '/' . $year . '/' . (string) $month, $svg . ' 更多文章');
+			printf($button, 'ajax-load', '/' . $year . '/' . (string) $month . '/', $svg . ' 更多文章');
 		}
 	}
 	else {
