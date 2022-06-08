@@ -32,25 +32,27 @@ get_header(); ?>
 		curl_close($ch); 
 		
 		if ($httpCode == 200):
-		echo '<br />註：本站在 2022 年 3 月搬家，搬運仍在進行中，鏈結可能失效，這裡可能有你想找的東西：<br />';
-		preg_match('/(?<=<title>)(.|\n)*?(?=<\/title>)/i', $apiResponse, $match);
-		$title = $match[0];
-		if ($title):
-			global $wp;
-			$url = urldecode(home_url($wp->request));
-			preg_match('/^.{1,}(?=((?:\/).{1,}(.html$)))/i', $url, $match);
-			$real_url = $match[0] . '/' . str_replace(' ', '-',$title);
+			echo '<br />註：本站在 2022 年 3 月搬家，搬運仍在進行中，鏈結可能失效，這裡可能有你想找的東西：<br />';
+			preg_match('/(?<=<title>)(.|\n)*?(?=<\/title>)/i', $apiResponse, $match);
+			$title = $match[0];
+			if ($title):
+				global $wp;
+				$url = urldecode(home_url($wp->request));
+				preg_match('/^.{1,}(?=((?:\/).{1,}(.html$)))/i', $url, $match);
+				$real_url = $match[0] . '/' . str_replace(' ', '-',$title);
 
-			echo '<a href="' . $real_url . '">' . $real_url . '</a><br />' ;
-		
-		// echo '（此為本站的 Blogger 舊版本的鏈結）';
+				echo '<a href="' . $real_url . '">' . $real_url . '</a><br />' ;
+			
+			// echo '（此為本站的 Blogger 舊版本的鏈結）';
 	?>
 		<script>
 		</script>
-<?php	endif; 
+<?php
+			endif;
+		endif;
 	else :?>
 	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6259217392436204"
-     crossorigin="anonymous"></script>
+	crossorigin="anonymous"></script>
 	<!-- 404 -->
 	<ins class="adsbygoogle"
 		style="display:block"
@@ -62,9 +64,8 @@ get_header(); ?>
 		(adsbygoogle = window.adsbygoogle || []).push({});
 	</script>
 	<br />
-<cm>輕鬆一下</cm>
-<?php endif;?>
-<?php endif;?>
+	<cm>輕鬆一下</cm>
+	<?php endif;?>
 
 
 </div>
