@@ -49,22 +49,37 @@ get_header(); ?>
 		</script>
 <?php
 			endif;
-		endif;
+			else :?>
+				<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6259217392436204"
+				crossorigin="anonymous"></script>
+				<!-- 404 -->
+				<ins class="adsbygoogle"
+					style="display:block"
+					data-ad-client="ca-pub-6259217392436204"
+					data-ad-slot="6196668685"
+					data-ad-format="auto"
+					data-full-width-responsive="true"></ins>
+				<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+				<br />
+				<cm>輕鬆一下</cm>
+<?php		endif;
 	else :?>
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6259217392436204"
-	crossorigin="anonymous"></script>
-	<!-- 404 -->
-	<ins class="adsbygoogle"
-		style="display:block"
-		data-ad-client="ca-pub-6259217392436204"
-		data-ad-slot="6196668685"
-		data-ad-format="auto"
-		data-full-width-responsive="true"></ins>
-	<script>
-		(adsbygoogle = window.adsbygoogle || []).push({});
-	</script>
-	<br />
-	<cm>輕鬆一下</cm>
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6259217392436204"
+		crossorigin="anonymous"></script>
+		<!-- 404 -->
+		<ins class="adsbygoogle"
+			style="display:block"
+			data-ad-client="ca-pub-6259217392436204"
+			data-ad-slot="6196668685"
+			data-ad-format="auto"
+			data-full-width-responsive="true"></ins>
+		<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+		<br />
+		<cm>輕鬆一下</cm>
 	<?php endif;?>
 
 
