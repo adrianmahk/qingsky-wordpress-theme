@@ -23,14 +23,16 @@ get_header(); ?>
 找不到相符的結果
 <?php
 	if (strpos($_SERVER['REQUEST_URI'], '.html') > 0) :
-		echo '<br />註：本站在 2022 年 3 月搬家，搬運仍在進行中，鏈結可能失效，這裡可能有你想找的東西：<br />';
 		
 		$url = 'https://blogger.qingsky.hk' . $_SERVER['REQUEST_URI'];
 		$ch = curl_init($url); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 		$apiResponse = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch); 
 		
+		if ($httpCode == 200):
+		echo '<br />註：本站在 2022 年 3 月搬家，搬運仍在進行中，鏈結可能失效，這裡可能有你想找的東西：<br />';
 		preg_match('/(?<=<title>)(.|\n)*?(?=<\/title>)/i', $apiResponse, $match);
 		$title = $match[0];
 		if ($title):
@@ -61,7 +63,8 @@ get_header(); ?>
 	</script>
 	<br />
 <cm>輕鬆一下</cm>
-<?php endif?>
+<?php endif;?>
+<?php endif;?>
 
 
 </div>
