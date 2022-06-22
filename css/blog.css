@@ -3158,6 +3158,24 @@ font-size: 16px;
 body.f17px .post-body.entry-content, body.f18px .post-body.entry-content {
 font-size: 17px;
 }
+@media screen and (min-width: 870px) {
+  body.f12px .post-body.entry-content, body.f13px .post-body.entry-content {
+    font-size: calc(13px + min(0.05vw, 1px));
+    }
+    .post-body.entry-content, body.f14px .post-body.entry-content {
+    font-size: calc(14px + min(0.05vw, 1px));
+    }
+    body.f15px .post-body.entry-content {
+    font-size: calc(15px + min(0.05vw, 1px));
+    }
+    body.f16px .post-body.entry-content {
+    font-size: calc(16px + min(0.05vw, 1px));
+    }
+    body.f17px .post-body.entry-content, body.f18px .post-body.entry-content {
+    font-size: calc(17px + min(0.05vw, 1px));
+    }
+}
+
 /* Adsense */
 .widget.AdSense {
 text-align: center;
