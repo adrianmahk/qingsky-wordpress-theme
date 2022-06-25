@@ -3143,35 +3143,35 @@ body.dark-mode .dark_mode_overlay {
 opacity: 1;
 }
 /* Font Size */
-body.f12px .post-body.entry-content, body.f13px .post-body.entry-content {
+body.item-view.f12px .post-body.entry-content, body.item-view.f13px .post-body.entry-content {
 font-size: 13px;
 }
-body.f14px .post-body.entry-content {
+body.item-view.f14px .post-body.entry-content {
 font-size: 14px;
 }
-body.f15px .post-body.entry-content {
+body.item-view.f15px .post-body.entry-content {
 font-size: 15px;
 }
-body.f16px .post-body.entry-content {
+body.item-view.f16px .post-body.entry-content {
 font-size: 16px;
 }
-body.f17px .post-body.entry-content, body.f18px .post-body.entry-content {
+body.item-view.f17px .post-body.entry-content, body.item-view.f18px .post-body.entry-content {
 font-size: 17px;
 }
 @media screen and (min-width: 870px) {
-  body.f12px .post-body.entry-content, body.f13px .post-body.entry-content {
+  body.item-view.f12px .post-body.entry-content, body.item-view.f13px .post-body.entry-content {
       font-size: min(calc(13px + (100vw - 870px) * 0.001), 14px);
     }
-    .post-body.entry-content, body.f14px .post-body.entry-content {
+    body.item-view .post-body.entry-content, body.item-view.f14px .post-body.entry-content {
     font-size: min(calc(14px + (100vw - 870px) * 0.001), 15px);
     }
-    body.f15px .post-body.entry-content {
+    body.item-view.f15px .post-body.entry-content {
       font-size: min(calc(15px + (100vw - 870px) * 0.001), 16px);
     }
-    body.f16px .post-body.entry-content {
+    body.item-view.f16px .post-body.entry-content {
       font-size: min(calc(16px + (100vw - 870px) * 0.001), 17px);
     }
-    body.f17px .post-body.entry-content, body.f18px .post-body.entry-content {
+    body.item-view.f17px .post-body.entry-content, body.item-view.f18px .post-body.entry-content {
       font-size: min(calc(17px + (100vw - 870px) * 0.001), 18px);
     }
 }
