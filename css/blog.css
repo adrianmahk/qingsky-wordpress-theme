@@ -3160,19 +3160,19 @@ font-size: 17px;
 }
 @media screen and (min-width: 870px) {
   body.f12px .post-body.entry-content, body.f13px .post-body.entry-content {
-    font-size: calc(13px + min(0.05vw, 1px));
+      font-size: min(calc(13px + (100vw - 870px) * 0.001), 14px);
     }
     .post-body.entry-content, body.f14px .post-body.entry-content {
-    font-size: calc(14px + min(0.05vw, 1px));
+    font-size: min(calc(14px + (100vw - 870px) * 0.001), 15px);
     }
     body.f15px .post-body.entry-content {
-    font-size: calc(15px + min(0.05vw, 1px));
+      font-size: min(calc(15px + (100vw - 870px) * 0.001), 16px);
     }
     body.f16px .post-body.entry-content {
-    font-size: calc(16px + min(0.05vw, 1px));
+      font-size: min(calc(16px + (100vw - 870px) * 0.001), 17px);
     }
     body.f17px .post-body.entry-content, body.f18px .post-body.entry-content {
-    font-size: calc(17px + min(0.05vw, 1px));
+      font-size: min(calc(17px + (100vw - 870px) * 0.001), 18px);
     }
 }
 
