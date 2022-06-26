@@ -3161,7 +3161,7 @@ font-size: 17px;
 @media screen and (min-width: 870px) {
   /* body.item-view .post-body.entry-content, body.item-view.f14px .post-body.entry-content { */
   body.item-view .post-body.entry-content {
-  font-size: min(calc(14px + (100vw - 870px) * 0.001), 15px);
+  /* font-size: min(calc(14px + (100vw - 870px) * 0.001), 15px); */
   font-size: 1.01em;
   }
   /* body.item-view.f12px .post-body.entry-content, body.item-view.f13px .post-body.entry-content {
