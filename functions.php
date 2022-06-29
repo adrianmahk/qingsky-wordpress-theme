@@ -784,8 +784,8 @@ function getIpData($userIP) {
 	}else{ 
 	} 
 }
-
-function purgeViewCountData() {
+add_action('purge_viewcounts_data', 'purge_viewcounts_data');
+function purge_viewcounts_data() {
 	global $wpdb;
 	$truncate_sql = "TRUNCATE `wp_viewcounts`";
 	$wpdb->query('START TRANSACTION');
