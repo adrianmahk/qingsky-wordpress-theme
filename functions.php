@@ -730,7 +730,7 @@ function update_view_count() {
 		$view_count_date_sql = "INSERT INTO `wp_viewcounts_date` (`date`, `update_time`, `view_count`) VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
 		
 		$view_count_post_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts_post` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `is_valid` BOOLEAN NOT NULL DEFAULT TRUE, `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`)) ENGINE = InnoDB";
-		$view_count_post_sql = "INSERT INTO `wp_viewcounts_post` (`url`, `date`, `update_time`, `view_count`, `is_valid`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request))."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, " . (is_404() ? 0 : 1)  . ", " . (is_singular() ?  get_the_ID() : 0) . ", '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+		$view_count_post_sql = "INSERT INTO `wp_viewcounts_post` (`url`, `date`, `update_time`, `view_count`, `is_valid`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request))."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, " . (is_404() ? 0 : 1)  . ", " . (is_singular() ?  get_the_ID() : 0) . ", '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `date` = CURRENT_TIMESTAMP, `update_time` = CURRENT_TIMESTAMP";
 		
 		
 		// Detailed version (will be purged by cron)
