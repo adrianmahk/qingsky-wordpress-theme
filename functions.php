@@ -787,13 +787,22 @@ function getIpData($userIP) {
 add_action('purge_viewcounts_data', 'purge_viewcounts_data');
 function purge_viewcounts_data() {
 	global $wpdb;
+	$dev = (strpos($_SERVER['HTTP_HOST'], 'dev') === false) ? '' : '-dev';
 	$truncate_sql = "TRUNCATE `wp_viewcounts`";
-	$wpdb->query('START TRANSACTION');
+
 	$result = $wpdb->get_results('SELECT * FROM `wp_viewcounts`');
+	$wpdb->query('START TRANSACTION');
 	$wpdb->query($truncate_sql);
-	$wpdb->query("TRUNCATE `qingnovels-dev`.`viewcounts`");
 	$wpdb->query('COMMIT');
 	error_log('Purged '. sizeof($result). ' lines of data from `'. $wpdb->dbname .'`.`wp_viewcounts`.');
+	
+
+	$qn_db = 'qingnovels'. $dev;
+	$result_qn = $wpdb->get_results('SELECT * FROM `' . $qn_db . '`.`viewcounts`');
+	$wpdb->query('START TRANSACTION');
+	$wpdb->query("TRUNCATE `" . $qn_db . "`.`viewcounts`");
+	$wpdb->query('COMMIT');
+	error_log('Purged '. sizeof($result_qn). ' lines of data from `'. $qn_db .'`.`wp_viewcounts`.');
 }
 
 add_shortcode('get_stats', 'get_stats');
