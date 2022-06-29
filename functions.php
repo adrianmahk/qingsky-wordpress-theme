@@ -718,30 +718,47 @@ function update_view_count() {
 				return;
 			}
 		}
+		if (strpos($_SERVER['HTTP_REFERER'], 'sw.js') > 0) {
+			return;
+		}
 
 		global $wp;
 		global $wpdb;
-		// $view_count_table_sql = "CREATE TABLE `wordpress`.`wp_posts_viewcount` (`post_id` BIGINT(20) NOT NULL , `post_title` TEXT NULL , `post_url` VARCHAR(255) NOT NULL , `view_count` INT(11) NOT NULL DEFAULT '0' , PRIMARY KEY (`post_id`)) ENGINE = InnoDB;";
-		$view_count_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `is_valid` BOOLEAN NOT NULL DEFAULT TRUE, `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
-		$view_count_sql = "INSERT INTO `wp_viewcounts` (`url`, `date`, `update_time`, `view_count`, `is_valid`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request)) ."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, " . (is_404() ? 0 : 1)  . ", " . (is_singular() ?  get_the_ID() : 0) . ", '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
-		// $view_count_sql = "INSERT INTO `wp_posts_viewcount` (`post_id`, `post_title`, `post_url`, `view_count`) VALUES(" . get_the_ID() . ", '" . get_the_title() . "', '" . get_permalink() . "', 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1";
-		$user_region = getIpData($_SERVER['REMOTE_ADDR']);
-		$user_region_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts_region` ( `region` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `view_count` INT(11) NOT NULL , PRIMARY KEY (`region`, `date`)) ENGINE = InnoDB;";
-		$user_region_sql = "INSERT INTO `wp_viewcounts_region` (`region`, `date`, `update_time`, `view_count`) VALUES('". $user_region . "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
 		
-		// echo $user_region_sql;exit();
+		// Split table
+		$view_count_date_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts_date` ( `view_count` INT(11) NOT NULL DEFAULT '0', `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`date`)) ENGINE = InnoDB";
+		$view_count_date_sql = "INSERT INTO `wp_viewcounts_date` (`date`, `update_time`, `view_count`) VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+		
+		$view_count_post_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts_post` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `is_valid` BOOLEAN NOT NULL DEFAULT TRUE, `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`)) ENGINE = InnoDB";
+		$view_count_post_sql = "INSERT INTO `wp_viewcounts_post` (`url`, `date`, `update_time`, `view_count`, `is_valid`, `post_id`, `title`) VALUES('". urldecode(home_url($wp->request))."', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, " . (is_404() ? 0 : 1)  . ", " . (is_singular() ?  get_the_ID() : 0) . ", '" . html_entity_decode(wp_get_document_title()) . "') ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+		
+		
+		// Detailed version (will be purged by cron)
+		$view_count_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts` ( `title` TEXT NULL, `post_id` BIGINT(20) NULL, `view_count` INT(11) NOT NULL DEFAULT '0', `is_valid` BOOLEAN NOT NULL DEFAULT TRUE, `url` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP  , PRIMARY KEY (`url`, `date`)) ENGINE = InnoDB";
+		$view_count_sql = "INSERT INTO `wp_posts_viewcount` (`post_id`, `post_title`, `post_url`, `view_count`) VALUES(" . get_the_ID() . ", '" . get_the_title() . "', '" . get_permalink() . "', 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1";
+
+		// User region (not working for now)
+		// $user_region = getIpData($_SERVER['REMOTE_ADDR']);
+		// $user_region_table_sql = "CREATE TABLE IF NOT EXISTS `wordpress`.`wp_viewcounts_region` ( `region` VARCHAR(255) NOT NULL , `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP , `update_time` TIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `view_count` INT(11) NOT NULL , PRIMARY KEY (`region`, `date`)) ENGINE = InnoDB;";
+		// $user_region_sql = "INSERT INTO `wp_viewcounts_region` (`region`, `date`, `update_time`, `view_count`) VALUES('". $user_region . "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1) ON DUPLICATE KEY UPDATE `view_count` = `view_count` + 1, `update_time` = CURRENT_TIMESTAMP";
+
 		$wpdb->query( "START TRANSACTION" );
+		$wpdb->query($view_count_date_table_sql);
+		$wpdb->query($view_count_date_sql);
+		$wpdb->query($view_count_post_table_sql);
+		$wpdb->query($view_count_post_sql);
+		
 		$wpdb->query($view_count_table_sql);
 		$wpdb->query($view_count_sql);
-		$wpdb->query($user_region_table_sql);
-		$wpdb->query($user_region_sql);
+
+		// $wpdb->query($user_region_table_sql);
+		// $wpdb->query($user_region_sql);
 		
 		$wpdb->query( "COMMIT" );
 	}
 }
 
 function getIpData($userIP) {
-	
 	// API end URL 
 	$apiURL = 'https://freegeoip.app/json/'.$userIP; 
 	
@@ -765,6 +782,16 @@ function getIpData($userIP) {
 		return $ipData['country_name'];
 	}else{ 
 	} 
+}
+
+function purgeViewCountData() {
+	global $wpdb;
+	$truncate_sql = "TRUNCATE `wp_viewcounts`";
+	$wpdb->query('START TRANSACTION');
+	$result = $wpdb->get_results('SELECT * FROM `wp_viewcounts`');
+	$wpdb->query($truncate_sql);
+	$wpdb->query('COMMIT');
+	error_log('Purged '. sizeof($result). ' lines of data from `wp_viewcounts`.');
 }
 
 add_shortcode('get_stats', 'get_stats');
