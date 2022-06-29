@@ -792,7 +792,7 @@ function purge_viewcounts_data() {
 	$result = $wpdb->get_results('SELECT * FROM `wp_viewcounts`');
 	$wpdb->query($truncate_sql);
 	$wpdb->query('COMMIT');
-	error_log('Purged '. sizeof($result). ' lines of data from `wp_viewcounts`.');
+	error_log('Purged '. sizeof($result). ' lines of data from `'. $wpdb->dbname .'`.`wp_viewcounts`.');
 }
 
 add_shortcode('get_stats', 'get_stats');
