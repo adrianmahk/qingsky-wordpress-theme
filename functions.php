@@ -788,19 +788,19 @@ add_action('purge_viewcounts_data', 'purge_viewcounts_data');
 function purge_viewcounts_data() {
 	global $wpdb;
 	$dev = (strpos($_SERVER['HTTP_HOST'], 'dev') === false) ? '' : '-dev';
-	$truncate_sql = "TRUNCATE `wp_viewcounts`";
 
-	$result = $wpdb->get_results('SELECT * FROM `wp_viewcounts`');
+	$result = $wpdb->get_results('SELECT * FROM `wp_viewcounts` WHERE `date` < SUBDATE(current_date, 7);');
 	$wpdb->query('START TRANSACTION');
-	$wpdb->query($truncate_sql);
+	$wpdb->query('DELETE FROM `wp_viewcounts` WHERE `date` < SUBDATE(current_date, 7);');
 	$wpdb->query('COMMIT');
 	error_log('Purged '. sizeof($result). ' lines of data from `'. $wpdb->dbname .'`.`wp_viewcounts`.');
 	
 
 	$qn_db = 'qingnovels'. $dev;
-	$result_qn = $wpdb->get_results('SELECT * FROM `' . $qn_db . '`.`viewcounts`');
+	$result_qn = $wpdb->get_results('SELECT * FROM `' . $qn_db . '`.`viewcounts` WHERE `date` < SUBDATE(current_date, 7);');
 	$wpdb->query('START TRANSACTION');
-	$wpdb->query("TRUNCATE `" . $qn_db . "`.`viewcounts`");
+	// $wpdb->query("TRUNCATE `" . $qn_db . "`.`viewcounts`");
+	$wpdb->query('DELETE FROM `' . $qn_db . '`.`viewcounts` WHERE `date` < SUBDATE(current_date, 7);');
 	$wpdb->query('COMMIT');
 	error_log('Purged '. sizeof($result_qn). ' lines of data from `'. $qn_db .'`.`wp_viewcounts`.');
 }
